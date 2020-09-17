@@ -1,0 +1,3 @@
+/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/rebuild_cache.dir
+/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/my-first-graphics-app.dir
+/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/edit_cache.dir
