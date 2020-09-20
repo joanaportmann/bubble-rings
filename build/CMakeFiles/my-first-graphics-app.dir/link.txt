@@ -1,1 +1,0 @@
-/usr/bin/c++    -rdynamic CMakeFiles/my-first-graphics-app.dir/src/Application.cpp.o CMakeFiles/my-first-graphics-app.dir/lib/VertexBuffer.cpp.o  -o my-first-graphics-app -lglfw -lGLEW -lGL -lGLU -lglut -lXmu -lXi -lGLU -lglut -lXmu -lXi 

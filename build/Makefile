@@ -111,71 +111,30 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named my-first-graphics-app
+# Target rules for targets named lodePNG
 
 # Build rule for target.
-my-first-graphics-app: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 my-first-graphics-app
-.PHONY : my-first-graphics-app
+lodePNG: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 lodePNG
+.PHONY : lodePNG
 
 # fast build rule for target.
-my-first-graphics-app/fast:
-	$(MAKE) -f CMakeFiles/my-first-graphics-app.dir/build.make CMakeFiles/my-first-graphics-app.dir/build
-.PHONY : my-first-graphics-app/fast
+lodePNG/fast:
+	$(MAKE) -f lib/lodePNG/CMakeFiles/lodePNG.dir/build.make lib/lodePNG/CMakeFiles/lodePNG.dir/build
+.PHONY : lodePNG/fast
 
-lib/VertexBuffer.o: lib/VertexBuffer.cpp.o
+#=============================================================================
+# Target rules for targets named TubeSystem
 
-.PHONY : lib/VertexBuffer.o
+# Build rule for target.
+TubeSystem: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 TubeSystem
+.PHONY : TubeSystem
 
-# target to build an object file
-lib/VertexBuffer.cpp.o:
-	$(MAKE) -f CMakeFiles/my-first-graphics-app.dir/build.make CMakeFiles/my-first-graphics-app.dir/lib/VertexBuffer.cpp.o
-.PHONY : lib/VertexBuffer.cpp.o
-
-lib/VertexBuffer.i: lib/VertexBuffer.cpp.i
-
-.PHONY : lib/VertexBuffer.i
-
-# target to preprocess a source file
-lib/VertexBuffer.cpp.i:
-	$(MAKE) -f CMakeFiles/my-first-graphics-app.dir/build.make CMakeFiles/my-first-graphics-app.dir/lib/VertexBuffer.cpp.i
-.PHONY : lib/VertexBuffer.cpp.i
-
-lib/VertexBuffer.s: lib/VertexBuffer.cpp.s
-
-.PHONY : lib/VertexBuffer.s
-
-# target to generate assembly for a file
-lib/VertexBuffer.cpp.s:
-	$(MAKE) -f CMakeFiles/my-first-graphics-app.dir/build.make CMakeFiles/my-first-graphics-app.dir/lib/VertexBuffer.cpp.s
-.PHONY : lib/VertexBuffer.cpp.s
-
-src/Application.o: src/Application.cpp.o
-
-.PHONY : src/Application.o
-
-# target to build an object file
-src/Application.cpp.o:
-	$(MAKE) -f CMakeFiles/my-first-graphics-app.dir/build.make CMakeFiles/my-first-graphics-app.dir/src/Application.cpp.o
-.PHONY : src/Application.cpp.o
-
-src/Application.i: src/Application.cpp.i
-
-.PHONY : src/Application.i
-
-# target to preprocess a source file
-src/Application.cpp.i:
-	$(MAKE) -f CMakeFiles/my-first-graphics-app.dir/build.make CMakeFiles/my-first-graphics-app.dir/src/Application.cpp.i
-.PHONY : src/Application.cpp.i
-
-src/Application.s: src/Application.cpp.s
-
-.PHONY : src/Application.s
-
-# target to generate assembly for a file
-src/Application.cpp.s:
-	$(MAKE) -f CMakeFiles/my-first-graphics-app.dir/build.make CMakeFiles/my-first-graphics-app.dir/src/Application.cpp.s
-.PHONY : src/Application.cpp.s
+# fast build rule for target.
+TubeSystem/fast:
+	$(MAKE) -f src/CMakeFiles/TubeSystem.dir/build.make src/CMakeFiles/TubeSystem.dir/build
+.PHONY : TubeSystem/fast
 
 # Help Target
 help:
@@ -184,14 +143,9 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... rebuild_cache"
-	@echo "... my-first-graphics-app"
 	@echo "... edit_cache"
-	@echo "... lib/VertexBuffer.o"
-	@echo "... lib/VertexBuffer.i"
-	@echo "... lib/VertexBuffer.s"
-	@echo "... src/Application.o"
-	@echo "... src/Application.i"
-	@echo "... src/Application.s"
+	@echo "... lodePNG"
+	@echo "... TubeSystem"
 .PHONY : help
 
 
