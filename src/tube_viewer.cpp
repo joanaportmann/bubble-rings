@@ -12,8 +12,12 @@
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>       /* time */
 #include <array>
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+#include <math.h>
 
 //=============================================================================
+
 
 
 Tube_viewer::Tube_viewer(const char* _title, int _width, int _height)
@@ -73,6 +77,21 @@ void Tube_viewer::resize(int _width, int _height)
 
 //-----------------------------------------------------------------------------
 
+std::vector<vec3> unitCircleVertices(int n) {
+	std::vector<vec3> vertices;
+
+	for (int i=0; i < n; i++) {
+		vec3 vertex;
+		vertex.x = cos(2 * M_PI / n * i);
+		vertex.y = sin(2 * M_PI / n * i);
+		vertices.push_back(vertex);
+	}
+
+	return vertices;
+}
+
+//--------------------------------------------------------------------------------
+
 
 void Tube_viewer::initialize()
 {
@@ -92,10 +111,13 @@ void Tube_viewer::initialize()
 	ship_path_renderer_.initialize();
 	ship_path_cp_renderer_.initialize();
 	ship_path_frame_.initialize();
+	unitCircle.initialize();
 
 	ship_path_.set_control_polygon(control_polygon_, true);
 	ship_path_renderer_.sample(ship_path_);
 	ship_path_cp_renderer_.setPoints(ship_path_.bezier_control_points());
+
+	unitCircle.setPoints(unitCircleVertices(8));
 }
 //-----------------------------------------------------------------------------
 
@@ -117,6 +139,7 @@ void Tube_viewer::paint()
 
 //-----------------------------------------------------------------------------
 
+		
 void Tube_viewer::draw_scene(mat4& _projection, mat4& _view)
 {
 		ship_path_frame_.draw(solid_color_shader_, _projection * _view, ship_path_(ship_path_param_));
@@ -125,12 +148,14 @@ void Tube_viewer::draw_scene(mat4& _projection, mat4& _view)
 		solid_color_shader_.set_uniform("modelview_projection_matrix", _projection * _view);
 		solid_color_shader_.set_uniform("color", vec4(0.8, 0.8, 0.8, 1.0));
 		ship_path_cp_renderer_.draw();
+		unitCircle.draw();
 
 		// Bezier curve
 		solid_color_shader_.use();
 		solid_color_shader_.set_uniform("modelview_projection_matrix", _projection * _view);
 		solid_color_shader_.set_uniform("color", vec4(1.0, 0.0, 0.0, 1.0));
 		ship_path_renderer_.draw();
+
 
 	// the sun is centered at the origin and -- for lighting -- considered to be a point, so that is the light position in world coordinates
 	vec4 light = vec4(0.0, 0.0, 0.0, 1.0); //in world coordinates

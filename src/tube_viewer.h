@@ -72,7 +72,7 @@ private:
 
     /// Whether/how to display the ship path curve.
     enum CurveDisplayMode { CURVE_SHOW_NONE = 0, CURVE_SHOW_PATH = 1, CURVE_SHOW_PATH_CP = 2, CURVE_SHOW_PATH_FRAME = 3, CURVE_SHOW_NUM_MODES = 4 } curve_display_mode_;
-    Path ship_path_renderer_, ship_path_cp_renderer_;
+    Path ship_path_renderer_, ship_path_cp_renderer_, unitCircle;
     Frame ship_path_frame_;
     float ship_path_param_ = 0; // current parametric distance of ship along the curve
 
