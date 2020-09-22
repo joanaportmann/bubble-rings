@@ -81,10 +81,12 @@ std::vector<vec3> unitCircleVertices(int n) {
 	std::vector<vec3> vertices;
 
 	for (int i=0; i < n; i++) {
-		vec3 vertex;
-		vertex.x = cos(2 * M_PI / n * i);
-		vertex.y = sin(2 * M_PI / n * i);
-		vertices.push_back(vertex);
+	
+		float x = cos(2 * M_PI / n * i);
+		float y = sin(2 * M_PI / n * i);
+		vec4 vertex =  mat4::translate(vec3(2, 2, 0)) * vec4(x, y, 0, 1);
+		vec3 vertex_3 = vec3(vertex.x, vertex.y, vertex.z);
+		vertices.push_back(vertex_3);
 	}
 
 	return vertices;
@@ -127,7 +129,7 @@ void Tube_viewer::paint()
 	// clear framebuffer and depth buffer first
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	vec4     eye = vec4(0,0,7,1.0);
+	vec4     eye = vec4(7,2,7,1.0);
 	vec4  center = vec4(0, 0, 0, 0);
 	vec4      up = vec4(0,1,0,0);
 	mat4    view = mat4::look_at(vec3(eye), (vec3)center, (vec3)up);
@@ -146,7 +148,7 @@ void Tube_viewer::draw_scene(mat4& _projection, mat4& _view)
 		
 		solid_color_shader_.use();
 		solid_color_shader_.set_uniform("modelview_projection_matrix", _projection * _view);
-		solid_color_shader_.set_uniform("color", vec4(0.8, 0.8, 0.8, 1.0));
+		solid_color_shader_.set_uniform("color", vec4(0, 0.8, 0.8, 1.0));
 		ship_path_cp_renderer_.draw();
 		unitCircle.draw();
 
