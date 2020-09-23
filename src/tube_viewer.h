@@ -70,6 +70,14 @@ private:
     /// state whether the rendering should be in color or not
     bool greyscale_;
 
+     /// rotation in x direction 
+    float x_angle_;
+    /// rotation in y direction 
+    float y_angle_;
+
+      /// eye's distance in radii from the observed point
+    float dist_factor_;
+
     /// Whether/how to display the ship path curve.
     enum CurveDisplayMode { CURVE_SHOW_NONE = 0, CURVE_SHOW_PATH = 1, CURVE_SHOW_PATH_CP = 2, CURVE_SHOW_PATH_FRAME = 3, CURVE_SHOW_NUM_MODES = 4 } curve_display_mode_;
     Path ship_path_renderer_, ship_path_cp_renderer_, unitCircle;

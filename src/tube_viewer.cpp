@@ -33,6 +33,10 @@ Tube_viewer::Tube_viewer(const char* _title, int _width, int _height)
 	near_ = 0.01f;
 	far_ = 20;
 
+	x_angle_ = -90.0f;
+	y_angle_ = 0.0f;
+	dist_factor_ = 9.0f;
+
 	srand((unsigned int)time(NULL));
 }
 
@@ -59,6 +63,43 @@ keyboard(int key, int scancode, int action, int mods)
 		case GLFW_KEY_ESCAPE:
 		{
 			glfwSetWindowShouldClose(window_, GL_TRUE);
+			break;
+		}
+
+		case GLFW_KEY_LEFT:
+		{
+			y_angle_ -= 10.0;
+			break;
+		}
+
+		case GLFW_KEY_RIGHT:
+		{
+			y_angle_ += 10.0;
+			break;
+		}
+
+		case GLFW_KEY_DOWN:
+		{
+			x_angle_ += 10.0;
+			break;
+		}
+
+		case GLFW_KEY_UP:
+		{
+			x_angle_ -= 10.0;
+			break;
+		}
+
+			// Key 9 increases and key 8 decreases the `dist_factor_` within the range - 2.5 < `dist_factor_` < 20.0.
+		case GLFW_KEY_8:
+		{
+			if (dist_factor_ >= 3.0) dist_factor_ -= 0.5;
+			break;
+		}
+
+		case GLFW_KEY_9:
+		{
+			if (dist_factor_ <= 19.5) dist_factor_ += 0.5;
 			break;
 		}
 		}
@@ -129,9 +170,19 @@ void Tube_viewer::paint()
 	// clear framebuffer and depth buffer first
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	vec4     eye = vec4(7,2,7,1.0);
-	vec4  center = vec4(0, 0, 0, 0);
-	vec4      up = vec4(0,1,0,0);
+	vec4 eye, center, up;
+	float radius, x_rotation, y_rotation;
+	mat4 rotation;
+
+	center = vec4(0, 0, 0, 0);
+
+	x_rotation = x_angle_;
+	y_rotation = y_angle_;
+	rotation = mat4::rotate_y(y_rotation) * mat4::rotate_x(x_rotation);
+	eye = center + rotation * vec4(0, 0, -(dist_factor_ ), 0);
+	up = rotation * vec4(0, 1, 0, 0);
+
+	
 	mat4    view = mat4::look_at(vec3(eye), (vec3)center, (vec3)up);
 
 	mat4 projection = mat4::perspective(fovy_, (float)width_ / (float)height_, near_, far_);
