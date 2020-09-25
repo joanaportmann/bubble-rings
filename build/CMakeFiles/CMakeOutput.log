@@ -28,28 +28,28 @@ The CXX compiler identification is GNU, found in "/home/joana/Documents/bachelor
 Determining if the C compiler works passed with the following output:
 Change Dir: /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_905f2/fast"
-/usr/bin/make -f CMakeFiles/cmTC_905f2.dir/build.make CMakeFiles/cmTC_905f2.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_51af3/fast"
+/usr/bin/make -f CMakeFiles/cmTC_51af3.dir/build.make CMakeFiles/cmTC_51af3.dir/build
 make[1]: Entering directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_905f2.dir/testCCompiler.c.o
-/usr/bin/cc    -o CMakeFiles/cmTC_905f2.dir/testCCompiler.c.o   -c /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp/testCCompiler.c
-Linking C executable cmTC_905f2
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_905f2.dir/link.txt --verbose=1
-/usr/bin/cc      -rdynamic CMakeFiles/cmTC_905f2.dir/testCCompiler.c.o  -o cmTC_905f2 
+Building C object CMakeFiles/cmTC_51af3.dir/testCCompiler.c.o
+/usr/bin/cc    -o CMakeFiles/cmTC_51af3.dir/testCCompiler.c.o   -c /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp/testCCompiler.c
+Linking C executable cmTC_51af3
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_51af3.dir/link.txt --verbose=1
+/usr/bin/cc      -rdynamic CMakeFiles/cmTC_51af3.dir/testCCompiler.c.o  -o cmTC_51af3 
 make[1]: Leaving directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
 
 
 Detecting C compiler ABI info compiled with the following output:
 Change Dir: /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_acf43/fast"
-/usr/bin/make -f CMakeFiles/cmTC_acf43.dir/build.make CMakeFiles/cmTC_acf43.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_0068f/fast"
+/usr/bin/make -f CMakeFiles/cmTC_0068f.dir/build.make CMakeFiles/cmTC_0068f.dir/build
 make[1]: Entering directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_acf43.dir/CMakeCCompilerABI.c.o
-/usr/bin/cc    -o CMakeFiles/cmTC_acf43.dir/CMakeCCompilerABI.c.o   -c /usr/share/cmake-3.10/Modules/CMakeCCompilerABI.c
-Linking C executable cmTC_acf43
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_acf43.dir/link.txt --verbose=1
-/usr/bin/cc     -v -rdynamic CMakeFiles/cmTC_acf43.dir/CMakeCCompilerABI.c.o  -o cmTC_acf43 
+Building C object CMakeFiles/cmTC_0068f.dir/CMakeCCompilerABI.c.o
+/usr/bin/cc    -o CMakeFiles/cmTC_0068f.dir/CMakeCCompilerABI.c.o   -c /usr/share/cmake-3.10/Modules/CMakeCCompilerABI.c
+Linking C executable cmTC_0068f
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_0068f.dir/link.txt --verbose=1
+/usr/bin/cc     -v -rdynamic CMakeFiles/cmTC_0068f.dir/CMakeCCompilerABI.c.o  -o cmTC_0068f 
 Using built-in specs.
 COLLECT_GCC=/usr/bin/cc
 COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper
@@ -61,9 +61,9 @@ Thread model: posix
 gcc version 7.5.0 (Ubuntu 7.5.0-3ubuntu1~18.04) 
 COMPILER_PATH=/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/
 LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib/:/lib/x86_64-linux-gnu/:/lib/../lib/:/usr/lib/x86_64-linux-gnu/:/usr/lib/../lib/:/home/joana/intel/compilers_and_libraries_2020.0.166/linux/compiler/lib/intel64_lin/:/home/joana/intel/compilers_and_libraries_2020.0.166/linux/mkl/lib/intel64_lin/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../:/lib/:/usr/lib/
-COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_acf43' '-mtune=generic' '-march=x86-64'
- /usr/lib/gcc/x86_64-linux-gnu/7/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/7/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper -plugin-opt=-fresolution=/tmp/ccl4oVcv.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -export-dynamic -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro -o cmTC_acf43 /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/7/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/7 -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/home/joana/intel/compilers_and_libraries_2020.0.166/linux/compiler/lib/intel64_lin -L/home/joana/intel/compilers_and_libraries_2020.0.166/linux/mkl/lib/intel64_lin -L/usr/lib/gcc/x86_64-linux-gnu/7/../../.. CMakeFiles/cmTC_acf43.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/x86_64-linux-gnu/7/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crtn.o
-COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_acf43' '-mtune=generic' '-march=x86-64'
+COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_0068f' '-mtune=generic' '-march=x86-64'
+ /usr/lib/gcc/x86_64-linux-gnu/7/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/7/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper -plugin-opt=-fresolution=/tmp/ccjDHESw.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -export-dynamic -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro -o cmTC_0068f /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/7/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/7 -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/home/joana/intel/compilers_and_libraries_2020.0.166/linux/compiler/lib/intel64_lin -L/home/joana/intel/compilers_and_libraries_2020.0.166/linux/mkl/lib/intel64_lin -L/usr/lib/gcc/x86_64-linux-gnu/7/../../.. CMakeFiles/cmTC_0068f.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/x86_64-linux-gnu/7/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crtn.o
+COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_0068f' '-mtune=generic' '-march=x86-64'
 make[1]: Leaving directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
 
 
@@ -71,14 +71,14 @@ Parsed C implicit link information from above output:
   link line regex: [^( *|.*[/\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
   ignore line: [Change Dir: /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp]
   ignore line: []
-  ignore line: [Run Build Command:"/usr/bin/make" "cmTC_acf43/fast"]
-  ignore line: [/usr/bin/make -f CMakeFiles/cmTC_acf43.dir/build.make CMakeFiles/cmTC_acf43.dir/build]
+  ignore line: [Run Build Command:"/usr/bin/make" "cmTC_0068f/fast"]
+  ignore line: [/usr/bin/make -f CMakeFiles/cmTC_0068f.dir/build.make CMakeFiles/cmTC_0068f.dir/build]
   ignore line: [make[1]: Entering directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp']
-  ignore line: [Building C object CMakeFiles/cmTC_acf43.dir/CMakeCCompilerABI.c.o]
-  ignore line: [/usr/bin/cc    -o CMakeFiles/cmTC_acf43.dir/CMakeCCompilerABI.c.o   -c /usr/share/cmake-3.10/Modules/CMakeCCompilerABI.c]
-  ignore line: [Linking C executable cmTC_acf43]
-  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_acf43.dir/link.txt --verbose=1]
-  ignore line: [/usr/bin/cc     -v -rdynamic CMakeFiles/cmTC_acf43.dir/CMakeCCompilerABI.c.o  -o cmTC_acf43 ]
+  ignore line: [Building C object CMakeFiles/cmTC_0068f.dir/CMakeCCompilerABI.c.o]
+  ignore line: [/usr/bin/cc    -o CMakeFiles/cmTC_0068f.dir/CMakeCCompilerABI.c.o   -c /usr/share/cmake-3.10/Modules/CMakeCCompilerABI.c]
+  ignore line: [Linking C executable cmTC_0068f]
+  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_0068f.dir/link.txt --verbose=1]
+  ignore line: [/usr/bin/cc     -v -rdynamic CMakeFiles/cmTC_0068f.dir/CMakeCCompilerABI.c.o  -o cmTC_0068f ]
   ignore line: [Using built-in specs.]
   ignore line: [COLLECT_GCC=/usr/bin/cc]
   ignore line: [COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper]
@@ -90,13 +90,13 @@ Parsed C implicit link information from above output:
   ignore line: [gcc version 7.5.0 (Ubuntu 7.5.0-3ubuntu1~18.04) ]
   ignore line: [COMPILER_PATH=/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/]
   ignore line: [LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib/:/lib/x86_64-linux-gnu/:/lib/../lib/:/usr/lib/x86_64-linux-gnu/:/usr/lib/../lib/:/home/joana/intel/compilers_and_libraries_2020.0.166/linux/compiler/lib/intel64_lin/:/home/joana/intel/compilers_and_libraries_2020.0.166/linux/mkl/lib/intel64_lin/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../:/lib/:/usr/lib/]
-  ignore line: [COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_acf43' '-mtune=generic' '-march=x86-64']
-  link line: [ /usr/lib/gcc/x86_64-linux-gnu/7/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/7/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper -plugin-opt=-fresolution=/tmp/ccl4oVcv.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -export-dynamic -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro -o cmTC_acf43 /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/7/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/7 -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/home/joana/intel/compilers_and_libraries_2020.0.166/linux/compiler/lib/intel64_lin -L/home/joana/intel/compilers_and_libraries_2020.0.166/linux/mkl/lib/intel64_lin -L/usr/lib/gcc/x86_64-linux-gnu/7/../../.. CMakeFiles/cmTC_acf43.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/x86_64-linux-gnu/7/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crtn.o]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_0068f' '-mtune=generic' '-march=x86-64']
+  link line: [ /usr/lib/gcc/x86_64-linux-gnu/7/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/7/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper -plugin-opt=-fresolution=/tmp/ccjDHESw.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -export-dynamic -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro -o cmTC_0068f /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/7/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/7 -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/home/joana/intel/compilers_and_libraries_2020.0.166/linux/compiler/lib/intel64_lin -L/home/joana/intel/compilers_and_libraries_2020.0.166/linux/mkl/lib/intel64_lin -L/usr/lib/gcc/x86_64-linux-gnu/7/../../.. CMakeFiles/cmTC_0068f.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/x86_64-linux-gnu/7/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crtn.o]
     arg [/usr/lib/gcc/x86_64-linux-gnu/7/collect2] ==> ignore
     arg [-plugin] ==> ignore
     arg [/usr/lib/gcc/x86_64-linux-gnu/7/liblto_plugin.so] ==> ignore
     arg [-plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper] ==> ignore
-    arg [-plugin-opt=-fresolution=/tmp/ccl4oVcv.res] ==> ignore
+    arg [-plugin-opt=-fresolution=/tmp/ccjDHESw.res] ==> ignore
     arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
     arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
     arg [-plugin-opt=-pass-through=-lc] ==> ignore
@@ -115,7 +115,7 @@ Parsed C implicit link information from above output:
     arg [-znow] ==> ignore
     arg [-zrelro] ==> ignore
     arg [-o] ==> ignore
-    arg [cmTC_acf43] ==> ignore
+    arg [cmTC_0068f] ==> ignore
     arg [/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/Scrt1.o] ==> ignore
     arg [/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crti.o] ==> ignore
     arg [/usr/lib/gcc/x86_64-linux-gnu/7/crtbeginS.o] ==> ignore
@@ -129,7 +129,7 @@ Parsed C implicit link information from above output:
     arg [-L/home/joana/intel/compilers_and_libraries_2020.0.166/linux/compiler/lib/intel64_lin] ==> dir [/home/joana/intel/compilers_and_libraries_2020.0.166/linux/compiler/lib/intel64_lin]
     arg [-L/home/joana/intel/compilers_and_libraries_2020.0.166/linux/mkl/lib/intel64_lin] ==> dir [/home/joana/intel/compilers_and_libraries_2020.0.166/linux/mkl/lib/intel64_lin]
     arg [-L/usr/lib/gcc/x86_64-linux-gnu/7/../../..] ==> dir [/usr/lib/gcc/x86_64-linux-gnu/7/../../..]
-    arg [CMakeFiles/cmTC_acf43.dir/CMakeCCompilerABI.c.o] ==> ignore
+    arg [CMakeFiles/cmTC_0068f.dir/CMakeCCompilerABI.c.o] ==> ignore
     arg [-lgcc] ==> lib [gcc]
     arg [--push-state] ==> ignore
     arg [--as-needed] ==> ignore
@@ -163,14 +163,14 @@ Parsed C implicit link information from above output:
 Detecting C [-std=c11] compiler features compiled with the following output:
 Change Dir: /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_bb62d/fast"
-/usr/bin/make -f CMakeFiles/cmTC_bb62d.dir/build.make CMakeFiles/cmTC_bb62d.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_505d4/fast"
+/usr/bin/make -f CMakeFiles/cmTC_505d4.dir/build.make CMakeFiles/cmTC_505d4.dir/build
 make[1]: Entering directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_bb62d.dir/feature_tests.c.o
-/usr/bin/cc   -std=c11 -o CMakeFiles/cmTC_bb62d.dir/feature_tests.c.o   -c /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/feature_tests.c
-Linking C executable cmTC_bb62d
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_bb62d.dir/link.txt --verbose=1
-/usr/bin/cc      -rdynamic CMakeFiles/cmTC_bb62d.dir/feature_tests.c.o  -o cmTC_bb62d 
+Building C object CMakeFiles/cmTC_505d4.dir/feature_tests.c.o
+/usr/bin/cc   -std=c11 -o CMakeFiles/cmTC_505d4.dir/feature_tests.c.o   -c /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/feature_tests.c
+Linking C executable cmTC_505d4
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_505d4.dir/link.txt --verbose=1
+/usr/bin/cc      -rdynamic CMakeFiles/cmTC_505d4.dir/feature_tests.c.o  -o cmTC_505d4 
 make[1]: Leaving directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
 
 
@@ -183,14 +183,14 @@ make[1]: Leaving directory '/home/joana/Documents/bachelorthesis/bubble-rings/bu
 Detecting C [-std=c99] compiler features compiled with the following output:
 Change Dir: /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_6547e/fast"
-/usr/bin/make -f CMakeFiles/cmTC_6547e.dir/build.make CMakeFiles/cmTC_6547e.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_96f2f/fast"
+/usr/bin/make -f CMakeFiles/cmTC_96f2f.dir/build.make CMakeFiles/cmTC_96f2f.dir/build
 make[1]: Entering directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_6547e.dir/feature_tests.c.o
-/usr/bin/cc   -std=c99 -o CMakeFiles/cmTC_6547e.dir/feature_tests.c.o   -c /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/feature_tests.c
-Linking C executable cmTC_6547e
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_6547e.dir/link.txt --verbose=1
-/usr/bin/cc      -rdynamic CMakeFiles/cmTC_6547e.dir/feature_tests.c.o  -o cmTC_6547e 
+Building C object CMakeFiles/cmTC_96f2f.dir/feature_tests.c.o
+/usr/bin/cc   -std=c99 -o CMakeFiles/cmTC_96f2f.dir/feature_tests.c.o   -c /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/feature_tests.c
+Linking C executable cmTC_96f2f
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_96f2f.dir/link.txt --verbose=1
+/usr/bin/cc      -rdynamic CMakeFiles/cmTC_96f2f.dir/feature_tests.c.o  -o cmTC_96f2f 
 make[1]: Leaving directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
 
 
@@ -203,14 +203,14 @@ make[1]: Leaving directory '/home/joana/Documents/bachelorthesis/bubble-rings/bu
 Detecting C [-std=c90] compiler features compiled with the following output:
 Change Dir: /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_49d39/fast"
-/usr/bin/make -f CMakeFiles/cmTC_49d39.dir/build.make CMakeFiles/cmTC_49d39.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_ccc6d/fast"
+/usr/bin/make -f CMakeFiles/cmTC_ccc6d.dir/build.make CMakeFiles/cmTC_ccc6d.dir/build
 make[1]: Entering directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_49d39.dir/feature_tests.c.o
-/usr/bin/cc   -std=c90 -o CMakeFiles/cmTC_49d39.dir/feature_tests.c.o   -c /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/feature_tests.c
-Linking C executable cmTC_49d39
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_49d39.dir/link.txt --verbose=1
-/usr/bin/cc      -rdynamic CMakeFiles/cmTC_49d39.dir/feature_tests.c.o  -o cmTC_49d39 
+Building C object CMakeFiles/cmTC_ccc6d.dir/feature_tests.c.o
+/usr/bin/cc   -std=c90 -o CMakeFiles/cmTC_ccc6d.dir/feature_tests.c.o   -c /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/feature_tests.c
+Linking C executable cmTC_ccc6d
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ccc6d.dir/link.txt --verbose=1
+/usr/bin/cc      -rdynamic CMakeFiles/cmTC_ccc6d.dir/feature_tests.c.o  -o cmTC_ccc6d 
 make[1]: Leaving directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
 
 
@@ -221,28 +221,28 @@ make[1]: Leaving directory '/home/joana/Documents/bachelorthesis/bubble-rings/bu
 Determining if the CXX compiler works passed with the following output:
 Change Dir: /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_2b31f/fast"
-/usr/bin/make -f CMakeFiles/cmTC_2b31f.dir/build.make CMakeFiles/cmTC_2b31f.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_7186d/fast"
+/usr/bin/make -f CMakeFiles/cmTC_7186d.dir/build.make CMakeFiles/cmTC_7186d.dir/build
 make[1]: Entering directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_2b31f.dir/testCXXCompiler.cxx.o
-/usr/bin/c++     -o CMakeFiles/cmTC_2b31f.dir/testCXXCompiler.cxx.o -c /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp/testCXXCompiler.cxx
-Linking CXX executable cmTC_2b31f
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_2b31f.dir/link.txt --verbose=1
-/usr/bin/c++       -rdynamic CMakeFiles/cmTC_2b31f.dir/testCXXCompiler.cxx.o  -o cmTC_2b31f 
+Building CXX object CMakeFiles/cmTC_7186d.dir/testCXXCompiler.cxx.o
+/usr/bin/c++     -o CMakeFiles/cmTC_7186d.dir/testCXXCompiler.cxx.o -c /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp/testCXXCompiler.cxx
+Linking CXX executable cmTC_7186d
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_7186d.dir/link.txt --verbose=1
+/usr/bin/c++       -rdynamic CMakeFiles/cmTC_7186d.dir/testCXXCompiler.cxx.o  -o cmTC_7186d 
 make[1]: Leaving directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
 
 
 Detecting CXX compiler ABI info compiled with the following output:
 Change Dir: /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_856dc/fast"
-/usr/bin/make -f CMakeFiles/cmTC_856dc.dir/build.make CMakeFiles/cmTC_856dc.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_7ed2f/fast"
+/usr/bin/make -f CMakeFiles/cmTC_7ed2f.dir/build.make CMakeFiles/cmTC_7ed2f.dir/build
 make[1]: Entering directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_856dc.dir/CMakeCXXCompilerABI.cpp.o
-/usr/bin/c++     -o CMakeFiles/cmTC_856dc.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.10/Modules/CMakeCXXCompilerABI.cpp
-Linking CXX executable cmTC_856dc
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_856dc.dir/link.txt --verbose=1
-/usr/bin/c++      -v -rdynamic CMakeFiles/cmTC_856dc.dir/CMakeCXXCompilerABI.cpp.o  -o cmTC_856dc 
+Building CXX object CMakeFiles/cmTC_7ed2f.dir/CMakeCXXCompilerABI.cpp.o
+/usr/bin/c++     -o CMakeFiles/cmTC_7ed2f.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.10/Modules/CMakeCXXCompilerABI.cpp
+Linking CXX executable cmTC_7ed2f
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_7ed2f.dir/link.txt --verbose=1
+/usr/bin/c++      -v -rdynamic CMakeFiles/cmTC_7ed2f.dir/CMakeCXXCompilerABI.cpp.o  -o cmTC_7ed2f 
 Using built-in specs.
 COLLECT_GCC=/usr/bin/c++
 COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper
@@ -254,9 +254,9 @@ Thread model: posix
 gcc version 7.5.0 (Ubuntu 7.5.0-3ubuntu1~18.04) 
 COMPILER_PATH=/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/
 LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib/:/lib/x86_64-linux-gnu/:/lib/../lib/:/usr/lib/x86_64-linux-gnu/:/usr/lib/../lib/:/home/joana/intel/compilers_and_libraries_2020.0.166/linux/compiler/lib/intel64_lin/:/home/joana/intel/compilers_and_libraries_2020.0.166/linux/mkl/lib/intel64_lin/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../:/lib/:/usr/lib/
-COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_856dc' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
- /usr/lib/gcc/x86_64-linux-gnu/7/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/7/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper -plugin-opt=-fresolution=/tmp/ccD4ZrIZ.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -export-dynamic -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro -o cmTC_856dc /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/7/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/7 -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/home/joana/intel/compilers_and_libraries_2020.0.166/linux/compiler/lib/intel64_lin -L/home/joana/intel/compilers_and_libraries_2020.0.166/linux/mkl/lib/intel64_lin -L/usr/lib/gcc/x86_64-linux-gnu/7/../../.. CMakeFiles/cmTC_856dc.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-linux-gnu/7/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crtn.o
-COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_856dc' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
+COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_7ed2f' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
+ /usr/lib/gcc/x86_64-linux-gnu/7/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/7/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper -plugin-opt=-fresolution=/tmp/cc6hAGcP.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -export-dynamic -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro -o cmTC_7ed2f /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/7/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/7 -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/home/joana/intel/compilers_and_libraries_2020.0.166/linux/compiler/lib/intel64_lin -L/home/joana/intel/compilers_and_libraries_2020.0.166/linux/mkl/lib/intel64_lin -L/usr/lib/gcc/x86_64-linux-gnu/7/../../.. CMakeFiles/cmTC_7ed2f.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-linux-gnu/7/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crtn.o
+COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_7ed2f' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
 make[1]: Leaving directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
 
 
@@ -264,14 +264,14 @@ Parsed CXX implicit link information from above output:
   link line regex: [^( *|.*[/\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
   ignore line: [Change Dir: /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp]
   ignore line: []
-  ignore line: [Run Build Command:"/usr/bin/make" "cmTC_856dc/fast"]
-  ignore line: [/usr/bin/make -f CMakeFiles/cmTC_856dc.dir/build.make CMakeFiles/cmTC_856dc.dir/build]
+  ignore line: [Run Build Command:"/usr/bin/make" "cmTC_7ed2f/fast"]
+  ignore line: [/usr/bin/make -f CMakeFiles/cmTC_7ed2f.dir/build.make CMakeFiles/cmTC_7ed2f.dir/build]
   ignore line: [make[1]: Entering directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp']
-  ignore line: [Building CXX object CMakeFiles/cmTC_856dc.dir/CMakeCXXCompilerABI.cpp.o]
-  ignore line: [/usr/bin/c++     -o CMakeFiles/cmTC_856dc.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.10/Modules/CMakeCXXCompilerABI.cpp]
-  ignore line: [Linking CXX executable cmTC_856dc]
-  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_856dc.dir/link.txt --verbose=1]
-  ignore line: [/usr/bin/c++      -v -rdynamic CMakeFiles/cmTC_856dc.dir/CMakeCXXCompilerABI.cpp.o  -o cmTC_856dc ]
+  ignore line: [Building CXX object CMakeFiles/cmTC_7ed2f.dir/CMakeCXXCompilerABI.cpp.o]
+  ignore line: [/usr/bin/c++     -o CMakeFiles/cmTC_7ed2f.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.10/Modules/CMakeCXXCompilerABI.cpp]
+  ignore line: [Linking CXX executable cmTC_7ed2f]
+  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_7ed2f.dir/link.txt --verbose=1]
+  ignore line: [/usr/bin/c++      -v -rdynamic CMakeFiles/cmTC_7ed2f.dir/CMakeCXXCompilerABI.cpp.o  -o cmTC_7ed2f ]
   ignore line: [Using built-in specs.]
   ignore line: [COLLECT_GCC=/usr/bin/c++]
   ignore line: [COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper]
@@ -283,13 +283,13 @@ Parsed CXX implicit link information from above output:
   ignore line: [gcc version 7.5.0 (Ubuntu 7.5.0-3ubuntu1~18.04) ]
   ignore line: [COMPILER_PATH=/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/]
   ignore line: [LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib/:/lib/x86_64-linux-gnu/:/lib/../lib/:/usr/lib/x86_64-linux-gnu/:/usr/lib/../lib/:/home/joana/intel/compilers_and_libraries_2020.0.166/linux/compiler/lib/intel64_lin/:/home/joana/intel/compilers_and_libraries_2020.0.166/linux/mkl/lib/intel64_lin/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../:/lib/:/usr/lib/]
-  ignore line: [COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_856dc' '-shared-libgcc' '-mtune=generic' '-march=x86-64']
-  link line: [ /usr/lib/gcc/x86_64-linux-gnu/7/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/7/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper -plugin-opt=-fresolution=/tmp/ccD4ZrIZ.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -export-dynamic -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro -o cmTC_856dc /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/7/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/7 -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/home/joana/intel/compilers_and_libraries_2020.0.166/linux/compiler/lib/intel64_lin -L/home/joana/intel/compilers_and_libraries_2020.0.166/linux/mkl/lib/intel64_lin -L/usr/lib/gcc/x86_64-linux-gnu/7/../../.. CMakeFiles/cmTC_856dc.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-linux-gnu/7/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crtn.o]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_7ed2f' '-shared-libgcc' '-mtune=generic' '-march=x86-64']
+  link line: [ /usr/lib/gcc/x86_64-linux-gnu/7/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/7/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper -plugin-opt=-fresolution=/tmp/cc6hAGcP.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -export-dynamic -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro -o cmTC_7ed2f /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/7/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/7 -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/home/joana/intel/compilers_and_libraries_2020.0.166/linux/compiler/lib/intel64_lin -L/home/joana/intel/compilers_and_libraries_2020.0.166/linux/mkl/lib/intel64_lin -L/usr/lib/gcc/x86_64-linux-gnu/7/../../.. CMakeFiles/cmTC_7ed2f.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-linux-gnu/7/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crtn.o]
     arg [/usr/lib/gcc/x86_64-linux-gnu/7/collect2] ==> ignore
     arg [-plugin] ==> ignore
     arg [/usr/lib/gcc/x86_64-linux-gnu/7/liblto_plugin.so] ==> ignore
     arg [-plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper] ==> ignore
-    arg [-plugin-opt=-fresolution=/tmp/ccD4ZrIZ.res] ==> ignore
+    arg [-plugin-opt=-fresolution=/tmp/cc6hAGcP.res] ==> ignore
     arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
     arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
     arg [-plugin-opt=-pass-through=-lc] ==> ignore
@@ -308,7 +308,7 @@ Parsed CXX implicit link information from above output:
     arg [-znow] ==> ignore
     arg [-zrelro] ==> ignore
     arg [-o] ==> ignore
-    arg [cmTC_856dc] ==> ignore
+    arg [cmTC_7ed2f] ==> ignore
     arg [/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/Scrt1.o] ==> ignore
     arg [/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crti.o] ==> ignore
     arg [/usr/lib/gcc/x86_64-linux-gnu/7/crtbeginS.o] ==> ignore
@@ -322,7 +322,7 @@ Parsed CXX implicit link information from above output:
     arg [-L/home/joana/intel/compilers_and_libraries_2020.0.166/linux/compiler/lib/intel64_lin] ==> dir [/home/joana/intel/compilers_and_libraries_2020.0.166/linux/compiler/lib/intel64_lin]
     arg [-L/home/joana/intel/compilers_and_libraries_2020.0.166/linux/mkl/lib/intel64_lin] ==> dir [/home/joana/intel/compilers_and_libraries_2020.0.166/linux/mkl/lib/intel64_lin]
     arg [-L/usr/lib/gcc/x86_64-linux-gnu/7/../../..] ==> dir [/usr/lib/gcc/x86_64-linux-gnu/7/../../..]
-    arg [CMakeFiles/cmTC_856dc.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
+    arg [CMakeFiles/cmTC_7ed2f.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
     arg [-lstdc++] ==> lib [stdc++]
     arg [-lm] ==> lib [m]
     arg [-lgcc_s] ==> lib [gcc_s]
@@ -352,14 +352,14 @@ Parsed CXX implicit link information from above output:
 Detecting CXX [-std=c++1z] compiler features compiled with the following output:
 Change Dir: /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_33551/fast"
-/usr/bin/make -f CMakeFiles/cmTC_33551.dir/build.make CMakeFiles/cmTC_33551.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_266b6/fast"
+/usr/bin/make -f CMakeFiles/cmTC_266b6.dir/build.make CMakeFiles/cmTC_266b6.dir/build
 make[1]: Entering directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_33551.dir/feature_tests.cxx.o
-/usr/bin/c++    -std=c++1z -o CMakeFiles/cmTC_33551.dir/feature_tests.cxx.o -c /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/feature_tests.cxx
-Linking CXX executable cmTC_33551
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_33551.dir/link.txt --verbose=1
-/usr/bin/c++       -rdynamic CMakeFiles/cmTC_33551.dir/feature_tests.cxx.o  -o cmTC_33551 
+Building CXX object CMakeFiles/cmTC_266b6.dir/feature_tests.cxx.o
+/usr/bin/c++    -std=c++1z -o CMakeFiles/cmTC_266b6.dir/feature_tests.cxx.o -c /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_266b6
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_266b6.dir/link.txt --verbose=1
+/usr/bin/c++       -rdynamic CMakeFiles/cmTC_266b6.dir/feature_tests.cxx.o  -o cmTC_266b6 
 make[1]: Leaving directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
 
 
@@ -425,14 +425,14 @@ make[1]: Leaving directory '/home/joana/Documents/bachelorthesis/bubble-rings/bu
 Detecting CXX [-std=c++14] compiler features compiled with the following output:
 Change Dir: /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_b0493/fast"
-/usr/bin/make -f CMakeFiles/cmTC_b0493.dir/build.make CMakeFiles/cmTC_b0493.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_837af/fast"
+/usr/bin/make -f CMakeFiles/cmTC_837af.dir/build.make CMakeFiles/cmTC_837af.dir/build
 make[1]: Entering directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_b0493.dir/feature_tests.cxx.o
-/usr/bin/c++    -std=c++14 -o CMakeFiles/cmTC_b0493.dir/feature_tests.cxx.o -c /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/feature_tests.cxx
-Linking CXX executable cmTC_b0493
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_b0493.dir/link.txt --verbose=1
-/usr/bin/c++       -rdynamic CMakeFiles/cmTC_b0493.dir/feature_tests.cxx.o  -o cmTC_b0493 
+Building CXX object CMakeFiles/cmTC_837af.dir/feature_tests.cxx.o
+/usr/bin/c++    -std=c++14 -o CMakeFiles/cmTC_837af.dir/feature_tests.cxx.o -c /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_837af
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_837af.dir/link.txt --verbose=1
+/usr/bin/c++       -rdynamic CMakeFiles/cmTC_837af.dir/feature_tests.cxx.o  -o cmTC_837af 
 make[1]: Leaving directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
 
 
@@ -498,14 +498,14 @@ make[1]: Leaving directory '/home/joana/Documents/bachelorthesis/bubble-rings/bu
 Detecting CXX [-std=c++11] compiler features compiled with the following output:
 Change Dir: /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_36cf2/fast"
-/usr/bin/make -f CMakeFiles/cmTC_36cf2.dir/build.make CMakeFiles/cmTC_36cf2.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_9d922/fast"
+/usr/bin/make -f CMakeFiles/cmTC_9d922.dir/build.make CMakeFiles/cmTC_9d922.dir/build
 make[1]: Entering directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_36cf2.dir/feature_tests.cxx.o
-/usr/bin/c++    -std=c++11 -o CMakeFiles/cmTC_36cf2.dir/feature_tests.cxx.o -c /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/feature_tests.cxx
-Linking CXX executable cmTC_36cf2
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_36cf2.dir/link.txt --verbose=1
-/usr/bin/c++       -rdynamic CMakeFiles/cmTC_36cf2.dir/feature_tests.cxx.o  -o cmTC_36cf2 
+Building CXX object CMakeFiles/cmTC_9d922.dir/feature_tests.cxx.o
+/usr/bin/c++    -std=c++11 -o CMakeFiles/cmTC_9d922.dir/feature_tests.cxx.o -c /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_9d922
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_9d922.dir/link.txt --verbose=1
+/usr/bin/c++       -rdynamic CMakeFiles/cmTC_9d922.dir/feature_tests.cxx.o  -o cmTC_9d922 
 make[1]: Leaving directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
 
 
@@ -571,14 +571,14 @@ make[1]: Leaving directory '/home/joana/Documents/bachelorthesis/bubble-rings/bu
 Detecting CXX [-std=c++98] compiler features compiled with the following output:
 Change Dir: /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_6a658/fast"
-/usr/bin/make -f CMakeFiles/cmTC_6a658.dir/build.make CMakeFiles/cmTC_6a658.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_fe196/fast"
+/usr/bin/make -f CMakeFiles/cmTC_fe196.dir/build.make CMakeFiles/cmTC_fe196.dir/build
 make[1]: Entering directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_6a658.dir/feature_tests.cxx.o
-/usr/bin/c++    -std=c++98 -o CMakeFiles/cmTC_6a658.dir/feature_tests.cxx.o -c /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/feature_tests.cxx
-Linking CXX executable cmTC_6a658
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_6a658.dir/link.txt --verbose=1
-/usr/bin/c++       -rdynamic CMakeFiles/cmTC_6a658.dir/feature_tests.cxx.o  -o cmTC_6a658 
+Building CXX object CMakeFiles/cmTC_fe196.dir/feature_tests.cxx.o
+/usr/bin/c++    -std=c++98 -o CMakeFiles/cmTC_fe196.dir/feature_tests.cxx.o -c /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_fe196
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_fe196.dir/link.txt --verbose=1
+/usr/bin/c++       -rdynamic CMakeFiles/cmTC_fe196.dir/feature_tests.cxx.o  -o cmTC_fe196 
 make[1]: Leaving directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
 
 
@@ -639,3 +639,465 @@ make[1]: Leaving directory '/home/joana/Documents/bachelorthesis/bubble-rings/bu
     Feature record: CXX_FEATURE:0cxx_variable_templates
     Feature record: CXX_FEATURE:0cxx_variadic_macros
     Feature record: CXX_FEATURE:0cxx_variadic_templates
+Performing C++ SOURCE FILE Test EIGEN_COMPILER_SUPPORT_CPP11 succeeded with the following output:
+Change Dir: /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_04654/fast"
+/usr/bin/make -f CMakeFiles/cmTC_04654.dir/build.make CMakeFiles/cmTC_04654.dir/build
+make[1]: Entering directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_04654.dir/src.cxx.o
+/usr/bin/c++    -DEIGEN_COMPILER_SUPPORT_CPP11   -std=c++11 -o CMakeFiles/cmTC_04654.dir/src.cxx.o -c /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_04654
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_04654.dir/link.txt --verbose=1
+/usr/bin/c++   -DEIGEN_COMPILER_SUPPORT_CPP11    -rdynamic CMakeFiles/cmTC_04654.dir/src.cxx.o  -o cmTC_04654 
+make[1]: Leaving directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test COMPILER_SUPPORT_std=cpp03 succeeded with the following output:
+Change Dir: /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_7ebe7/fast"
+/usr/bin/make -f CMakeFiles/cmTC_7ebe7.dir/build.make CMakeFiles/cmTC_7ebe7.dir/build
+make[1]: Entering directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_7ebe7.dir/src.cxx.o
+/usr/bin/c++    -DCOMPILER_SUPPORT_std=cpp03   -std=c++03 -o CMakeFiles/cmTC_7ebe7.dir/src.cxx.o -c /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_7ebe7
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_7ebe7.dir/link.txt --verbose=1
+/usr/bin/c++   -DCOMPILER_SUPPORT_std=cpp03    -rdynamic CMakeFiles/cmTC_7ebe7.dir/src.cxx.o  -o cmTC_7ebe7 
+make[1]: Leaving directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test standard_math_library_linked_to_automatically succeeded with the following output:
+Change Dir: /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_aec14/fast"
+/usr/bin/make -f CMakeFiles/cmTC_aec14.dir/build.make CMakeFiles/cmTC_aec14.dir/build
+make[1]: Entering directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_aec14.dir/src.cxx.o
+/usr/bin/c++    -std=c++03 -Dstandard_math_library_linked_to_automatically   -o CMakeFiles/cmTC_aec14.dir/src.cxx.o -c /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_aec14
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_aec14.dir/link.txt --verbose=1
+/usr/bin/c++   -std=c++03 -Dstandard_math_library_linked_to_automatically    -rdynamic CMakeFiles/cmTC_aec14.dir/src.cxx.o  -o cmTC_aec14 
+make[1]: Leaving directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+
+Source file was:
+#include<cmath>
+int main() { std::sin(0.0); std::log(0.0f); }
+Performing C++ SOURCE FILE Test COMPILER_SUPPORT_WERROR succeeded with the following output:
+Change Dir: /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_fa33f/fast"
+/usr/bin/make -f CMakeFiles/cmTC_fa33f.dir/build.make CMakeFiles/cmTC_fa33f.dir/build
+make[1]: Entering directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_fa33f.dir/src.cxx.o
+/usr/bin/c++    -std=c++03 -DCOMPILER_SUPPORT_WERROR   -Werror -o CMakeFiles/cmTC_fa33f.dir/src.cxx.o -c /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_fa33f
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_fa33f.dir/link.txt --verbose=1
+/usr/bin/c++   -std=c++03 -DCOMPILER_SUPPORT_WERROR    -rdynamic CMakeFiles/cmTC_fa33f.dir/src.cxx.o  -o cmTC_fa33f 
+make[1]: Leaving directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test COMPILER_SUPPORT_pedantic succeeded with the following output:
+Change Dir: /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_5e8ce/fast"
+/usr/bin/make -f CMakeFiles/cmTC_5e8ce.dir/build.make CMakeFiles/cmTC_5e8ce.dir/build
+make[1]: Entering directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_5e8ce.dir/src.cxx.o
+/usr/bin/c++    -std=c++03 -DCOMPILER_SUPPORT_pedantic -Werror   -pedantic -o CMakeFiles/cmTC_5e8ce.dir/src.cxx.o -c /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_5e8ce
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_5e8ce.dir/link.txt --verbose=1
+/usr/bin/c++   -std=c++03 -DCOMPILER_SUPPORT_pedantic -Werror    -rdynamic CMakeFiles/cmTC_5e8ce.dir/src.cxx.o  -o cmTC_5e8ce 
+make[1]: Leaving directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test COMPILER_SUPPORT_Wall succeeded with the following output:
+Change Dir: /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_9480c/fast"
+/usr/bin/make -f CMakeFiles/cmTC_9480c.dir/build.make CMakeFiles/cmTC_9480c.dir/build
+make[1]: Entering directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_9480c.dir/src.cxx.o
+/usr/bin/c++    -std=c++03 -pedantic -DCOMPILER_SUPPORT_Wall -Werror   -Wall -o CMakeFiles/cmTC_9480c.dir/src.cxx.o -c /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_9480c
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_9480c.dir/link.txt --verbose=1
+/usr/bin/c++   -std=c++03 -pedantic -DCOMPILER_SUPPORT_Wall -Werror    -rdynamic CMakeFiles/cmTC_9480c.dir/src.cxx.o  -o cmTC_9480c 
+make[1]: Leaving directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test COMPILER_SUPPORT_Wextra succeeded with the following output:
+Change Dir: /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_98a07/fast"
+/usr/bin/make -f CMakeFiles/cmTC_98a07.dir/build.make CMakeFiles/cmTC_98a07.dir/build
+make[1]: Entering directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_98a07.dir/src.cxx.o
+/usr/bin/c++    -std=c++03 -pedantic -Wall -DCOMPILER_SUPPORT_Wextra -Werror   -Wextra -o CMakeFiles/cmTC_98a07.dir/src.cxx.o -c /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_98a07
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_98a07.dir/link.txt --verbose=1
+/usr/bin/c++   -std=c++03 -pedantic -Wall -DCOMPILER_SUPPORT_Wextra -Werror    -rdynamic CMakeFiles/cmTC_98a07.dir/src.cxx.o  -o cmTC_98a07 
+make[1]: Leaving directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test COMPILER_SUPPORT_Wundef succeeded with the following output:
+Change Dir: /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_91cea/fast"
+/usr/bin/make -f CMakeFiles/cmTC_91cea.dir/build.make CMakeFiles/cmTC_91cea.dir/build
+make[1]: Entering directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_91cea.dir/src.cxx.o
+/usr/bin/c++    -std=c++03 -pedantic -Wall -Wextra -DCOMPILER_SUPPORT_Wundef -Werror   -Wundef -o CMakeFiles/cmTC_91cea.dir/src.cxx.o -c /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_91cea
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_91cea.dir/link.txt --verbose=1
+/usr/bin/c++   -std=c++03 -pedantic -Wall -Wextra -DCOMPILER_SUPPORT_Wundef -Werror    -rdynamic CMakeFiles/cmTC_91cea.dir/src.cxx.o  -o cmTC_91cea 
+make[1]: Leaving directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test COMPILER_SUPPORT_Wcastalign succeeded with the following output:
+Change Dir: /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_243ef/fast"
+/usr/bin/make -f CMakeFiles/cmTC_243ef.dir/build.make CMakeFiles/cmTC_243ef.dir/build
+make[1]: Entering directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_243ef.dir/src.cxx.o
+/usr/bin/c++    -std=c++03 -pedantic -Wall -Wextra -Wundef -DCOMPILER_SUPPORT_Wcastalign -Werror   -Wcast-align -o CMakeFiles/cmTC_243ef.dir/src.cxx.o -c /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_243ef
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_243ef.dir/link.txt --verbose=1
+/usr/bin/c++   -std=c++03 -pedantic -Wall -Wextra -Wundef -DCOMPILER_SUPPORT_Wcastalign -Werror    -rdynamic CMakeFiles/cmTC_243ef.dir/src.cxx.o  -o cmTC_243ef 
+make[1]: Leaving directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test COMPILER_SUPPORT_Wcharsubscripts succeeded with the following output:
+Change Dir: /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_1bc84/fast"
+/usr/bin/make -f CMakeFiles/cmTC_1bc84.dir/build.make CMakeFiles/cmTC_1bc84.dir/build
+make[1]: Entering directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_1bc84.dir/src.cxx.o
+/usr/bin/c++    -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -DCOMPILER_SUPPORT_Wcharsubscripts -Werror   -Wchar-subscripts -o CMakeFiles/cmTC_1bc84.dir/src.cxx.o -c /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_1bc84
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_1bc84.dir/link.txt --verbose=1
+/usr/bin/c++   -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -DCOMPILER_SUPPORT_Wcharsubscripts -Werror    -rdynamic CMakeFiles/cmTC_1bc84.dir/src.cxx.o  -o cmTC_1bc84 
+make[1]: Leaving directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test COMPILER_SUPPORT_Wnonvirtualdtor succeeded with the following output:
+Change Dir: /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_9cb58/fast"
+/usr/bin/make -f CMakeFiles/cmTC_9cb58.dir/build.make CMakeFiles/cmTC_9cb58.dir/build
+make[1]: Entering directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_9cb58.dir/src.cxx.o
+/usr/bin/c++    -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -DCOMPILER_SUPPORT_Wnonvirtualdtor -Werror   -Wnon-virtual-dtor -o CMakeFiles/cmTC_9cb58.dir/src.cxx.o -c /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_9cb58
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_9cb58.dir/link.txt --verbose=1
+/usr/bin/c++   -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -DCOMPILER_SUPPORT_Wnonvirtualdtor -Werror    -rdynamic CMakeFiles/cmTC_9cb58.dir/src.cxx.o  -o cmTC_9cb58 
+make[1]: Leaving directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test COMPILER_SUPPORT_Wunusedlocaltypedefs succeeded with the following output:
+Change Dir: /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_184eb/fast"
+/usr/bin/make -f CMakeFiles/cmTC_184eb.dir/build.make CMakeFiles/cmTC_184eb.dir/build
+make[1]: Entering directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_184eb.dir/src.cxx.o
+/usr/bin/c++    -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -DCOMPILER_SUPPORT_Wunusedlocaltypedefs -Werror   -Wunused-local-typedefs -o CMakeFiles/cmTC_184eb.dir/src.cxx.o -c /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_184eb
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_184eb.dir/link.txt --verbose=1
+/usr/bin/c++   -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -DCOMPILER_SUPPORT_Wunusedlocaltypedefs -Werror    -rdynamic CMakeFiles/cmTC_184eb.dir/src.cxx.o  -o cmTC_184eb 
+make[1]: Leaving directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test COMPILER_SUPPORT_Wpointerarith succeeded with the following output:
+Change Dir: /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_745eb/fast"
+/usr/bin/make -f CMakeFiles/cmTC_745eb.dir/build.make CMakeFiles/cmTC_745eb.dir/build
+make[1]: Entering directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_745eb.dir/src.cxx.o
+/usr/bin/c++    -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -DCOMPILER_SUPPORT_Wpointerarith -Werror   -Wpointer-arith -o CMakeFiles/cmTC_745eb.dir/src.cxx.o -c /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_745eb
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_745eb.dir/link.txt --verbose=1
+/usr/bin/c++   -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -DCOMPILER_SUPPORT_Wpointerarith -Werror    -rdynamic CMakeFiles/cmTC_745eb.dir/src.cxx.o  -o cmTC_745eb 
+make[1]: Leaving directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test COMPILER_SUPPORT_Wwritestrings succeeded with the following output:
+Change Dir: /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_8100c/fast"
+/usr/bin/make -f CMakeFiles/cmTC_8100c.dir/build.make CMakeFiles/cmTC_8100c.dir/build
+make[1]: Entering directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_8100c.dir/src.cxx.o
+/usr/bin/c++    -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -DCOMPILER_SUPPORT_Wwritestrings -Werror   -Wwrite-strings -o CMakeFiles/cmTC_8100c.dir/src.cxx.o -c /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_8100c
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_8100c.dir/link.txt --verbose=1
+/usr/bin/c++   -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -DCOMPILER_SUPPORT_Wwritestrings -Werror    -rdynamic CMakeFiles/cmTC_8100c.dir/src.cxx.o  -o cmTC_8100c 
+make[1]: Leaving directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test COMPILER_SUPPORT_Wformatsecurity succeeded with the following output:
+Change Dir: /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_4a292/fast"
+/usr/bin/make -f CMakeFiles/cmTC_4a292.dir/build.make CMakeFiles/cmTC_4a292.dir/build
+make[1]: Entering directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_4a292.dir/src.cxx.o
+/usr/bin/c++    -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -DCOMPILER_SUPPORT_Wformatsecurity -Werror   -Wformat-security -o CMakeFiles/cmTC_4a292.dir/src.cxx.o -c /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_4a292
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_4a292.dir/link.txt --verbose=1
+/usr/bin/c++   -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -DCOMPILER_SUPPORT_Wformatsecurity -Werror    -rdynamic CMakeFiles/cmTC_4a292.dir/src.cxx.o  -o cmTC_4a292 
+make[1]: Leaving directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test COMPILER_SUPPORT_Wlogicalop succeeded with the following output:
+Change Dir: /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_ab2f6/fast"
+/usr/bin/make -f CMakeFiles/cmTC_ab2f6.dir/build.make CMakeFiles/cmTC_ab2f6.dir/build
+make[1]: Entering directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_ab2f6.dir/src.cxx.o
+/usr/bin/c++    -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -DCOMPILER_SUPPORT_Wlogicalop -Werror   -Wlogical-op -o CMakeFiles/cmTC_ab2f6.dir/src.cxx.o -c /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_ab2f6
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ab2f6.dir/link.txt --verbose=1
+/usr/bin/c++   -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -DCOMPILER_SUPPORT_Wlogicalop -Werror    -rdynamic CMakeFiles/cmTC_ab2f6.dir/src.cxx.o  -o cmTC_ab2f6 
+make[1]: Leaving directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test COMPILER_SUPPORT_Wdoublepromotion succeeded with the following output:
+Change Dir: /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_73f3f/fast"
+/usr/bin/make -f CMakeFiles/cmTC_73f3f.dir/build.make CMakeFiles/cmTC_73f3f.dir/build
+make[1]: Entering directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_73f3f.dir/src.cxx.o
+/usr/bin/c++    -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -DCOMPILER_SUPPORT_Wdoublepromotion -Werror   -Wdouble-promotion -o CMakeFiles/cmTC_73f3f.dir/src.cxx.o -c /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_73f3f
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_73f3f.dir/link.txt --verbose=1
+/usr/bin/c++   -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -DCOMPILER_SUPPORT_Wdoublepromotion -Werror    -rdynamic CMakeFiles/cmTC_73f3f.dir/src.cxx.o  -o cmTC_73f3f 
+make[1]: Leaving directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test COMPILER_SUPPORT_Wnopsabi succeeded with the following output:
+Change Dir: /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_0b719/fast"
+/usr/bin/make -f CMakeFiles/cmTC_0b719.dir/build.make CMakeFiles/cmTC_0b719.dir/build
+make[1]: Entering directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_0b719.dir/src.cxx.o
+/usr/bin/c++    -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wdouble-promotion -DCOMPILER_SUPPORT_Wnopsabi -Werror   -Wno-psabi -o CMakeFiles/cmTC_0b719.dir/src.cxx.o -c /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_0b719
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_0b719.dir/link.txt --verbose=1
+/usr/bin/c++   -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wdouble-promotion -DCOMPILER_SUPPORT_Wnopsabi -Werror    -rdynamic CMakeFiles/cmTC_0b719.dir/src.cxx.o  -o cmTC_0b719 
+make[1]: Leaving directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test COMPILER_SUPPORT_Wnovariadicmacros succeeded with the following output:
+Change Dir: /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_8e3ce/fast"
+/usr/bin/make -f CMakeFiles/cmTC_8e3ce.dir/build.make CMakeFiles/cmTC_8e3ce.dir/build
+make[1]: Entering directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_8e3ce.dir/src.cxx.o
+/usr/bin/c++    -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wdouble-promotion -Wno-psabi -DCOMPILER_SUPPORT_Wnovariadicmacros -Werror   -Wno-variadic-macros -o CMakeFiles/cmTC_8e3ce.dir/src.cxx.o -c /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_8e3ce
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_8e3ce.dir/link.txt --verbose=1
+/usr/bin/c++   -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wdouble-promotion -Wno-psabi -DCOMPILER_SUPPORT_Wnovariadicmacros -Werror    -rdynamic CMakeFiles/cmTC_8e3ce.dir/src.cxx.o  -o cmTC_8e3ce 
+make[1]: Leaving directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test COMPILER_SUPPORT_Wnolonglong succeeded with the following output:
+Change Dir: /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_fb970/fast"
+/usr/bin/make -f CMakeFiles/cmTC_fb970.dir/build.make CMakeFiles/cmTC_fb970.dir/build
+make[1]: Entering directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_fb970.dir/src.cxx.o
+/usr/bin/c++    -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wdouble-promotion -Wno-psabi -Wno-variadic-macros -DCOMPILER_SUPPORT_Wnolonglong -Werror   -Wno-long-long -o CMakeFiles/cmTC_fb970.dir/src.cxx.o -c /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_fb970
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_fb970.dir/link.txt --verbose=1
+/usr/bin/c++   -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wdouble-promotion -Wno-psabi -Wno-variadic-macros -DCOMPILER_SUPPORT_Wnolonglong -Werror    -rdynamic CMakeFiles/cmTC_fb970.dir/src.cxx.o  -o cmTC_fb970 
+make[1]: Leaving directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test COMPILER_SUPPORT_fnochecknew succeeded with the following output:
+Change Dir: /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_da808/fast"
+/usr/bin/make -f CMakeFiles/cmTC_da808.dir/build.make CMakeFiles/cmTC_da808.dir/build
+make[1]: Entering directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_da808.dir/src.cxx.o
+/usr/bin/c++    -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wdouble-promotion -Wno-psabi -Wno-variadic-macros -Wno-long-long -DCOMPILER_SUPPORT_fnochecknew -Werror   -fno-check-new -o CMakeFiles/cmTC_da808.dir/src.cxx.o -c /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_da808
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_da808.dir/link.txt --verbose=1
+/usr/bin/c++   -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wdouble-promotion -Wno-psabi -Wno-variadic-macros -Wno-long-long -DCOMPILER_SUPPORT_fnochecknew -Werror    -rdynamic CMakeFiles/cmTC_da808.dir/src.cxx.o  -o cmTC_da808 
+make[1]: Leaving directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test COMPILER_SUPPORT_fnocommon succeeded with the following output:
+Change Dir: /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_a4273/fast"
+/usr/bin/make -f CMakeFiles/cmTC_a4273.dir/build.make CMakeFiles/cmTC_a4273.dir/build
+make[1]: Entering directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_a4273.dir/src.cxx.o
+/usr/bin/c++    -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wdouble-promotion -Wno-psabi -Wno-variadic-macros -Wno-long-long -fno-check-new -DCOMPILER_SUPPORT_fnocommon -Werror   -fno-common -o CMakeFiles/cmTC_a4273.dir/src.cxx.o -c /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_a4273
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_a4273.dir/link.txt --verbose=1
+/usr/bin/c++   -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wdouble-promotion -Wno-psabi -Wno-variadic-macros -Wno-long-long -fno-check-new -DCOMPILER_SUPPORT_fnocommon -Werror    -rdynamic CMakeFiles/cmTC_a4273.dir/src.cxx.o  -o cmTC_a4273 
+make[1]: Leaving directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test COMPILER_SUPPORT_fstrictaliasing succeeded with the following output:
+Change Dir: /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_051c6/fast"
+/usr/bin/make -f CMakeFiles/cmTC_051c6.dir/build.make CMakeFiles/cmTC_051c6.dir/build
+make[1]: Entering directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_051c6.dir/src.cxx.o
+/usr/bin/c++    -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wdouble-promotion -Wno-psabi -Wno-variadic-macros -Wno-long-long -fno-check-new -fno-common -DCOMPILER_SUPPORT_fstrictaliasing -Werror   -fstrict-aliasing -o CMakeFiles/cmTC_051c6.dir/src.cxx.o -c /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_051c6
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_051c6.dir/link.txt --verbose=1
+/usr/bin/c++   -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wdouble-promotion -Wno-psabi -Wno-variadic-macros -Wno-long-long -fno-check-new -fno-common -DCOMPILER_SUPPORT_fstrictaliasing -Werror    -rdynamic CMakeFiles/cmTC_051c6.dir/src.cxx.o  -o cmTC_051c6 
+make[1]: Leaving directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test COMPILER_SUPPORT_ansi succeeded with the following output:
+Change Dir: /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_9c0db/fast"
+/usr/bin/make -f CMakeFiles/cmTC_9c0db.dir/build.make CMakeFiles/cmTC_9c0db.dir/build
+make[1]: Entering directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_9c0db.dir/src.cxx.o
+/usr/bin/c++    -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wdouble-promotion -Wno-psabi -Wno-variadic-macros -Wno-long-long -fno-check-new -fno-common -fstrict-aliasing -DCOMPILER_SUPPORT_ansi -Werror   -ansi -o CMakeFiles/cmTC_9c0db.dir/src.cxx.o -c /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_9c0db
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_9c0db.dir/link.txt --verbose=1
+/usr/bin/c++   -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wdouble-promotion -Wno-psabi -Wno-variadic-macros -Wno-long-long -fno-check-new -fno-common -fstrict-aliasing -DCOMPILER_SUPPORT_ansi -Werror    -rdynamic CMakeFiles/cmTC_9c0db.dir/src.cxx.o  -o cmTC_9c0db 
+make[1]: Leaving directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test COMPILER_SUPPORT_OPENMP succeeded with the following output:
+Change Dir: /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_40576/fast"
+/usr/bin/make -f CMakeFiles/cmTC_40576.dir/build.make CMakeFiles/cmTC_40576.dir/build
+make[1]: Entering directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_40576.dir/src.cxx.o
+/usr/bin/c++    -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wdouble-promotion -Wno-psabi -Wno-variadic-macros -Wno-long-long -fno-check-new -fno-common -fstrict-aliasing -ansi -DCOMPILER_SUPPORT_OPENMP   -fopenmp -o CMakeFiles/cmTC_40576.dir/src.cxx.o -c /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_40576
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_40576.dir/link.txt --verbose=1
+/usr/bin/c++   -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wdouble-promotion -Wno-psabi -Wno-variadic-macros -Wno-long-long -fno-check-new -fno-common -fstrict-aliasing -ansi -DCOMPILER_SUPPORT_OPENMP    -rdynamic CMakeFiles/cmTC_40576.dir/src.cxx.o  -o cmTC_40576 
+make[1]: Leaving directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main() { return 0; }
+Determining if the include file pthread.h exists passed with the following output:
+Change Dir: /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_3ce5f/fast"
+/usr/bin/make -f CMakeFiles/cmTC_3ce5f.dir/build.make CMakeFiles/cmTC_3ce5f.dir/build
+make[1]: Entering directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_3ce5f.dir/CheckIncludeFile.c.o
+/usr/bin/cc    -o CMakeFiles/cmTC_3ce5f.dir/CheckIncludeFile.c.o   -c /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+Linking C executable cmTC_3ce5f
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_3ce5f.dir/link.txt --verbose=1
+/usr/bin/cc      -rdynamic CMakeFiles/cmTC_3ce5f.dir/CheckIncludeFile.c.o  -o cmTC_3ce5f 
+make[1]: Leaving directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+
+
+Determining if the function pthread_create exists in the pthread passed with the following output:
+Change Dir: /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_65f92/fast"
+/usr/bin/make -f CMakeFiles/cmTC_65f92.dir/build.make CMakeFiles/cmTC_65f92.dir/build
+make[1]: Entering directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_65f92.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_65f92.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.10/Modules/CheckFunctionExists.c
+Linking C executable cmTC_65f92
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_65f92.dir/link.txt --verbose=1
+/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=pthread_create    -rdynamic CMakeFiles/cmTC_65f92.dir/CheckFunctionExists.c.o  -o cmTC_65f92 -lpthread 
+make[1]: Leaving directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+
+
+Determining if the function sgemm_ exists passed with the following output:
+Change Dir: /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_0785e/fast"
+/usr/bin/make -f CMakeFiles/cmTC_0785e.dir/build.make CMakeFiles/cmTC_0785e.dir/build
+make[1]: Entering directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_0785e.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=sgemm_ -fopenmp   -o CMakeFiles/cmTC_0785e.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.10/Modules/CheckFunctionExists.c
+Linking C executable cmTC_0785e
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_0785e.dir/link.txt --verbose=1
+/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=sgemm_ -fopenmp    -rdynamic CMakeFiles/cmTC_0785e.dir/CheckFunctionExists.c.o  -o cmTC_0785e -Wl,--no-as-needed -lmkl_intel_lp64 -lmkl_gnu_thread -lmkl_core /usr/lib/gcc/x86_64-linux-gnu/7/libgomp.so -ldl -lpthread -lm 
+make[1]: Leaving directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+
+
+Performing C++ SOURCE FILE Test COMPILER_SUPPORT_FASTMATH succeeded with the following output:
+Change Dir: /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_79200/fast"
+/usr/bin/make -f CMakeFiles/cmTC_79200.dir/build.make CMakeFiles/cmTC_79200.dir/build
+make[1]: Entering directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_79200.dir/src.cxx.o
+/usr/bin/c++    -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wdouble-promotion -Wno-psabi -Wno-variadic-macros -Wno-long-long -fno-check-new -fno-common -fstrict-aliasing -ansi -DCOMPILER_SUPPORT_FASTMATH -fopenmp   -ffast-math -o CMakeFiles/cmTC_79200.dir/src.cxx.o -c /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_79200
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_79200.dir/link.txt --verbose=1
+/usr/bin/c++   -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wdouble-promotion -Wno-psabi -Wno-variadic-macros -Wno-long-long -fno-check-new -fno-common -fstrict-aliasing -ansi -DCOMPILER_SUPPORT_FASTMATH -fopenmp    -rdynamic CMakeFiles/cmTC_79200.dir/src.cxx.o  -o cmTC_79200 
+make[1]: Leaving directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test COMPILER_SUPPORT_std=cpp03 succeeded with the following output:
+Change Dir: /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_6c802/fast"
+/usr/bin/make -f CMakeFiles/cmTC_6c802.dir/build.make CMakeFiles/cmTC_6c802.dir/build
+make[1]: Entering directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_6c802.dir/src.cxx.o
+/usr/bin/c++    -DCOMPILER_SUPPORT_std=cpp03   -std=c++03 -o CMakeFiles/cmTC_6c802.dir/src.cxx.o -c /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_6c802
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_6c802.dir/link.txt --verbose=1
+/usr/bin/c++   -DCOMPILER_SUPPORT_std=cpp03    -rdynamic CMakeFiles/cmTC_6c802.dir/src.cxx.o  -o cmTC_6c802 
+make[1]: Leaving directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main() { return 0; }
+Determining if the function sgemm_ exists passed with the following output:
+Change Dir: /home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_89fc9/fast"
+/usr/bin/make -f CMakeFiles/cmTC_89fc9.dir/build.make CMakeFiles/cmTC_89fc9.dir/build
+make[1]: Entering directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_89fc9.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=sgemm_ -fopenmp   -o CMakeFiles/cmTC_89fc9.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.10/Modules/CheckFunctionExists.c
+Linking C executable cmTC_89fc9
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_89fc9.dir/link.txt --verbose=1
+/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=sgemm_ -fopenmp    -rdynamic CMakeFiles/cmTC_89fc9.dir/CheckFunctionExists.c.o  -o cmTC_89fc9 -Wl,--no-as-needed -lmkl_intel_lp64 -lmkl_gnu_thread -lmkl_core /usr/lib/gcc/x86_64-linux-gnu/7/libgomp.so -ldl -lpthread -lm 
+make[1]: Leaving directory '/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/CMakeTmp'
+
+

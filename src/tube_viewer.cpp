@@ -16,6 +16,9 @@
 #include <GLFW/glfw3.h>
 #include <math.h>
 
+#include  <Eigen/Core>
+#include  <iostream>
+#include <Eigen/src/Geometry/Quaternion.h>
 //=============================================================================
 
 
@@ -23,10 +26,6 @@
 Tube_viewer::Tube_viewer(const char* _title, int _width, int _height)
 	: GLFW_window(_title, _width, _height)
 {
-	// start animation
-	timer_active_ = true;
-	time_step_ = 1.0f / 24.0f; // one hour
-
 	// rendering parameters
 	greyscale_ = false;
 	fovy_ = 45;
@@ -118,14 +117,19 @@ void Tube_viewer::resize(int _width, int _height)
 
 //-----------------------------------------------------------------------------
 
-std::vector<vec3> unitCircleVertices(int n) {
+std::vector<vec3> unitCircleVertices(int n, vec3 center, vec3 normal, float radius) {
 	std::vector<vec3> vertices;
 
 	for (int i=0; i < n; i++) {
 	
-		float x = cos(2 * M_PI / n * i);
-		float y = sin(2 * M_PI / n * i);
-		vec4 vertex =  mat4::translate(vec3(2, 2, 0)) * vec4(x, y, 0, 1);
+		float x = cos(2 * M_PI / n * i) * radius;
+		float y = sin(2 * M_PI / n * i) * radius;
+
+		mat3 rotation;
+
+		rotation = Eigen::Quaternion::FromTwoVectors (vec3(2, 2, 0), vec3(1, 1, 1)); 	
+
+		vec4 vertex =  mat4::translate(center) * vec4(x, y, 0, 1);
 		vec3 vertex_3 = vec3(vertex.x, vertex.y, vertex.z);
 		vertices.push_back(vertex_3);
 	}
@@ -134,7 +138,6 @@ std::vector<vec3> unitCircleVertices(int n) {
 }
 
 //--------------------------------------------------------------------------------
-
 
 void Tube_viewer::initialize()
 {
@@ -154,13 +157,16 @@ void Tube_viewer::initialize()
 	ship_path_renderer_.initialize();
 	ship_path_cp_renderer_.initialize();
 	ship_path_frame_.initialize();
-	unitCircle.initialize();
+	circle1.initialize();
+	circle2.initialize();
 
 	ship_path_.set_control_polygon(control_polygon_, true);
 	ship_path_renderer_.sample(ship_path_);
 	ship_path_cp_renderer_.setPoints(ship_path_.bezier_control_points());
 
-	unitCircle.setPoints(unitCircleVertices(8));
+	circle1.setPoints(unitCircleVertices(12, vec3(2, 2, 0), vec3(1, 1, 1), 0.2));
+	circle2.setPoints(unitCircleVertices(12, vec3(3, 0, 0), vec3(-1, 0, 2), 1));
+	
 }
 //-----------------------------------------------------------------------------
 
@@ -195,13 +201,28 @@ void Tube_viewer::paint()
 		
 void Tube_viewer::draw_scene(mat4& _projection, mat4& _view)
 {
+
+		mat4 m_matrix;
+		mat4 mv_matrix;
+		mat4 mvp_matrix;
+		mat3 n_matrix;
+
+		float alpha;
+		vec3 normal_at_origin = vec3(0, 1, 0);
+		vec3 normal_at_circlevertex = vec3(2, 2, 0);
+		alpha = acos( dot(normal_at_origin, normal_at_circlevertex) / (norm(normal_at_origin) * norm(normal_at_circlevertex)));
+
+		m_matrix = mat4::rotate_y(alpha);
+		mv_matrix = _view * m_matrix;
+		mvp_matrix = _projection * mv_matrix;
 		ship_path_frame_.draw(solid_color_shader_, _projection * _view, ship_path_(ship_path_param_));
 		
 		solid_color_shader_.use();
 		solid_color_shader_.set_uniform("modelview_projection_matrix", _projection * _view);
 		solid_color_shader_.set_uniform("color", vec4(0, 0.8, 0.8, 1.0));
 		ship_path_cp_renderer_.draw();
-		unitCircle.draw();
+		circle1.draw();
+		circle2.draw();
 
 		// Bezier curve
 		solid_color_shader_.use();

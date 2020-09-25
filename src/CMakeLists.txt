@@ -13,8 +13,12 @@ set(SHADER_PATH  ${CMAKE_SOURCE_DIR}/src      CACHE PATH "location of shader pro
 add_definitions("-DTEXTURE_PATH=\"${TEXTURE_PATH}\"")
 add_definitions("-DSHADER_PATH=\"${SHADER_PATH}\"")
 
+
+find_package (Eigen3 3.3 REQUIRED NO_MODULE)
+
 # executable
 add_executable(TubeSystem ${HEADERS} ${SOURCES})
+target_link_libraries (TubeSystem Eigen3::Eigen)
 target_include_directories(TubeSystem SYSTEM PUBLIC ${GLEW_INCLUDE_DIRS})
 # Note: target_link_libraries(glfw) should actually bring in the necessary header files.
 target_link_libraries(TubeSystem lodePNG glfw ${GLEW_LIBRARIES} ${OPENGL_LIBRARIES})

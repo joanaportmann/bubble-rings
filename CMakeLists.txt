@@ -1,6 +1,6 @@
 project(TubeSystem)
 
-cmake_minimum_required(VERSION 2.8.11)
+cmake_minimum_required(VERSION 3.0)
 
 # set output paths
 set(PROJECT_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR})
@@ -47,10 +47,12 @@ endif()
 # add source directory to include path
 include_directories(${CMAKE_SOURCE_DIR}/src/)
 include_directories(${CMAKE_SOURCE_DIR}/lib/lodePNG/)
+#include_directories(${CMAKE_SOURCE_DIR}/lib/eigen-3.3.7)
 
 
 # build source directory
 add_subdirectory(lib/lodePNG)
+#add_subdirectory(lib/eigen-3.3.7)
 add_subdirectory(src)
 
 # documentation
