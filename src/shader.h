@@ -14,6 +14,7 @@
 #include "glmath.h"
 #include <vector>
 
+
 //=============================================================================
 
 /// shader class for easy handling of the shader
@@ -76,10 +77,10 @@ private:
 inline void set_uniform_by_location(int loc, bool         val) { glUniform1i       (loc, static_cast<int>(val));          }
 inline void set_uniform_by_location(int loc, float        val) { glUniform1f       (loc, val);                            }
 inline void set_uniform_by_location(int loc, int          val) { glUniform1i       (loc, val);                            }
-inline void set_uniform_by_location(int loc, const vec3  &val) { glUniform3f       (loc, val[0], val[1], val[2]);         }
-inline void set_uniform_by_location(int loc, const vec4  &val) { glUniform4f       (loc, val[0], val[1], val[2], val[3]); }
-inline void set_uniform_by_location(int loc, const mat3  &val) { glUniformMatrix3fv(loc, 1, false, val.data());           }
-inline void set_uniform_by_location(int loc, const mat4  &val) { glUniformMatrix4fv(loc, 1, false, val.data());           }
+inline void set_uniform_by_location(int loc, const vec3  &val) { glUniform3f       (loc, val(0), val(1), val(2));         }
+inline void set_uniform_by_location(int loc, const vec4  &val) { glUniform4f       (loc, val(0), val(1), val(2), val(3)); }
+inline void set_uniform_by_location(int loc, const Eigen::Matrix3f val) { glUniformMatrix3fv(loc, 1, false, val.data());           }
+inline void set_uniform_by_location(int loc, const Eigen::Matrix4f val) { glUniformMatrix4fv(loc, 1, false, val.data());           }
 
 template<typename T>
 void Shader::set_uniform(const char* name, const T &value, bool optional) {

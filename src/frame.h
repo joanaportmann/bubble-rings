@@ -2,6 +2,7 @@
 #define FRAME_H
 
 #include "shader.h"
+#include <Eigen/Geometry>
 
 // Represents and visualizes a 3D reference frame adapted to a curve:
 //      t:      unit vector tangent to the curve
@@ -14,18 +15,18 @@ struct Frame {
     // Align the frame with the tangent vector "tnew" either using parallel transport
     // from the current tangent vector or setting the vector as close to +y as possible.
     void alignTo(vec3 tnew) {
-        tnew = normalize(tnew);
+        tnew.normalize();
         if (m_useParallelTransport) {
-            vec3 sinThetaAxis = cross(t, tnew);
-            float cosTheta = dot(t, tnew);
+            vec3 sinThetaAxis = t.cross(tnew);
+            float cosTheta = t.dot(tnew);
             t    = tnew;
-            up   = (dot(sinThetaAxis, up  ) / (1 + cosTheta)) * sinThetaAxis + cross(sinThetaAxis, up  ) + cosTheta * up;
-            left = (dot(sinThetaAxis, left) / (1 + cosTheta)) * sinThetaAxis + cross(sinThetaAxis, left) + cosTheta * left;
+            up   = (sinThetaAxis.dot(up)  / (1 + cosTheta)) * sinThetaAxis + sinThetaAxis.cross(up) + cosTheta * up;
+            left = ( sinThetaAxis.dot(left) / (1 + cosTheta)) * sinThetaAxis + sinThetaAxis.cross(left)+ cosTheta * left;
         }
         else {
             t    = tnew;
-            left = normalize(cross(vec3(0.0, 1.0, 0.0), t));
-            up   = normalize(cross(t, left));
+            left = (vec3(0.0, 1.0, 0.0).cross(t)).normalized();
+            up   = (t.cross(left)).normalized();
         }
     }
 
@@ -94,10 +95,15 @@ struct Frame {
     void draw(Shader &s, const mat4 &vp, const vec3 &pos) {
         glBindVertexArray(m_arrowVAO);
 
-        auto model = mat4::translate(pos) * mat4(xyzToFrame());
+        Eigen::Affine3f scaling;
+        scaling = Eigen::Scaling(0.25f);
+        mat4 scaling_matrix = scaling.matrix();
+
+        auto model = mat4(xyzToFrame();
+
 
         s.use();
-        s.set_uniform("modelview_projection_matrix", vp * model * mat4::scale(0.25));
+        s.set_uniform("modelview_projection_matrix", vp * model * scaling_matrix);
         s.set_uniform("color", vec4(1.0, 0.0, 0.0, 1.0));
         glDrawElements(GL_TRIANGLES, m_nidx, GL_UNSIGNED_INT, NULL);
 
@@ -119,11 +125,16 @@ struct Frame {
     // We display the proper (x, y, z) axes for orienting the ship,
     // which should point in the +t direction and have the proper up vector.
     // Construct the rotation matrix mapping the (x, y, z) axis vectors to (left, up, t).
-    mat3 xyzToFrame() const {
-        mat3 m;
+    mat4 xyzToFrame(const vec3 &translation) const {
+        mat4 m;
         m(0, 0) = left[0]; m(0, 1) = up[0]; m(0, 2) = t[0];
         m(1, 0) = left[1]; m(1, 1) = up[1]; m(1, 2) = t[1];
         m(2, 0) = left[2]; m(2, 1) = up[2]; m(2, 2) = t[2];
+
+        //TODO
+
+        m(3, 0) = 
+
         return m;
     }
 

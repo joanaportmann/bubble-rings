@@ -16,7 +16,7 @@
 #include "shader.h"
 #include "path.h"
 #include "frame.h"
-#include "bezier.h"
+
 
 
 
@@ -84,8 +84,7 @@ private:
     Frame ship_path_frame_;
     float ship_path_param_ = 0; // current parametric distance of ship along the curve
 
-    /// Piecewise degree-3 Bezier spline.
-    PiecewiseBezier ship_path_;
+
 
     // Control polygon for cubic spline
     std::vector<vec3> control_polygon_ = {

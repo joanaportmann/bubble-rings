@@ -19,6 +19,8 @@
 #include  <Eigen/Core>
 #include  <iostream>
 #include <Eigen/src/Geometry/Quaternion.h>
+
+using Eigen::Vector3d;
 //=============================================================================
 
 
@@ -117,7 +119,7 @@ void Tube_viewer::resize(int _width, int _height)
 
 //-----------------------------------------------------------------------------
 
-std::vector<vec3> unitCircleVertices(int n, vec3 center, vec3 normal, float radius) {
+std::vector<vec3> unitCircleVertices(int n, vec3 center, Vector3d normal, float radius) {
 	std::vector<vec3> vertices;
 
 	for (int i=0; i < n; i++) {
@@ -125,9 +127,7 @@ std::vector<vec3> unitCircleVertices(int n, vec3 center, vec3 normal, float radi
 		float x = cos(2 * M_PI / n * i) * radius;
 		float y = sin(2 * M_PI / n * i) * radius;
 
-		mat3 rotation;
-
-		rotation = Eigen::Quaternion::FromTwoVectors (vec3(2, 2, 0), vec3(1, 1, 1)); 	
+		auto rotation = Eigen::Quaterniond::FromTwoVectors (Vector3d(0, 0, 1), normal); 	
 
 		vec4 vertex =  mat4::translate(center) * vec4(x, y, 0, 1);
 		vec3 vertex_3 = vec3(vertex.x, vertex.y, vertex.z);
