@@ -97,22 +97,34 @@ struct Frame {
 
         Eigen::Affine3f scaling;
         scaling = Eigen::Scaling(0.25f);
-        mat4 scaling_matrix = scaling.matrix();
+        mat4 scaling_matrix = scaling.matrix().cast<double>();
 
-        auto model = mat4(xyzToFrame();
+        //Includes translation
+        auto model = xyzToFrame(pos);
 
+        Eigen::Affine3f rotation_z;
+        rotation_z = Eigen::AngleAxisf(0.25*M_PI, vec3::UnitZ().cast<float>());
+        mat4 rotation_z_matrix = rotation_z.matrix().cast<double>();
 
+        Eigen::Affine3f rotation_y;
+        rotation_y = Eigen::AngleAxisf(-0.25*M_PI, vec3::UnitY().cast<float>());
+        mat4 rotation_y_matrix = rotation_y.matrix().cast<double>();
+
+        mat4 M_1, M_2;
+        mat4 M_0 = vp * model * scaling_matrix;
+        M_1 = vp * model * rotation_z_matrix * scaling_matrix;
+        M_2 = vp * model * rotation_y_matrix * scaling_matrix;
         s.use();
-        s.set_uniform("modelview_projection_matrix", vp * model * scaling_matrix);
+        s.set_uniform<mat4>("modelview_projection_matrix", M_0);
         s.set_uniform("color", vec4(1.0, 0.0, 0.0, 1.0));
         glDrawElements(GL_TRIANGLES, m_nidx, GL_UNSIGNED_INT, NULL);
 
         s.set_uniform("color", vec4(0.0, 1.0, 0.0, 1.0));
-        s.set_uniform("modelview_projection_matrix", vp * model * mat4::rotate_z(90) * mat4::scale(0.25));
+        s.set_uniform("modelview_projection_matrix", M_1);
         glDrawElements(GL_TRIANGLES, m_nidx, GL_UNSIGNED_INT, NULL);
 
         s.set_uniform("color", vec4(0.0, 0.0, 1.0, 1.0));
-        s.set_uniform("modelview_projection_matrix", vp * model * mat4::rotate_y(-90) * mat4::scale(0.25));
+        s.set_uniform("modelview_projection_matrix", M_2);
         glDrawElements(GL_TRIANGLES, m_nidx, GL_UNSIGNED_INT, NULL);
 
         glBindVertexArray(0);
@@ -127,13 +139,10 @@ struct Frame {
     // Construct the rotation matrix mapping the (x, y, z) axis vectors to (left, up, t).
     mat4 xyzToFrame(const vec3 &translation) const {
         mat4 m;
-        m(0, 0) = left[0]; m(0, 1) = up[0]; m(0, 2) = t[0];
-        m(1, 0) = left[1]; m(1, 1) = up[1]; m(1, 2) = t[1];
-        m(2, 0) = left[2]; m(2, 1) = up[2]; m(2, 2) = t[2];
-
-        //TODO
-
-        m(3, 0) = 
+        m(0, 0) = left[0]; m(0, 1) = up[0]; m(0, 2) = t[0]; m(0, 3) = translation[0];
+        m(1, 0) = left[1]; m(1, 1) = up[1]; m(1, 2) = t[1]; m(1, 3) = translation[1];
+        m(2, 0) = left[2]; m(2, 1) = up[2]; m(2, 2) = t[2]; m(2, 3) = translation[2];
+        m(3, 0) = 0; m(3, 1) = 0; m(3, 2) = 0; m(3, 3) = 1;
 
         return m;
     }

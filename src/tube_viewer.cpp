@@ -18,7 +18,7 @@
 
 #include  <Eigen/Core>
 #include  <iostream>
-#include <Eigen/src/Geometry/Quaternion.h>
+//#include <Eigen/src/Geometry/Quaternion.h>
 
 using Eigen::Vector3d;
 //=============================================================================
@@ -128,10 +128,9 @@ std::vector<vec3> unitCircleVertices(int n, vec3 center, Vector3d normal, float 
 		float y = sin(2 * M_PI / n * i) * radius;
 
 		auto rotation = Eigen::Quaterniond::FromTwoVectors (Vector3d(0, 0, 1), normal); 	
-
-		vec4 vertex =  mat4::translate(center) * vec4(x, y, 0, 1);
-		vec3 vertex_3 = vec3(vertex.x, vertex.y, vertex.z);
-		vertices.push_back(vertex_3);
+		
+		vec3 vertex =  (rotation.matrix() * vec3(x, y, 0)) + center;
+		vertices.push_back(vertex);
 	}
 
 	return vertices;
@@ -160,9 +159,9 @@ void Tube_viewer::initialize()
 	circle1.initialize();
 	circle2.initialize();
 
-	ship_path_.set_control_polygon(control_polygon_, true);
-	ship_path_renderer_.sample(ship_path_);
-	ship_path_cp_renderer_.setPoints(ship_path_.bezier_control_points());
+	//ship_path_.set_control_polygon(control_polygon_, true);
+	//ship_path_renderer_.sample(ship_path_);
+	ship_path_cp_renderer_.setPoints(control_polygon_);
 
 	circle1.setPoints(unitCircleVertices(12, vec3(2, 2, 0), vec3(1, 1, 1), 0.2));
 	circle2.setPoints(unitCircleVertices(12, vec3(3, 0, 0), vec3(-1, 0, 2), 1));
@@ -177,21 +176,34 @@ void Tube_viewer::paint()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	vec4 eye, center, up;
-	float radius, x_rotation, y_rotation;
+	float x_rotation, y_rotation;
 	mat4 rotation;
 
 	center = vec4(0, 0, 0, 0);
 
 	x_rotation = x_angle_;
 	y_rotation = y_angle_;
-	rotation = mat4::rotate_y(y_rotation) * mat4::rotate_x(x_rotation);
-	eye = center + rotation * vec4(0, 0, -(dist_factor_ ), 0);
+
+	 Eigen::Affine3f rotation_x;
+        rotation_x = Eigen::AngleAxisf(x_rotation, vec3::UnitX().cast<float>());
+        mat4 rotation_x_matrix = rotation_x.matrix().cast<double>();
+
+        Eigen::Affine3f rotation_y;
+        rotation_y = Eigen::AngleAxisf(y_rotation, vec3::UnitY().cast<float>());
+        mat4 rotation_y_matrix = rotation_y.matrix().cast<double>();
+
+	rotation = rotation_y_matrix * rotation_x_matrix;
+	eye = center + rotation * vec4(0, 0, -(dist_factor_), 0);
 	up = rotation * vec4(0, 1, 0, 0);
 
 	
-	mat4    view = mat4::look_at(vec3(eye), (vec3)center, (vec3)up);
-
-	mat4 projection = mat4::perspective(fovy_, (float)width_ / (float)height_, near_, far_);
+	mat4    view;
+	view = MatUtils::look_at(
+		eye, 
+		center,
+		up);
+	mat4 projection; 
+	projection = MatUtils::perspective(fovy_, (float)width_ / (float)height_, near_, far_);
 	draw_scene(projection, view);
 	}
 
@@ -201,40 +213,36 @@ void Tube_viewer::paint()
 		
 void Tube_viewer::draw_scene(mat4& _projection, mat4& _view)
 {
-
-		mat4 m_matrix;
-		mat4 mv_matrix;
-		mat4 mvp_matrix;
-		mat3 n_matrix;
-
-		float alpha;
-		vec3 normal_at_origin = vec3(0, 1, 0);
-		vec3 normal_at_circlevertex = vec3(2, 2, 0);
-		alpha = acos( dot(normal_at_origin, normal_at_circlevertex) / (norm(normal_at_origin) * norm(normal_at_circlevertex)));
-
-		m_matrix = mat4::rotate_y(alpha);
-		mv_matrix = _view * m_matrix;
-		mvp_matrix = _projection * mv_matrix;
-		ship_path_frame_.draw(solid_color_shader_, _projection * _view, ship_path_(ship_path_param_));
-		
-		solid_color_shader_.use();
-		solid_color_shader_.set_uniform("modelview_projection_matrix", _projection * _view);
-		solid_color_shader_.set_uniform("color", vec4(0, 0.8, 0.8, 1.0));
-		ship_path_cp_renderer_.draw();
-		circle1.draw();
-		circle2.draw();
-
-		// Bezier curve
-		solid_color_shader_.use();
-		solid_color_shader_.set_uniform("modelview_projection_matrix", _projection * _view);
-		solid_color_shader_.set_uniform("color", vec4(1.0, 0.0, 0.0, 1.0));
-		ship_path_renderer_.draw();
-
+	// the matrices we need: model, modelview, modelview-projection, normal
+	mat4 m_matrix;
+	mat4 mv_matrix;
+	mat4 mvp_matrix;
+	mat3 n_matrix;
 
 	// the sun is centered at the origin and -- for lighting -- considered to be a point, so that is the light position in world coordinates
 	vec4 light = vec4(0.0, 0.0, 0.0, 1.0); //in world coordinates
 	// convert light into camera coordinates
 	light = _view * light;
+	
+	// render circles and polygonpath
+	mat4 matrix;
+	matrix = _projection * _view;
+	solid_color_shader_.use();
+	solid_color_shader_.set_uniform("modelview_projection_matrix", matrix);
+	solid_color_shader_.set_uniform("color", vec4(0, 0.8, 0.8, 1.0));
+	ship_path_cp_renderer_.draw();
+	circle1.draw();
+	circle2.draw();
+		
+
+		// Bezier curve
+		//solid_color_shader_.use();
+		//solid_color_shader_.set_uniform("modelview_projection_matrix", _projection * _view);
+		//solid_color_shader_.set_uniform("color", vec4(1.0, 0.0, 0.0, 1.0));
+		//ship_path_renderer_.draw();
+
+
+
 
 	// check for OpenGL errors
 	glCheckError();

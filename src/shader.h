@@ -79,8 +79,12 @@ inline void set_uniform_by_location(int loc, float        val) { glUniform1f    
 inline void set_uniform_by_location(int loc, int          val) { glUniform1i       (loc, val);                            }
 inline void set_uniform_by_location(int loc, const vec3  &val) { glUniform3f       (loc, val(0), val(1), val(2));         }
 inline void set_uniform_by_location(int loc, const vec4  &val) { glUniform4f       (loc, val(0), val(1), val(2), val(3)); }
-inline void set_uniform_by_location(int loc, const Eigen::Matrix3f val) { glUniformMatrix3fv(loc, 1, false, val.data());           }
-inline void set_uniform_by_location(int loc, const Eigen::Matrix4f val) { glUniformMatrix4fv(loc, 1, false, val.data());           }
+inline void set_uniform_by_location(int loc, const Eigen::Matrix3d val) {
+    glUniformMatrix3fv(loc, 1, false, ((Eigen::Matrix3f) val.cast<float>()).data());       
+}
+inline void set_uniform_by_location(int loc, const Eigen::Matrix4d val) {
+    glUniformMatrix4fv(loc, 1, false, ((Eigen::Matrix4f) val.cast<float>()).data());
+}
 
 template<typename T>
 void Shader::set_uniform(const char* name, const T &value, bool optional) {

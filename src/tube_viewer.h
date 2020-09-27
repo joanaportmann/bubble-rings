@@ -19,7 +19,6 @@
 
 
 
-
 /// OpenGL viewer that handles all the rendering for us
 class Tube_viewer : public GLFW_window
 {
