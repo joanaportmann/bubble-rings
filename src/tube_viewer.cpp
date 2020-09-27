@@ -16,7 +16,7 @@
 #include <GLFW/glfw3.h>
 #include <math.h>
 
-#include  <Eigen/Core>
+#include  <Eigen/Dense>
 #include  <iostream>
 //#include <Eigen/src/Geometry/Quaternion.h>
 
@@ -57,10 +57,6 @@ keyboard(int key, int scancode, int action, int mods)
 			break;
 		}
 
-		case GLFW_KEY_C:
-			curve_display_mode_ = CurveDisplayMode((int(curve_display_mode_) + 1) % int(CURVE_SHOW_NUM_MODES));
-			break;
-		
 		case GLFW_KEY_ESCAPE:
 		{
 			glfwSetWindowShouldClose(window_, GL_TRUE);
@@ -199,7 +195,7 @@ void Tube_viewer::paint()
 	
 	mat4    view;
 	view = MatUtils::look_at(
-		eye, 
+		eye,
 		center,
 		up);
 	mat4 projection; 

@@ -3,7 +3,7 @@
 #include <iostream>
 #include <cassert>
 #include <math.h>
-#include <Eigen/Core>
+#include <Eigen/Dense>
 
 using vec4 = Eigen::Vector4d;
 using vec3 = Eigen::Vector3d;

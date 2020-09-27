@@ -5,7 +5,7 @@
 #include <iostream>
 #include <cassert>
 #include <math.h>
-#include <Eigen/Core>
+#include <Eigen/Dense> 
 //#include <Eigen/src/Geometry.h>
 
 
@@ -30,7 +30,7 @@ mat4 MatUtils::look_at(const vec4& eye_4d, const vec4& center_4d, const vec4& up
 
 //-----------------------------------------------------------------------------
 
-mat4 frustum(float l, float r, float b, float t, float n, float f)
+mat4 MatUtils::frustum(float l, float r, float b, float t, float n, float f)
 {
     mat4 m = mat4::Zero();
     m(0,0) = 2.0f * n / (r-l);
@@ -47,14 +47,14 @@ mat4 frustum(float l, float r, float b, float t, float n, float f)
 //-----------------------------------------------------------------------------
 
 
-mat4 perspective(float fovy, float aspect, float near, float far)
+mat4 MatUtils::perspective(float fovy, float aspect, float near, float far)
 {
     float t = near * tan( fovy * (float)M_PI / 360.0f );
     float b = -t;
     float l = b * aspect;
     float r = t * aspect;
 
-    return frustum(l, r, b, t, near, far);
+    return MatUtils::frustum(l, r, b, t, near, far);
 }
 
 
