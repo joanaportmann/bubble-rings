@@ -50,6 +50,8 @@ protected:
     /// \param _view the view matrix for the scene
     void draw_scene(mat4& _projection, mat4& _view);
 
+   void initializeCircle(const std::vector<vec3> pts, float radius);
+
 
 private:
 
@@ -77,11 +79,14 @@ private:
       /// eye's distance in radii from the observed point
     float dist_factor_;
 
-    Path ship_path_renderer_, ship_path_cp_renderer_, circle1, circle2;
+    std::vector<Path> circles;
+
+    Path ship_path_renderer_, ship_path_cp_renderer_, circle2, circle1;
     Frame ship_path_frame_;
 
     // Control polygon for cubic spline
     std::vector<vec3> control_polygon_ = {
+        {-1.0, 1.0, 1.0},
         {2.0, 2.0, 0.0},
         {3.0, 0.0, 0.0},
         {3.0, 0.0, -2.0},

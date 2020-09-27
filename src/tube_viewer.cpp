@@ -115,7 +115,7 @@ void Tube_viewer::resize(int _width, int _height)
 
 //-----------------------------------------------------------------------------
 
-std::vector<vec3> unitCircleVertices(int n, vec3 center, Vector3d normal, float radius) {
+std::vector<vec3> circleVertices(int n, vec3 center, Vector3d normal, float radius) {
 	std::vector<vec3> vertices;
 
 	for (int i=0; i < n; i++) {
@@ -152,18 +152,22 @@ void Tube_viewer::initialize()
 	ship_path_renderer_.initialize();
 	ship_path_cp_renderer_.initialize();
 	ship_path_frame_.initialize();
-	circle1.initialize();
-	circle2.initialize();
 
 	//ship_path_.set_control_polygon(control_polygon_, true);
 	//ship_path_renderer_.sample(ship_path_);
-	ship_path_cp_renderer_.setPoints(control_polygon_);
-
-	circle1.setPoints(unitCircleVertices(12, vec3(2, 2, 0), vec3(1, 1, 1), 0.2));
-	circle2.setPoints(unitCircleVertices(12, vec3(3, 0, 0), vec3(-1, 0, 2), 1));
-	
+	ship_path_cp_renderer_.setPoints(control_polygon_);	
 }
 //-----------------------------------------------------------------------------
+
+void Tube_viewer::initializeCircle (std::vector<vec3> control_polygon_, float radius) {
+	std::vector<Path> circles;
+	for(int i = 1; i < control_polygon_.size() - 1 ; i++) {
+	Path circle;
+	circle.initialize();
+	circle.setPoints(circleVertices(12, control_polygon_[i], control_polygon_[i+1]- control_polygon_[i], radius));
+	circle.draw();
+	};
+};
 
 
 void Tube_viewer::paint()
@@ -227,9 +231,8 @@ void Tube_viewer::draw_scene(mat4& _projection, mat4& _view)
 	solid_color_shader_.set_uniform("modelview_projection_matrix", matrix);
 	solid_color_shader_.set_uniform("color", vec4(0, 0.8, 0.8, 1.0));
 	ship_path_cp_renderer_.draw();
-	circle1.draw();
-	circle2.draw();
-		
+
+	Tube_viewer::initializeCircle(control_polygon_, 0.2);	
 
 		// Bezier curve
 		//solid_color_shader_.use();
