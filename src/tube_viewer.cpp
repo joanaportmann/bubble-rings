@@ -224,7 +224,7 @@ void Tube_viewer::draw_scene(mat4& _projection, mat4& _view)
 	// convert light into camera coordinates
 	light = _view * light;
 	
-	// render circles and polygonpath
+	// render polygonpath
 	mat4 matrix;
 	matrix = _projection * _view;
 	solid_color_shader_.use();
@@ -232,16 +232,8 @@ void Tube_viewer::draw_scene(mat4& _projection, mat4& _view)
 	solid_color_shader_.set_uniform("color", vec4(0, 0.8, 0.8, 1.0));
 	ship_path_cp_renderer_.draw();
 
+	// render circles around polygonpath
 	Tube_viewer::initializeCircle(control_polygon_, 0.2);	
-
-		// Bezier curve
-		//solid_color_shader_.use();
-		//solid_color_shader_.set_uniform("modelview_projection_matrix", _projection * _view);
-		//solid_color_shader_.set_uniform("color", vec4(1.0, 0.0, 0.0, 1.0));
-		//ship_path_renderer_.draw();
-
-
-
 
 	// check for OpenGL errors
 	glCheckError();
