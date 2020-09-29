@@ -21,7 +21,7 @@ class Tube
 {
 public:
 
-    Tube(std::vector<vec3> tubeVertices);
+    Tube(std::vector<vec3> tubeVertices_);
 
     /// destructor
     ~Tube();
@@ -36,12 +36,13 @@ private:
 
     /// generate sphere vertices/triangles and OpenGL buffers
     void initialize();
-
-
-private:
+    std::vector<vec3> verticesOfAllCircles(std::vector<vec3> controlPolygon, float radius, std::vector<vec3> verticesOfTube);
+    std::vector<vec3> circleVertices_t(int n, vec3 center, vec3 normal, float radius);
 
     /// indices of the triangle vertices
     unsigned int n_indices_ = 0;
+
+    std::vector<vec3> controlPolygon_;
 
     // vertex array object
     GLuint vao_ = 0;

@@ -9,24 +9,24 @@
 
 #include "tube_viewer.h"
 #include "glmath.h"
-#include <stdlib.h>     /* srand, rand */
-#include <time.h>       /* time */
+#include <stdlib.h> /* srand, rand */
+#include <time.h>	/* time */
 #include <array>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <math.h>
 
-#include  <Eigen/Dense>
-#include  <iostream>
-//#include <Eigen/src/Geometry/Quaternion.h>
+#include <Eigen/Dense>
+//#include <iostream>
 
-using Eigen::Vector3d;
+//#include <Eigen/src/Geometry/Quaternion.h>
+//using Eigen::Vector3d;
+
 //=============================================================================
 
-
-
 Tube_viewer::Tube_viewer(const char* _title, int _width, int _height)
-	: GLFW_window(_title, _width, _height)
+	: GLFW_window(_title, _width, _height),
+	tube(control_polygon_)
 {
 	// rendering parameters
 	greyscale_ = false;
@@ -39,13 +39,13 @@ Tube_viewer::Tube_viewer(const char* _title, int _width, int _height)
 	dist_factor_ = 9.0f;
 
 	srand((unsigned int)time(NULL));
+
 }
 
 //-----------------------------------------------------------------------------
 
-void
-Tube_viewer::
-keyboard(int key, int scancode, int action, int mods)
+void Tube_viewer::
+	keyboard(int key, int scancode, int action, int mods)
 {
 	if (action == GLFW_PRESS || action == GLFW_REPEAT)
 	{
@@ -90,13 +90,15 @@ keyboard(int key, int scancode, int action, int mods)
 			// Key 9 increases and key 8 decreases the `dist_factor_` within the range - 2.5 < `dist_factor_` < 20.0.
 		case GLFW_KEY_8:
 		{
-			if (dist_factor_ >= 3.0) dist_factor_ -= 0.5;
+			if (dist_factor_ >= 3.0)
+				dist_factor_ -= 0.5;
 			break;
 		}
 
 		case GLFW_KEY_9:
 		{
-			if (dist_factor_ <= 19.5) dist_factor_ += 0.5;
+			if (dist_factor_ <= 19.5)
+				dist_factor_ += 0.5;
 			break;
 		}
 		}
@@ -104,7 +106,6 @@ keyboard(int key, int scancode, int action, int mods)
 }
 
 //-----------------------------------------------------------------------------
-
 
 void Tube_viewer::resize(int _width, int _height)
 {
@@ -115,17 +116,19 @@ void Tube_viewer::resize(int _width, int _height)
 
 //-----------------------------------------------------------------------------
 
-std::vector<vec3> circleVertices(int n, vec3 center, Vector3d normal, float radius) {
+std::vector<vec3> circleVertices(int n, vec3 center, vec3 normal, float radius)
+{
 	std::vector<vec3> vertices;
 
-	for (int i=0; i < n; i++) {
-	
+	for (int i = 0; i < n; i++)
+	{
+
 		float x = cos(2 * M_PI / n * i) * radius;
 		float y = sin(2 * M_PI / n * i) * radius;
 
-		auto rotation = Eigen::Quaterniond::FromTwoVectors (Vector3d(0, 0, 1), normal); 	
-		
-		vec3 vertex =  (rotation.matrix() * vec3(x, y, 0)) + center;
+		auto rotation = Eigen::Quaterniond::FromTwoVectors(vec3(0, 0, 1), normal);
+
+		vec3 vertex = (rotation.matrix() * vec3(x, y, 0)) + center;
 		vertices.push_back(vertex);
 	}
 
@@ -155,20 +158,22 @@ void Tube_viewer::initialize()
 
 	//ship_path_.set_control_polygon(control_polygon_, true);
 	//ship_path_renderer_.sample(ship_path_);
-	ship_path_cp_renderer_.setPoints(control_polygon_);	
+	ship_path_cp_renderer_.setPoints(control_polygon_);
 }
 //-----------------------------------------------------------------------------
 
-void Tube_viewer::initializeCircle (std::vector<vec3> control_polygon_, float radius) {
-	std::vector<Path> circles;
-	for(int i = 1; i < control_polygon_.size() - 1 ; i++) {
-	Path circle;
-	circle.initialize();
-	circle.setPoints(circleVertices(12, control_polygon_[i], control_polygon_[i+1]- control_polygon_[i], radius));
-	circle.draw();
+void Tube_viewer::drawCircle(std::vector<vec3> control_polygon_, float radius)
+{
+	//std::vector<Path> circles;
+	for (int i = 1; i < control_polygon_.size() - 1; i++)
+	{
+		Path circle;
+		circle.initialize();
+		std::vector<vec3> verticesOfOneCircle = circleVertices(12, control_polygon_[i], control_polygon_[i + 1] - control_polygon_[i], radius);
+		circle.setPoints(verticesOfOneCircle);
+		circle.draw();
 	};
 };
-
 
 void Tube_viewer::paint()
 {
@@ -184,34 +189,31 @@ void Tube_viewer::paint()
 	x_rotation = x_angle_;
 	y_rotation = y_angle_;
 
-	 Eigen::Affine3f rotation_x;
-        rotation_x = Eigen::AngleAxisf(x_rotation, vec3::UnitX().cast<float>());
-        mat4 rotation_x_matrix = rotation_x.matrix().cast<double>();
+	Eigen::Affine3f rotation_x;
+	rotation_x = Eigen::AngleAxisf(x_rotation, vec3::UnitX().cast<float>());
+	mat4 rotation_x_matrix = rotation_x.matrix().cast<double>();
 
-        Eigen::Affine3f rotation_y;
-        rotation_y = Eigen::AngleAxisf(y_rotation, vec3::UnitY().cast<float>());
-        mat4 rotation_y_matrix = rotation_y.matrix().cast<double>();
+	Eigen::Affine3f rotation_y;
+	rotation_y = Eigen::AngleAxisf(y_rotation, vec3::UnitY().cast<float>());
+	mat4 rotation_y_matrix = rotation_y.matrix().cast<double>();
 
 	rotation = rotation_y_matrix * rotation_x_matrix;
 	eye = center + rotation * vec4(0, 0, -(dist_factor_), 0);
 	up = rotation * vec4(0, 1, 0, 0);
 
-	
-	mat4    view;
+	mat4 view;
 	view = MatUtils::look_at(
 		eye,
 		center,
 		up);
-	mat4 projection; 
+	mat4 projection;
 	projection = MatUtils::perspective(fovy_, (float)width_ / (float)height_, near_, far_);
 	draw_scene(projection, view);
-	}
-
+}
 
 //-----------------------------------------------------------------------------
 
-		
-void Tube_viewer::draw_scene(mat4& _projection, mat4& _view)
+void Tube_viewer::draw_scene(mat4 &_projection, mat4 &_view)
 {
 	// the matrices we need: model, modelview, modelview-projection, normal
 	mat4 m_matrix;
@@ -223,7 +225,7 @@ void Tube_viewer::draw_scene(mat4& _projection, mat4& _view)
 	vec4 light = vec4(0.0, 0.0, 0.0, 1.0); //in world coordinates
 	// convert light into camera coordinates
 	light = _view * light;
-	
+
 	// render polygonpath
 	mat4 matrix;
 	matrix = _projection * _view;
@@ -233,8 +235,7 @@ void Tube_viewer::draw_scene(mat4& _projection, mat4& _view)
 	ship_path_cp_renderer_.draw();
 
 	// render circles around polygonpath
-	Tube_viewer::initializeCircle(control_polygon_, 0.2);	
-
+	drawCircle(control_polygon_, 0.2);
 	// check for OpenGL errors
 	glCheckError();
 }

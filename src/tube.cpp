@@ -11,11 +11,16 @@
 #include "glmath.h"
 #include <vector>
 #include <math.h>
+#include <Eigen/Dense>
+//#include "tube_viewer.h"
 
 //=============================================================================
 
 
-Tube::Tube(std::vector<vec3> tubeVertices){}
+Tube::Tube(std::vector<vec3> CP)
+    : controlPolygon_(CP)
+{
+}
 
 
 //-----------------------------------------------------------------------------
@@ -35,12 +40,50 @@ Tube::~Tube()
 
 //-----------------------------------------------------------------------------
 
+std::vector<vec3> circleVertices_t(int n, vec3 center, vec3 normal, float radius)
+{
+	std::vector<vec3> vertices;
+
+	for (int i = 0; i < n; i++)
+	{
+
+		float x = cos(2 * M_PI / n * i) * radius;
+		float y = sin(2 * M_PI / n * i) * radius;
+
+		auto rotation = Eigen::Quaterniond::FromTwoVectors(vec3(0, 0, 1), normal);
+
+		vec3 vertex = (rotation.matrix() * vec3(x, y, 0)) + center;
+		vertices.push_back(vertex);
+	}
+
+	return vertices;
+}
+
+//----------------------------------------------------------------------------------
+
+std::vector<vec3> verticesOfAllCircles( std::vector<vec3> controlPolygon, float radius, std::vector<vec3> verticesOfTube)
+{
+	for (int i = 1; i < controlPolygon.size() - 1; i++)
+	{
+		std::vector<vec3> verticesOfOneCircle = circleVertices_t(12, controlPolygon[i], controlPolygon[i + 1] - controlPolygon[i], radius);
+		for (int i = 0; i < verticesOfOneCircle.size() - 1; i++)
+		{
+			verticesOfTube.push_back(verticesOfOneCircle[i]);
+		}
+		
+	};
+	return verticesOfTube;
+};
+
+//------------------------------------------------------------------------------------
+
 
 void Tube::initialize()
 {
-    const unsigned int n_vertices   = 3 * tubeVertices.size();
+    Tube::tubeVertices = verticesOfAllCircles(controlPolygon_ , 0.3, Tube::tubeVertices);
+    const unsigned int n_vertices   = 3 * Tube::tubeVertices.size();
     // Hardcoded: Momentan hat Kreis 7 vertces
-    const unsigned int n_triangles  = 2 * tubeVertices.size();
+    const unsigned int n_triangles  = 2 * Tube::tubeVertices.size();
 
     std::vector<GLfloat> positions(3*n_vertices);
     std::vector<GLuint >   indices(3*n_triangles);
@@ -49,9 +92,9 @@ void Tube::initialize()
     //unsigned int t(0), n(0), tan(0), bitan(0);
 
     // generate vertices
-    for (unsigned int i=0; i<tubeVertices.size(); ++i)
+    for (unsigned int i=0; i<tubeVertices.size() - 1; ++i)
     {
-            vec3 currentVector = tubeVertices[i];
+            vec3 currentVector = Tube::tubeVertices[i];
             positions[p++] = currentVector(0);
             positions[p++] = currentVector(1);
             positions[p++] = currentVector(2);
@@ -66,13 +109,13 @@ void Tube::initialize()
 
 
     // generate triangles
-    for (unsigned int v=0; v<tubeVertices.size()-1; ++v)
+    for (unsigned int v=0; v<Tube::tubeVertices.size()-1; ++v)
     {       
         bool lastVertexInCircle = v % 7 == 6;
             unsigned int i0 = v;
-            unsigned int i1 = (lastVertexInCircle ? v - 6 : v + 1) % tubeVertices.size();
-            unsigned int i2 = (v+7) % tubeVertices.size();
-            unsigned int i3 = (lastVertexInCircle ? v + 1 : v + 8) % tubeVertices.size();
+            unsigned int i1 = (lastVertexInCircle ? v - 6 : v + 1) % Tube::tubeVertices.size();
+            unsigned int i2 = (v+7) % Tube::tubeVertices.size();
+            unsigned int i3 = (lastVertexInCircle ? v + 1 : v + 8) % Tube::tubeVertices.size();
 
             indices[i++] = i0;
             indices[i++] = i1;
