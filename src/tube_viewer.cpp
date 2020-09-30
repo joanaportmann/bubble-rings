@@ -233,7 +233,8 @@ void Tube_viewer::draw_scene(mat4 &_projection, mat4 &_view)
 	solid_color_shader_.set_uniform("modelview_projection_matrix", matrix);
 	solid_color_shader_.set_uniform("color", vec4(0, 0.8, 0.8, 1.0));
 	ship_path_cp_renderer_.draw();
-
+	tube.draw();
+	
 	// render circles around polygonpath
 	drawCircle(control_polygon_, 0.2);
 	// check for OpenGL errors

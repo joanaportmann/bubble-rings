@@ -7,7 +7,7 @@
 //
 //=============================================================================
 #ifndef TUBE_H
-#define TUBEE_H
+#define TUBE_H
 //=============================================================================
 
 #include "gl.h"
@@ -16,17 +16,16 @@
 #include <vector>
 //=============================================================================
 
-/// class that creates a sphere with a desired tessellation degree and renders it
+
 class Tube
 {
+
 public:
 
     Tube(std::vector<vec3> tubeVertices_);
 
     /// destructor
     ~Tube();
-
-    std::vector<vec3> tubeVertices;
 
     /// render mesh of the sphere
     void draw(GLenum mode=GL_TRIANGLES);
@@ -36,13 +35,19 @@ private:
 
     /// generate sphere vertices/triangles and OpenGL buffers
     void initialize();
-    std::vector<vec3> verticesOfAllCircles(std::vector<vec3> controlPolygon, float radius, std::vector<vec3> verticesOfTube);
+
+    /// Compute normal vectors for triangles and vertices
+    void compute_normals();
+
     std::vector<vec3> circleVertices_t(int n, vec3 center, vec3 normal, float radius);
+
+    // generate triangle structs
+    void createTriangleAndVertexStructs();
 
     /// indices of the triangle vertices
     unsigned int n_indices_ = 0;
 
-    std::vector<vec3> controlPolygon_;
+    
 
     // vertex array object
     GLuint vao_ = 0;
@@ -58,6 +63,40 @@ private:
     GLuint tbo_ = 0;
     /// index buffer object
     GLuint ibo_ = 0;
+
+    /// a triangle is specified by three indices and a normal
+    struct Triangle
+    {
+        vec3 v0;
+        vec3 v1;
+        vec3 v2;
+        /// index of first vertex 
+        int ind0;
+        /// index of second vertex 
+        int ind1;
+        /// index of third vertex 
+        int ind2;
+        /// triangle normal
+        vec3 normal;
+    };
+
+      /// a vertex consists of a position and a normal
+    struct Vertex
+    {
+        /// vertex position
+        vec3 position;
+        /// vertex normal
+        vec3 normal;
+    }; 
+    
+    /// Array of vertices
+    std::vector<Vertex> vertices_;
+    /// Array of triangles
+    std::vector<Triangle> triangles_;
+
+    std::vector<vec3> tubeVertices;
+    std::vector<vec3> controlPolygon_;
+
 };
 
 

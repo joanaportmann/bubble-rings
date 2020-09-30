@@ -1,8 +1,0 @@
-/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/rebuild_cache.dir
-/home/joana/Documents/bachelorthesis/bubble-rings/build/CMakeFiles/edit_cache.dir
-/home/joana/Documents/bachelorthesis/bubble-rings/build/lib/lodePNG/CMakeFiles/rebuild_cache.dir
-/home/joana/Documents/bachelorthesis/bubble-rings/build/lib/lodePNG/CMakeFiles/lodePNG.dir
-/home/joana/Documents/bachelorthesis/bubble-rings/build/lib/lodePNG/CMakeFiles/edit_cache.dir
-/home/joana/Documents/bachelorthesis/bubble-rings/build/src/CMakeFiles/rebuild_cache.dir
-/home/joana/Documents/bachelorthesis/bubble-rings/build/src/CMakeFiles/TubeSystem.dir
-/home/joana/Documents/bachelorthesis/bubble-rings/build/src/CMakeFiles/edit_cache.dir
