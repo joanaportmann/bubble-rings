@@ -65,25 +65,25 @@ void Tube_viewer::
 
 		case GLFW_KEY_LEFT:
 		{
-			y_angle_ -= 10.0;
+			y_angle_ -= 0.2 * M_PI;
 			break;
 		}
 
 		case GLFW_KEY_RIGHT:
 		{
-			y_angle_ += 10.0;
+			y_angle_ += 0.1 * M_PI;
 			break;
 		}
 
 		case GLFW_KEY_DOWN:
 		{
-			x_angle_ += 10.0;
+			x_angle_ += 0.1 * M_PI;
 			break;
 		}
 
 		case GLFW_KEY_UP:
 		{
-			x_angle_ -= 10.0;
+			x_angle_ -= 0.1 * M_PI;
 			break;
 		}
 

@@ -108,8 +108,9 @@ void Tube::createTriangleAndVertexStructs()
 {
 
     tubeVertices = verticesOfAllCircles(controlPolygon_, 0.3);
+    cout << tubeVertices.size();
 
-    for (unsigned int v = 0; v < tubeVertices.size() - 1; ++v)
+    for (unsigned int v = 0; v < tubeVertices.size(); ++v)
     {
         Triangle triangle1, triangle2;
         Vertex vertex1, vertex2, vertex3, vertex4;
@@ -155,9 +156,9 @@ void Tube::compute_normals()
     // compute triangle normals
     for (Triangle &t : triangles_)
     {
-        const vec3 &p0 = vertices_[t.ind0].position;
-        const vec3 &p1 = vertices_[t.ind1].position;
-        const vec3 &p2 = vertices_[t.ind2].position;
+        const vec3 &p0 = vertices_.at(t.ind0).position;
+        const vec3 &p1 = vertices_.at(t.ind1).position;
+        const vec3 &p2 = vertices_.at(t.ind2).position;
 
         t.normal = ((p1 - p0).cross(p2 - p0)).normalized();
     }
@@ -169,9 +170,9 @@ void Tube::compute_normals()
 
     for (Triangle &t : triangles_)
     {
-        const vec3 &p0 = vertices_[t.ind0].position;
-        const vec3 &p1 = vertices_[t.ind1].position;
-        const vec3 &p2 = vertices_[t.ind2].position;
+        const vec3 &p0 = vertices_.at(t.ind0).position;
+        const vec3 &p1 = vertices_.at(t.ind1).position;
+        const vec3 &p2 = vertices_.at(t.ind2).position;
 
         double w0, w1, w2;
 
@@ -179,9 +180,10 @@ void Tube::compute_normals()
         angleWeights(p0, p1, p2, w0, w1, w2);
    
         //adding the normals all together
-        vertices_[t.ind0].normal += t.normal * w0;
-        vertices_[t.ind1].normal += t.normal * w1;
-        vertices_[t.ind2].normal += t.normal * w2;
+
+        vertices_.at(t.ind0).normal += t.normal * w0;
+        vertices_.at(t.ind1).normal += t.normal * w1;
+        vertices_.at(t.ind2).normal += t.normal * w2;
     }
 
 
@@ -199,20 +201,19 @@ void Tube::initialize()
     Tube::createTriangleAndVertexStructs();
     Tube::compute_normals();
 
-    const unsigned int n_vertices = 3 * tubeVertices.size();
-    const unsigned int n_triangles = 2 * tubeVertices.size();
-
-    std::vector<GLfloat> positions(3 * n_vertices);
-    std::vector<GLuint> indices(3 * n_triangles);
-    std::vector<GLfloat> normals(3 * n_vertices);
+    std::vector<GLfloat> positions(3 * vertices_.size());
+    std::vector<GLuint> indices(3 * triangles_.size());
+    std::vector<GLfloat> normals(3 * vertices_.size());
 
     unsigned int p(0), i(0), n(0);
     //unsigned int t(0), tan(0), bitan(0);
 
+    assert(positions.size() == 3 * vertices_.size());
+    assert(normals.size() == 3 *vertices_.size());
+
     // generate vertices
     for (Vertex &v : vertices_)
     {
-
         positions[p++] = v.position(0);
         positions[p++] = v.position(1);
         positions[p++] = v.position(2);
@@ -233,7 +234,7 @@ void Tube::initialize()
         indices[i++] = t.ind2;
     }
 
-    n_indices_ = 3 * n_triangles;
+    n_indices_ = 3 * triangles_.size();
 
     printf("Hallo\n");
     // generate vertex array object
@@ -248,21 +249,21 @@ void Tube::initialize()
     // vertex positions -> attribute 0
 
     glBindBuffer(GL_ARRAY_BUFFER, vbo_);
-    glBufferData(GL_ARRAY_BUFFER, 3 * n_vertices * sizeof(float), &positions[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 3 * vertices_.size() * sizeof(float), &positions[0], GL_STATIC_DRAW);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(0);
 
     // normal vectors -> attribute 1
 
     glBindBuffer(GL_ARRAY_BUFFER, nbo_);
-    glBufferData(GL_ARRAY_BUFFER, 3 * n_vertices * sizeof(float), &normals[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 3 * vertices_.size() * sizeof(float), &normals[0], GL_STATIC_DRAW);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(1);
 
     // triangle indices
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo_);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 3 * n_triangles * sizeof(GLuint), &indices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 3 * triangles_.size() * sizeof(GLuint), &indices[0], GL_STATIC_DRAW);
 }
 
 //-----------------------------------------------------------------------------
