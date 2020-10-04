@@ -77,6 +77,9 @@ private:
     /// phong shader (renders texture and basic illumination)
     Shader   phong_shader_;
 
+    // sun shader (renders the sun: texture plus an optional shimmer effect)
+    Shader   tube_shader_;
+   
     /// simple shader for visualizing curves (just using solid color).
     Shader   solid_color_shader_;
 

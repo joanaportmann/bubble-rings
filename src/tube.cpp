@@ -54,9 +54,8 @@ std::vector<vec3> circleVertices_t(int n, vec3 center, vec3 normal, float radius
 {
     std::vector<vec3> vertices;
 
-    for (int i = 0; i < n - 1; i++)
+    for (int i = 0; i < n; i++)
     {
-
         float x = cos(2 * M_PI / n * i) * radius;
         float y = sin(2 * M_PI / n * i) * radius;
 
@@ -74,14 +73,19 @@ std::vector<vec3> circleVertices_t(int n, vec3 center, vec3 normal, float radius
 
 std::vector<vec3> verticesOfAllCircles(const std::vector<vec3> &controlPolygon, float radius)
 {
-
     std::vector<vec3> verticesOfTube;
-    for (int i = 1; i < controlPolygon.size() - 1; i++)
+
+    for (int i = 0; i < controlPolygon.size(); i++)
     {
-        std::vector<vec3> verticesOfOneCircle = circleVertices_t(12, controlPolygon[i], controlPolygon[i + 1] - controlPolygon[i], radius);
-        for (int i = 0; i < verticesOfOneCircle.size() - 1; i++)
+        std::vector<vec3> verticesOfOneCircle = circleVertices_t(
+            7,
+            controlPolygon[i],
+            controlPolygon[(i + 1) % controlPolygon.size()] - controlPolygon[i],
+            radius
+        );
+        for (int j = 0; j < verticesOfOneCircle.size(); j++)
         {
-            verticesOfTube.push_back(verticesOfOneCircle[i]);
+            verticesOfTube.push_back(verticesOfOneCircle[j]);
         }
     };
 
@@ -108,36 +112,35 @@ void Tube::createTriangleAndVertexStructs()
 {
 
     tubeVertices = verticesOfAllCircles(controlPolygon_, 0.3);
-    cout << tubeVertices.size();
 
     for (unsigned int v = 0; v < tubeVertices.size(); ++v)
     {
         Triangle triangle1, triangle2;
-        Vertex vertex1, vertex2, vertex3, vertex4;
+        Vertex vertex0, vertex1, vertex2, vertex3;
         bool lastVertexInCircle = v % 7 == 6;
-
-        vertex1.position = tubeVertices[v];
-        Tube::vertices_.push_back(vertex1);
-        vertex2.position = tubeVertices[(lastVertexInCircle ? v - 6 : v + 1) % tubeVertices.size()];
-        Tube::vertices_.push_back(vertex2);
-        vertex3.position = tubeVertices[(v + 7) % tubeVertices.size()];
-        Tube::vertices_.push_back(vertex3);
-        vertex4.position = tubeVertices[(lastVertexInCircle ? v + 1 : v + 8) % tubeVertices.size()];
-        Tube::vertices_.push_back(vertex4);
 
         unsigned int i0 = v;
         unsigned int i1 = (lastVertexInCircle ? v - 6 : v + 1) % tubeVertices.size();
         unsigned int i2 = (v + 7) % tubeVertices.size();
         unsigned int i3 = (lastVertexInCircle ? v + 1 : v + 8) % tubeVertices.size();
 
+        vertex0.position = tubeVertices[i0];
+        Tube::vertices_.push_back(vertex0);
+        vertex1.position = tubeVertices[i1];
+        Tube::vertices_.push_back(vertex1);
+        vertex2.position = tubeVertices[i2];
+        Tube::vertices_.push_back(vertex2);
+        vertex3.position = tubeVertices[i3];
+        Tube::vertices_.push_back(vertex3);
+
         triangle1.ind0 = i0;
         triangle1.ind1 = i1;
         triangle1.ind2 = i3;
         Tube::triangles_.push_back(triangle1);
 
-        triangle2.ind0 = i1;
-        triangle2.ind1 = i2;
-        triangle2.ind2 = i3;
+        triangle2.ind0 = i0;
+        triangle2.ind1 = i3;
+        triangle2.ind2 = i2;
         Tube::triangles_.push_back(triangle2);
     }
 }
@@ -204,26 +207,28 @@ void Tube::initialize()
     std::vector<GLfloat> positions(3 * vertices_.size());
     std::vector<GLuint> indices(3 * triangles_.size());
     std::vector<GLfloat> normals(3 * vertices_.size());
+    std::vector<GLfloat> texcoords(2*vertices_.size());
 
-    unsigned int p(0), i(0), n(0);
+    unsigned int p(0), i(0), n(0), t(0);
     //unsigned int t(0), tan(0), bitan(0);
 
     assert(positions.size() == 3 * vertices_.size());
     assert(normals.size() == 3 *vertices_.size());
+    assert(triangles_.size() == 2 * vertices_.size());
 
     // generate vertices
     for (Vertex &v : vertices_)
     {
-        positions[p++] = v.position(0);
-        positions[p++] = v.position(1);
-        positions[p++] = v.position(2);
+        positions[p++] = v.position.x();
+        positions[p++] = v.position.y();
+        positions[p++] = v.position.z();
 
         normals[n++] = v.normal(0);
         normals[n++] = v.normal(1);
         normals[n++] = v.normal(2);
 
-        //texcoords[t++] = 1.0-u;
-        //texcoords[t++] = 1.0-v;
+        texcoords[t++] = 0.8;
+        texcoords[t++] = 0.5;
     }
 
     // generate triangles
@@ -240,30 +245,38 @@ void Tube::initialize()
     // generate vertex array object
     glGenVertexArrays(1, &vao_);
     printf("Velo\n");
+    // generate buffers
     glGenBuffers(1, &vbo_);
     glGenBuffers(1, &ibo_);
     glGenBuffers(1, &nbo_);
 
-
     glBindVertexArray(vao_);
+
     // vertex positions -> attribute 0
 
     glBindBuffer(GL_ARRAY_BUFFER, vbo_);
-    glBufferData(GL_ARRAY_BUFFER, 3 * vertices_.size() * sizeof(float), &positions[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, positions.size() * sizeof(float), &positions[0], GL_STATIC_DRAW);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(0);
 
     // normal vectors -> attribute 1
 
     glBindBuffer(GL_ARRAY_BUFFER, nbo_);
-    glBufferData(GL_ARRAY_BUFFER, 3 * vertices_.size() * sizeof(float), &normals[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(float), &normals[0], GL_STATIC_DRAW);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(1);
+
+    // texture coordinates -> attribute 2
+    glGenBuffers(1, &tbo_);
+    glBindBuffer(GL_ARRAY_BUFFER, tbo_);
+    glBufferData(GL_ARRAY_BUFFER, texcoords.size() * sizeof(float), &texcoords[0], GL_STATIC_DRAW);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(2);
 
     // triangle indices
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo_);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 3 * triangles_.size() * sizeof(GLuint), &indices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), &indices[0], GL_STATIC_DRAW);
 }
 
 //-----------------------------------------------------------------------------
