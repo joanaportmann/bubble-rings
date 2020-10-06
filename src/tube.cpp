@@ -50,7 +50,7 @@ std::string debugString0("000");
 std::string debugString1("111");
 //-----------------------------------------------------------------------------
 
-std::vector<vec3> circleVertices_t(int n, vec3 center, vec3 normal, float radius)
+std::vector<vec3> verticesofOneCircle_(int n, vec3 center, vec3 normal, float radius)
 {
     std::vector<vec3> vertices;
 
@@ -77,7 +77,7 @@ std::vector<vec3> verticesOfAllCircles(const std::vector<vec3> &controlPolygon, 
 
     for (int i = 0; i < controlPolygon.size(); i++)
     {
-        std::vector<vec3> verticesOfOneCircle = circleVertices_t(
+        std::vector<vec3> verticesOfOneCircle = verticesofOneCircle_(
             7,
             controlPolygon[i],
             controlPolygon[(i + 1) % controlPolygon.size()] - controlPolygon[i],
@@ -94,17 +94,17 @@ std::vector<vec3> verticesOfAllCircles(const std::vector<vec3> &controlPolygon, 
 
 //------------------------------------------------------------------------------------
 
-void angleWeights(const vec3 &p0, const vec3 &p1, const vec3 &p2,
-                  double &w0, double &w1, double &w2)
-{
-    // compute angle weights
-    const vec3 e01 = (p1 - p0).normalized();
-    const vec3 e12 = (p2 - p1).normalized();
-    const vec3 e20 = (p0 - p2).normalized();
-    w0 = acos(std::max(-1.0, std::min(1.0, e01.dot(-e20))));
-    w1 = acos(std::max(-1.0, std::min(1.0, e12.dot(-e01))));
-    w2 = acos(std::max(-1.0, std::min(1.0, e20.dot(-e12))));
-}
+// void angleWeights(const vec3 &p0, const vec3 &p1, const vec3 &p2,
+//                   double &w0, double &w1, double &w2)
+// {
+//     // compute angle weights
+//     const vec3 e01 = (p1 - p0).normalized();
+//     const vec3 e12 = (p2 - p1).normalized();
+//     const vec3 e20 = (p0 - p2).normalized();
+//     w0 = acos(std::max(-1.0, std::min(1.0, e01.dot(-e20))));
+//     w1 = acos(std::max(-1.0, std::min(1.0, e12.dot(-e01))));
+//     w2 = acos(std::max(-1.0, std::min(1.0, e20.dot(-e12))));
+// }
 
 //------------------------------------------------------------------------------------
 
@@ -166,35 +166,35 @@ void Tube::compute_normals()
         t.normal = ((p1 - p0).cross(p2 - p0)).normalized();
     }
     // initialize vertex normals to zero
-    for (Vertex &v : vertices_)
-    {
-        v.normal = vec3(0, 0, 0);
-    }
+    // for (Vertex &v : vertices_)
+    // {
+    //     v.normal = vec3(0, 0, 0);
+    // }
 
-    for (Triangle &t : triangles_)
-    {
-        const vec3 &p0 = vertices_.at(t.ind0).position;
-        const vec3 &p1 = vertices_.at(t.ind1).position;
-        const vec3 &p2 = vertices_.at(t.ind2).position;
+    // for (Triangle &t : triangles_)
+    // {
+    //     const vec3 &p0 = vertices_.at(t.ind0).position;
+    //     const vec3 &p1 = vertices_.at(t.ind1).position;
+    //     const vec3 &p2 = vertices_.at(t.ind2).position;
 
-        double w0, w1, w2;
+    //     double w0, w1, w2;
 
-        // Weigh the normals by their triangles' angles.
-        angleWeights(p0, p1, p2, w0, w1, w2);
+    //     // Weigh the normals by their triangles' angles.
+    //     angleWeights(p0, p1, p2, w0, w1, w2);
    
-        //adding the normals all together
+    //     //adding the normals all together
 
-        vertices_.at(t.ind0).normal += t.normal * w0;
-        vertices_.at(t.ind1).normal += t.normal * w1;
-        vertices_.at(t.ind2).normal += t.normal * w2;
-    }
+    //     vertices_.at(t.ind0).normal += t.normal * w0;
+    //     vertices_.at(t.ind1).normal += t.normal * w1;
+    //     vertices_.at(t.ind2).normal += t.normal * w2;
+    // }
 
 
-    for (Vertex &v : vertices_)
-    {
-        v.normal = (v.normal).normalized();
-        //cout << v.position << "\n"; 
-    } 
+    // for (Vertex &v : vertices_)
+    // {
+    //     v.normal = (v.normal).normalized();
+    //     //cout << v.position << "\n"; 
+    // } 
 }
 
 //--------------------------------------------------------------------------------------
@@ -205,28 +205,19 @@ void Tube::initialize()
     Tube::createTriangleAndVertexStructs();
     Tube::compute_normals();
 
-    std::vector<GLfloat> positions(3 * vertices_.size());
+    std::vector<GLfloat> positions(3 * tubeVertices.size());
     std::vector<GLuint> indices(3 * triangles_.size());
-    std::vector<GLfloat> normals(3 * vertices_.size());
-    std::vector<GLfloat> texcoords(2 * vertices_.size());
+    std::vector<GLfloat> normals(3 * triangles_.size());
+    std::vector<GLfloat> texcoords(2 * tubeVertices.size());
 
     unsigned int p(0), i(0), n(0), t(0);
-    //unsigned int t(0), tan(0), bitan(0);
-
-    assert(positions.size() == 3 * vertices_.size());
-    assert(normals.size() == 3 *vertices_.size());
-    assert(triangles_.size() == 2 * vertices_.size());
 
     // generate vertices
-    for (Vertex &v : vertices_)
+    for (int k = 0; k < tubeVertices.size(); k++)
     {
-        positions[p++] = v.position.x();
-        positions[p++] = v.position.y();
-        positions[p++] = v.position.z();
-
-        normals[n++] = v.normal(0);
-        normals[n++] = v.normal(1);
-        normals[n++] = v.normal(2);
+        positions[p++] = tubeVertices[k](0);
+        positions[p++] = tubeVertices[k](1);
+        positions[p++] = tubeVertices[k](2);
 
         texcoords[t++] = 0.8;
         texcoords[t++] = 0.5;
@@ -237,16 +228,15 @@ void Tube::initialize()
     // generate triangles
     for (Triangle &t : triangles_)
     {
-        if (counter++ > 0) break;
-        
-       
-        printf("%d\n",t.ind0);
-        printf("%d\n",t.ind1);
-        printf("%d\n",t.ind2);
+        //if (counter++ > 2) break;
 
         indices[i++] = t.ind0;
         indices[i++] = t.ind1;
         indices[i++] = t.ind2;
+
+        normals[n++] = t.normal(0);
+        normals[n++] = t.normal(1);
+        normals[n++] = t.normal(2);
     }
 
     n_indices_ = 3 * triangles_.size();
