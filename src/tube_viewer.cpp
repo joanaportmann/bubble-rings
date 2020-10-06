@@ -21,6 +21,7 @@
 
 //#include <Eigen/src/Geometry/Quaternion.h>
 //using Eigen::Vector3d;
+using namespace std;
 
 //=============================================================================
 
@@ -165,11 +166,16 @@ void Tube_viewer::initialize()
 void Tube_viewer::drawCircle(std::vector<vec3> control_polygon_, float radius)
 {
 	//std::vector<Path> circles;
-	for (int i = 1; i < control_polygon_.size() - 1; i++)
+	for (int i = 0; i < control_polygon_.size(); i++)
 	{
 		Path circle;
 		circle.initialize();
-		std::vector<vec3> verticesOfOneCircle = circleVertices(7, control_polygon_[i], control_polygon_[i + 1] - control_polygon_[i], radius);
+		std::vector<vec3> verticesOfOneCircle = circleVertices(
+			7,
+			control_polygon_[i],
+			control_polygon_[(i + 1) % control_polygon_.size()] - control_polygon_[i],
+			radius
+		);
 		circle.setPoints(verticesOfOneCircle);
 		circle.draw();
 	};
@@ -234,7 +240,7 @@ void Tube_viewer::draw_scene(mat4 &_projection, mat4 &_view)
 
 	solid_color_shader_.use();
 	solid_color_shader_.set_uniform("modelview_projection_matrix", matrix);
-	solid_color_shader_.set_uniform("color", vec4(0, 0.8, 0.8, 1.0));
+	solid_color_shader_.set_uniform("color", vec4(0.8, 0.8, 0.2, 0.6));
 	ship_path_cp_renderer_.draw();
 	//tube_shader_.use();
 	//tube_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
@@ -269,7 +275,7 @@ void Tube_viewer::draw_scene(mat4 &_projection, mat4 &_view)
 	tube.draw();
 	
 	// render circles around polygonpath
-	drawCircle(control_polygon_, 0.2);
+	drawCircle(control_polygon_, 0.3);
 	// check for OpenGL errors
 	glCheckError();
 }

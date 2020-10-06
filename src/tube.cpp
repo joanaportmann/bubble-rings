@@ -193,6 +193,7 @@ void Tube::compute_normals()
     for (Vertex &v : vertices_)
     {
         v.normal = (v.normal).normalized();
+        //cout << v.position << "\n"; 
     } 
 }
 
@@ -207,7 +208,7 @@ void Tube::initialize()
     std::vector<GLfloat> positions(3 * vertices_.size());
     std::vector<GLuint> indices(3 * triangles_.size());
     std::vector<GLfloat> normals(3 * vertices_.size());
-    std::vector<GLfloat> texcoords(2*vertices_.size());
+    std::vector<GLfloat> texcoords(2 * vertices_.size());
 
     unsigned int p(0), i(0), n(0), t(0);
     //unsigned int t(0), tan(0), bitan(0);
@@ -231,9 +232,18 @@ void Tube::initialize()
         texcoords[t++] = 0.5;
     }
 
+ 
+    int counter = 0;
     // generate triangles
     for (Triangle &t : triangles_)
     {
+        if (counter++ > 0) break;
+        
+       
+        printf("%d\n",t.ind0);
+        printf("%d\n",t.ind1);
+        printf("%d\n",t.ind2);
+
         indices[i++] = t.ind0;
         indices[i++] = t.ind1;
         indices[i++] = t.ind2;
@@ -241,10 +251,10 @@ void Tube::initialize()
 
     n_indices_ = 3 * triangles_.size();
 
-    printf("Hallo\n");
+    
     // generate vertex array object
     glGenVertexArrays(1, &vao_);
-    printf("Velo\n");
+  
     // generate buffers
     glGenBuffers(1, &vbo_);
     glGenBuffers(1, &ibo_);
