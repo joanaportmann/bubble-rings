@@ -18,6 +18,8 @@
 
 #include <Eigen/Dense>
 
+#define numberOfVerticesPerTubeCircle 15
+
 //using Eigen::Vector3d;
 using namespace std;
 
@@ -64,25 +66,25 @@ void Tube_viewer::
 
 		case GLFW_KEY_LEFT:
 		{
-			y_angle_ -= 0.2 * M_PI;
+			y_angle_ -= 0.05 * M_PI;
 			break;
 		}
 
 		case GLFW_KEY_RIGHT:
 		{
-			y_angle_ += 0.1 * M_PI;
+			y_angle_ += 0.05 * M_PI;
 			break;
 		}
 
 		case GLFW_KEY_DOWN:
 		{
-			x_angle_ += 0.1 * M_PI;
+			x_angle_ += 0.05 * M_PI;
 			break;
 		}
 
 		case GLFW_KEY_UP:
 		{
-			x_angle_ -= 0.1 * M_PI;
+			x_angle_ -= 0.05 * M_PI;
 			break;
 		}
 
@@ -90,14 +92,14 @@ void Tube_viewer::
 		case GLFW_KEY_8:
 		{
 			if (dist_factor_ >= 3.0)
-				dist_factor_ -= 0.5;
+				dist_factor_ -= 0.2;
 			break;
 		}
 
 		case GLFW_KEY_9:
 		{
 			if (dist_factor_ <= 19.5)
-				dist_factor_ += 0.5;
+				dist_factor_ += 0.2;
 			break;
 		}
 		}
@@ -166,17 +168,16 @@ void Tube_viewer::drawCircle(std::vector<vec3> control_polygon_, float radius)
 	{
 		Path circle;
 		circle.initialize();
+		vec3 edgeAfter = control_polygon_[(i + 1) % control_polygon_.size()] - control_polygon_[i];
+		vec3 edgeBefore = control_polygon_[i] - control_polygon_[(i - 1 + control_polygon_.size()) % control_polygon_.size()];
 		std::vector<vec3> verticesOfOneCircle = circleVertices(
-			7,
+			numberOfVerticesPerTubeCircle,
 			control_polygon_[i],
-			//control_polygon_[(i + 1) % control_polygon_.size()] - control_polygon_[i],
-
-			0.5 *((control_polygon_[(i + 1) % control_polygon_.size()] - control_polygon_[i]) + (control_polygon_[i] - control_polygon_[(i-1) % control_polygon_.size()])),
-
+			(edgeAfter + edgeBefore).normalized(),
 			radius
 		);
 		circle.setPoints(verticesOfOneCircle);
-		circle.draw();
+		//circle.draw();
 	};
 };
 

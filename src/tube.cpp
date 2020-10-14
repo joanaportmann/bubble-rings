@@ -16,6 +16,8 @@
 #include <string>
 //#include "tube_viewer.h"
 
+#define numberOfVerticesPerTubeCircle 15
+
 using namespace std;
 
 //=============================================================================
@@ -77,10 +79,12 @@ std::vector<vec3> verticesOfAllCircles(const std::vector<vec3> &controlPolygon, 
 
     for (int i = 0; i < controlPolygon.size(); i++)
     {
+        vec3 edgeAfter = controlPolygon[(i + 1) % controlPolygon.size()] - controlPolygon[i];
+		vec3 edgeBefore = controlPolygon[i] - controlPolygon[(i - 1 + controlPolygon.size()) % controlPolygon.size()];
         std::vector<vec3> verticesOfOneCircle = verticesofOneCircle_(
-            7,
+            numberOfVerticesPerTubeCircle,
             controlPolygon[i],
-            controlPolygon[(i + 1) % controlPolygon.size()] - controlPolygon[i],
+            (edgeBefore + edgeAfter).normalized(),
             radius
         );
         for (int j = 0; j < verticesOfOneCircle.size(); j++)
@@ -94,19 +98,6 @@ std::vector<vec3> verticesOfAllCircles(const std::vector<vec3> &controlPolygon, 
 
 //------------------------------------------------------------------------------------
 
-// void angleWeights(const vec3 &p0, const vec3 &p1, const vec3 &p2,
-//                   double &w0, double &w1, double &w2)
-// {
-//     // compute angle weights
-//     const vec3 e01 = (p1 - p0).normalized();
-//     const vec3 e12 = (p2 - p1).normalized();
-//     const vec3 e20 = (p0 - p2).normalized();
-//     w0 = acos(std::max(-1.0, std::min(1.0, e01.dot(-e20))));
-//     w1 = acos(std::max(-1.0, std::min(1.0, e12.dot(-e01))));
-//     w2 = acos(std::max(-1.0, std::min(1.0, e20.dot(-e12))));
-// }
-
-//------------------------------------------------------------------------------------
 
 void Tube::createTriangleAndVertexStructs()
 {
@@ -117,12 +108,12 @@ void Tube::createTriangleAndVertexStructs()
     {
         Triangle triangle1, triangle2;
         Vertex vertex0, vertex1, vertex2, vertex3;
-        bool lastVertexInCircle = v % 7 == 6;
+        bool lastVertexInCircle = v % numberOfVerticesPerTubeCircle == numberOfVerticesPerTubeCircle - 1;
 
         unsigned int i0 = v;
-        unsigned int i1 = (lastVertexInCircle ? v - 6 : v + 1) % tubeVertices.size();
-        unsigned int i2 = (v + 7) % tubeVertices.size();
-        unsigned int i3 = (lastVertexInCircle ? v + 1 : v + 8) % tubeVertices.size();
+        unsigned int i1 = (lastVertexInCircle ? v - (numberOfVerticesPerTubeCircle - 1) : v + 1) % tubeVertices.size();
+        unsigned int i2 = (v + numberOfVerticesPerTubeCircle) % tubeVertices.size();
+        unsigned int i3 = (lastVertexInCircle ? v + 1 : v + (numberOfVerticesPerTubeCircle + 1)) % tubeVertices.size();
 
         vertex0.position = tubeVertices[i0];
         Tube::vertices_.push_back(vertex0);

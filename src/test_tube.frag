@@ -16,10 +16,10 @@ out vec4 f_color;
 void main() {
     // f_color = color;
     float normal_to_light;
-    normal_to_light = 0.5 * dot(vec3(0.2, 0.3, 0.1), v2f_normal); 
+    normal_to_light = dot(normalize(vec3(0.2, 0.3, 0.1)), normalize(v2f_normal));
     vec3 color;
-    color.x = 0.5 + normal_to_light;
-    color.y = 0.5 + normal_to_light;
-    color.z = 0.5 + normal_to_light;
+    color.x = 0.7 + 0.5 * normal_to_light;
+    color.y = 0.6 + 0.5 * normal_to_light;
+    color.z = 0.4 + 0.5 * normal_to_light;
     f_color = vec4(color, 1);
 }
