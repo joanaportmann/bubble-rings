@@ -21,6 +21,13 @@ public:
     static mat4 look_at(const vec4& eye, const vec4& center, const vec4& up);
 };
 
+/// reflect vector \c v at normal \c n
+inline const vec3 reflect(const vec3& v, const vec3& n)
+{
+    return v - (2.0f * n.dot(v)) * n;
+}
+
+
 #ifdef _WIN32
 #define M_PI 3.14159265
 #include <algorithm>

@@ -79,7 +79,10 @@ private:
     Shader   tube_shader_;
    
     /// simple shader for visualizing curves (just using solid color).
-    Shader   solid_color_shader_;
+    Shader solid_color_shader_;
+
+    /// Shader
+    Shader test_tube_shader_;
 
     /// interval for the animation timer
     bool  timer_active_;

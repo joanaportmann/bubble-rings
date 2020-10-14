@@ -13,6 +13,8 @@
 layout (location = 0) in vec4 v_position;
 uniform mat4 modelview_projection_matrix;
 
+
+
 void main() {
     // Compute vertices' normalized device coordinates
     gl_Position = modelview_projection_matrix * v_position;
