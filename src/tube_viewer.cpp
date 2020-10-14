@@ -169,7 +169,10 @@ void Tube_viewer::drawCircle(std::vector<vec3> control_polygon_, float radius)
 		std::vector<vec3> verticesOfOneCircle = circleVertices(
 			7,
 			control_polygon_[i],
-			control_polygon_[(i + 1) % control_polygon_.size()] - control_polygon_[i],
+			//control_polygon_[(i + 1) % control_polygon_.size()] - control_polygon_[i],
+
+			0.5 *((control_polygon_[(i + 1) % control_polygon_.size()] - control_polygon_[i]) + (control_polygon_[i] - control_polygon_[(i-1) % control_polygon_.size()])),
+
 			radius
 		);
 		circle.setPoints(verticesOfOneCircle);
