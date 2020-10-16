@@ -16,7 +16,7 @@
 #include <string>
 //#include "tube_viewer.h"
 
-#define numberOfVerticesPerTubeCircle 15
+#define numberOfVerticesPerTubeCircle 30
 
 using namespace std;
 
@@ -107,7 +107,7 @@ void Tube::createTriangleAndVertexStructs()
     for (unsigned int v = 0; v < tubeVertices.size(); ++v)
     {
         Triangle triangle1, triangle2;
-        Vertex vertex0, vertex1, vertex2, vertex3;
+       
         bool lastVertexInCircle = v % numberOfVerticesPerTubeCircle == numberOfVerticesPerTubeCircle - 1;
 
         unsigned int i0 = v;
@@ -115,14 +115,6 @@ void Tube::createTriangleAndVertexStructs()
         unsigned int i2 = (v + numberOfVerticesPerTubeCircle) % tubeVertices.size();
         unsigned int i3 = (lastVertexInCircle ? v + 1 : v + (numberOfVerticesPerTubeCircle + 1)) % tubeVertices.size();
 
-        vertex0.position = tubeVertices[i0];
-        Tube::vertices_.push_back(vertex0);
-        vertex1.position = tubeVertices[i1];
-        Tube::vertices_.push_back(vertex1);
-        vertex2.position = tubeVertices[i2];
-        Tube::vertices_.push_back(vertex2);
-        vertex3.position = tubeVertices[i3];
-        Tube::vertices_.push_back(vertex3);
 
         triangle1.ind0 = i0;
         triangle1.ind1 = i1;
@@ -147,14 +139,17 @@ void Tube::createTriangleAndVertexStructs()
 void Tube::compute_normals()
 {
 
+    int c = 0;
     // compute triangle normals
     for (Triangle &t : triangles_)
     {
-        const vec3 &p0 = vertices_.at(t.ind0).position;
-        const vec3 &p1 = vertices_.at(t.ind1).position;
-        const vec3 &p2 = vertices_.at(t.ind2).position;
+        const vec3 &p0 = tubeVertices[t.ind0];
+        const vec3 &p1 = tubeVertices[t.ind1];
+        const vec3 &p2 = tubeVertices[t.ind2];
 
         t.normal = ((p1 - p0).cross(p2 - p0)).normalized();
+        // t.normal = ((p2 - p1).cross(p0 - p1)).normalized();
+        //t.normal = vec3(1, 1, sin(c++));
     }
     // initialize vertex normals to zero
     // for (Vertex &v : vertices_)
@@ -215,12 +210,10 @@ void Tube::initialize()
     }
 
  
-    int counter = 0;
+
     // generate triangles
     for (Triangle &t : triangles_)
     {
-        //if (counter++ > 2) break;
-
         indices[i++] = t.ind0;
         indices[i++] = t.ind1;
         indices[i++] = t.ind2;
@@ -252,17 +245,20 @@ void Tube::initialize()
 
     // normal vectors -> attribute 1
 
+    cout << triangles_[0].normal << "\n";
+    cout << triangles_[1].normal << "\n";
+
     glBindBuffer(GL_ARRAY_BUFFER, nbo_);
     glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(float), &normals[0], GL_STATIC_DRAW);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(1);
 
     // texture coordinates -> attribute 2
-    glGenBuffers(1, &tbo_);
-    glBindBuffer(GL_ARRAY_BUFFER, tbo_);
-    glBufferData(GL_ARRAY_BUFFER, texcoords.size() * sizeof(float), &texcoords[0], GL_STATIC_DRAW);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
-    glEnableVertexAttribArray(2);
+    // glGenBuffers(1, &tbo_);
+    // glBindBuffer(GL_ARRAY_BUFFER, tbo_);
+    // glBufferData(GL_ARRAY_BUFFER, texcoords.size() * sizeof(float), &texcoords[0], GL_STATIC_DRAW);
+    // glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
+    // glEnableVertexAttribArray(2);
 
     // triangle indices
 

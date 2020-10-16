@@ -18,7 +18,7 @@
 
 #include <Eigen/Dense>
 
-#define numberOfVerticesPerTubeCircle 15
+#define numberOfVerticesPerTubeCircle 30
 
 //using Eigen::Vector3d;
 using namespace std;

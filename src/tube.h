@@ -80,17 +80,6 @@ private:
         vec3 normal;
     };
 
-      /// a vertex consists of a position and a normal
-    struct Vertex
-    {
-        /// vertex position
-        vec3 position;
-        /// vertex normal
-        vec3 normal;
-    }; 
-    
-    /// Array of vertices
-    std::vector<Vertex> vertices_;
     /// Array of triangles
     std::vector<Triangle> triangles_;
 
