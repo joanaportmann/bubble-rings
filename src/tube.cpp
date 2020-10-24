@@ -209,14 +209,16 @@ void Tube::initialize()
         texcoords[t++] = 0.5;
     }
 
- 
 
     // generate triangles
+    int count = 0;
     for (Triangle &t : triangles_)
     {
         indices[i++] = t.ind0;
         indices[i++] = t.ind1;
         indices[i++] = t.ind2;
+
+        if (count++ % 2 == 1) continue;
 
         normals[n++] = t.normal(0);
         normals[n++] = t.normal(1);
@@ -231,8 +233,8 @@ void Tube::initialize()
   
     // generate buffers
     glGenBuffers(1, &vbo_);
-    glGenBuffers(1, &ibo_);
     glGenBuffers(1, &nbo_);
+    glGenBuffers(1, &ibo_);
 
     glBindVertexArray(vao_);
 
