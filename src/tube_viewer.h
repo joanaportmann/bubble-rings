@@ -17,7 +17,7 @@
 #include "path.h"
 #include "frame.h"
 #include "tube.h"
-
+#include "filament.h"
 
 
 /// OpenGL viewer that handles all the rendering for us
@@ -32,15 +32,15 @@ public:
     Tube_viewer(const char* _title, int _width, int _height);
 
       // Control polygon for circle to be contoured
-    std::vector<vec3> control_polygon_ = {
-        {2.0, 0.0, 0.0},
-        {1.4, 1.4, 0.0},
-        {0.0, 2.0, 0.0},
-        {-1.4, 1.4, 0.0},
-        {-2.0, 0.0, 0.0},
-        {-1.4, -1.4, 0.0},
-        {0.0, -2.0, 0.0},
-        {1.4, -1.4, 0.0}      
+    std::vector<FilamentPoint> control_polygon_ = {
+        {{2.0, 0.0, 0.0}, 2.0},
+        {{1.4, 1.4, 0.0}, 0.9},
+        {{0.0, 2.0, 0.0}, 1.0},
+        {{-1.4, 1.4, 0.0}, 0.2},
+        {{-2.0, 0.0, 0.0}, 0.7},
+        {{-1.4, -1.4, 0.0}, 0.5},
+        {{0.0, -2.0, 0.0}, 1.1},
+        {{1.4, -1.4, 0.0}, 0.8}
     };
 
 

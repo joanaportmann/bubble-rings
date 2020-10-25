@@ -14,7 +14,7 @@
 #include <Eigen/Dense>
 #include <iostream>
 #include <string>
-//#include "tube_viewer.h"
+#include <stdlib.h> 
 
 #define numberOfVerticesPerTubeCircle 30
 
@@ -22,9 +22,9 @@ using namespace std;
 
 //=============================================================================
 
-Tube::Tube(std::vector<vec3> CP)
-    : controlPolygon_(CP)
-{
+Tube::Tube(Filament filament) 
+    : filament_(filament)
+{    
 }
 
 //-----------------------------------------------------------------------------
@@ -70,19 +70,19 @@ std::vector<vec3> verticesofOneCircle_(int n, vec3 center, vec3 normal, float ra
 
 //----------------------------------------------------------------------------------
 
-std::vector<vec3> verticesOfAllCircles(const std::vector<vec3> &controlPolygon, float radius)
+std::vector<vec3> verticesOfAllCircles(const std::vector<FilamentPoint> &controlPolygon)
 {
     std::vector<vec3> verticesOfTube;
 
     for (int i = 0; i < controlPolygon.size(); i++)
     {
-        vec3 edgeAfter = controlPolygon[(i + 1) % controlPolygon.size()] - controlPolygon[i];
-		vec3 edgeBefore = controlPolygon[i] - controlPolygon[(i - 1 + controlPolygon.size()) % controlPolygon.size()];
+        vec3 edgeAfter = controlPolygon[(i + 1) % controlPolygon.size()].position - controlPolygon[i].position;
+		vec3 edgeBefore = controlPolygon[i].position - controlPolygon[(i - 1 + controlPolygon.size()) % controlPolygon.size()].position;
         std::vector<vec3> verticesOfOneCircle = verticesofOneCircle_(
             numberOfVerticesPerTubeCircle,
-            controlPolygon[i],
+            controlPolygon[i].position,
             (edgeBefore + edgeAfter).normalized(),
-            radius
+            controlPolygon[i].a
         );
         for (int j = 0; j < verticesOfOneCircle.size(); j++)
         {
@@ -98,8 +98,8 @@ std::vector<vec3> verticesOfAllCircles(const std::vector<vec3> &controlPolygon, 
 
 void Tube::createTriangleStruct()
 {
-
-    tubeVertices = verticesOfAllCircles(controlPolygon_, 0.3);
+    std::vector<FilamentPoint> filamentPoints = filament_.getFilamentPoints();
+    tubeVertices = verticesOfAllCircles(filamentPoints);
 
     for (unsigned int v = 0; v < tubeVertices.size(); ++v)
     {

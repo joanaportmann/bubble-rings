@@ -14,6 +14,7 @@
 #include <Eigen/Dense>
 #include "glmath.h"
 #include <vector>
+#include "filament.h"
 //=============================================================================
 
 
@@ -22,7 +23,7 @@ class Tube
 
 public:
 
-    Tube(std::vector<vec3> tubeVertices_);
+    Tube(Filament filament);
 
     /// destructor
     ~Tube();
@@ -39,7 +40,7 @@ private:
     /// Compute normal vectors for triangles and vertices
     void compute_normals();
 
-    std::vector<vec3> circleVertices_t(int n, vec3 center, vec3 normal, float radius);
+    std::vector<vec3> circleVertices_t(int n, vec3 normal);
 
     // generate triangle structs
     void createTriangleStruct();
@@ -84,7 +85,7 @@ private:
     std::vector<Triangle> triangles_;
 
     std::vector<vec3> tubeVertices;
-    std::vector<vec3> controlPolygon_;
+    Filament filament_;
 
 };
 

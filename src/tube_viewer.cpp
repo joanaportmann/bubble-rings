@@ -157,29 +157,29 @@ void Tube_viewer::initialize()
 	ship_path_cp_renderer_.initialize();
 	ship_path_frame_.initialize();
 
-	ship_path_cp_renderer_.setPoints(control_polygon_);
+	//ship_path_cp_renderer_.setPoints(control_polygon_);
 }
 //-----------------------------------------------------------------------------
 
-void Tube_viewer::drawCircle(std::vector<vec3> control_polygon_, float radius)
-{
-	//std::vector<Path> circles;
-	for (int i = 0; i < control_polygon_.size(); i++)
-	{
-		Path circle;
-		circle.initialize();
-		vec3 edgeAfter = control_polygon_[(i + 1) % control_polygon_.size()] - control_polygon_[i];
-		vec3 edgeBefore = control_polygon_[i] - control_polygon_[(i - 1 + control_polygon_.size()) % control_polygon_.size()];
-		std::vector<vec3> verticesOfOneCircle = circleVertices(
-			numberOfVerticesPerTubeCircle,
-			control_polygon_[i],
-			(edgeAfter + edgeBefore).normalized(),
-			radius
-		);
-		circle.setPoints(verticesOfOneCircle);
-		//circle.draw();
-	};
-};
+// void Tube_viewer::drawCircle(std::vector<vec3> control_polygon_, float radius)
+// {
+// 	//std::vector<Path> circles;
+// 	for (int i = 0; i < control_polygon_.size(); i++)
+// 	{
+// 		Path circle;
+// 		circle.initialize();
+// 		vec3 edgeAfter = control_polygon_[(i + 1) % control_polygon_.size()] - control_polygon_[i];
+// 		vec3 edgeBefore = control_polygon_[i] - control_polygon_[(i - 1 + control_polygon_.size()) % control_polygon_.size()];
+// 		std::vector<vec3> verticesOfOneCircle = circleVertices(
+// 			numberOfVerticesPerTubeCircle,
+// 			control_polygon_[i],
+// 			(edgeAfter + edgeBefore).normalized(),
+// 			radius
+// 		);
+// 		circle.setPoints(verticesOfOneCircle);
+// 		//circle.draw();
+// 	};
+// };
 
 void Tube_viewer::paint()
 {
@@ -262,7 +262,7 @@ void Tube_viewer::draw_scene(mat4 &_projection, mat4 &_view)
 
 	
 	// render circles around polygonpath
-	drawCircle(control_polygon_, 0.3);
+	//drawCircle(control_polygon_, 0.3);
 	// check for OpenGL errors
 	glCheckError();
 }
