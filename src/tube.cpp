@@ -48,9 +48,6 @@ Tube::~Tube()
 }
 
 //----------------------------------------------------------------------------
-std::string debugString0("000");
-std::string debugString1("111");
-//-----------------------------------------------------------------------------
 
 std::vector<vec3> verticesofOneCircle_(int n, vec3 center, vec3 normal, float radius)
 {
@@ -99,7 +96,7 @@ std::vector<vec3> verticesOfAllCircles(const std::vector<vec3> &controlPolygon, 
 //------------------------------------------------------------------------------------
 
 
-void Tube::createTriangleAndVertexStructs()
+void Tube::createTriangleStruct()
 {
 
     tubeVertices = verticesOfAllCircles(controlPolygon_, 0.3);
@@ -131,9 +128,7 @@ void Tube::createTriangleAndVertexStructs()
 //------------------------------------------------------------------------------------
 
 /** * 
- * Computes vertex normals by averaging the normals of their incident triangles.
- * Stores the vertex normals in the Vertex::normal member variable.
- * Weights the normals by their triangles' angles.
+ * Computes triangle's normals 
  */
 
 void Tube::compute_normals()
@@ -148,39 +143,7 @@ void Tube::compute_normals()
         const vec3 &p2 = tubeVertices[t.ind2];
 
         t.normal = ((p1 - p0).cross(p2 - p0)).normalized();
-        // t.normal = ((p2 - p1).cross(p0 - p1)).normalized();
-        //t.normal = vec3(1, 1, sin(c++));
     }
-    // initialize vertex normals to zero
-    // for (Vertex &v : vertices_)
-    // {
-    //     v.normal = vec3(0, 0, 0);
-    // }
-
-    // for (Triangle &t : triangles_)
-    // {
-    //     const vec3 &p0 = vertices_.at(t.ind0).position;
-    //     const vec3 &p1 = vertices_.at(t.ind1).position;
-    //     const vec3 &p2 = vertices_.at(t.ind2).position;
-
-    //     double w0, w1, w2;
-
-    //     // Weigh the normals by their triangles' angles.
-    //     angleWeights(p0, p1, p2, w0, w1, w2);
-   
-    //     //adding the normals all together
-
-    //     vertices_.at(t.ind0).normal += t.normal * w0;
-    //     vertices_.at(t.ind1).normal += t.normal * w1;
-    //     vertices_.at(t.ind2).normal += t.normal * w2;
-    // }
-
-
-    // for (Vertex &v : vertices_)
-    // {
-    //     v.normal = (v.normal).normalized();
-    //     //cout << v.position << "\n"; 
-    // } 
 }
 
 //--------------------------------------------------------------------------------------
@@ -188,7 +151,7 @@ void Tube::compute_normals()
 void Tube::initialize()
 {
 
-    Tube::createTriangleAndVertexStructs();
+    Tube::createTriangleStruct();
     Tube::compute_normals();
 
     std::vector<GLfloat> positions(3 * tubeVertices.size());
@@ -255,12 +218,6 @@ void Tube::initialize()
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(1);
 
-    // texture coordinates -> attribute 2
-    // glGenBuffers(1, &tbo_);
-    // glBindBuffer(GL_ARRAY_BUFFER, tbo_);
-    // glBufferData(GL_ARRAY_BUFFER, texcoords.size() * sizeof(float), &texcoords[0], GL_STATIC_DRAW);
-    // glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
-    // glEnableVertexAttribArray(2);
 
     // triangle indices
 

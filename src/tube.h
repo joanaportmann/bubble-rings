@@ -42,7 +42,7 @@ private:
     std::vector<vec3> circleVertices_t(int n, vec3 center, vec3 normal, float radius);
 
     // generate triangle structs
-    void createTriangleAndVertexStructs();
+    void createTriangleStruct();
 
     /// indices of the triangle vertices
     unsigned int n_indices_ = 0;
