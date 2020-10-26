@@ -49,57 +49,10 @@ Tube::~Tube()
 
 //----------------------------------------------------------------------------
 
-std::vector<vec3> verticesofOneCircle_(int n, vec3 center, vec3 normal, float radius)
-{
-    std::vector<vec3> vertices;
-
-    for (int i = 0; i < n; i++)
-    {
-        float x = cos(2 * M_PI / n * i) * radius;
-        float y = sin(2 * M_PI / n * i) * radius;
-
-        auto rotation = Eigen::Quaterniond::FromTwoVectors(vec3(0, 0, 1), normal);
-
-        vec3 vertex = (rotation.matrix() * vec3(x, y, 0)) + center;
-
-        vertices.push_back(vertex);
-    }
-
-    return vertices;
-}
-
-//----------------------------------------------------------------------------------
-
-std::vector<vec3> verticesOfAllCircles(const std::vector<FilamentPoint> &controlPolygon)
-{
-    std::vector<vec3> verticesOfTube;
-
-    for (int i = 0; i < controlPolygon.size(); i++)
-    {
-        vec3 edgeAfter = controlPolygon[(i + 1) % controlPolygon.size()].position - controlPolygon[i].position;
-		vec3 edgeBefore = controlPolygon[i].position - controlPolygon[(i - 1 + controlPolygon.size()) % controlPolygon.size()].position;
-        std::vector<vec3> verticesOfOneCircle = verticesofOneCircle_(
-            numberOfVerticesPerTubeCircle,
-            controlPolygon[i].position,
-            (edgeBefore + edgeAfter).normalized(),
-            controlPolygon[i].a
-        );
-        for (int j = 0; j < verticesOfOneCircle.size(); j++)
-        {
-            verticesOfTube.push_back(verticesOfOneCircle[j]);
-        }
-    };
-
-    return verticesOfTube;
-};
-
-//------------------------------------------------------------------------------------
-
-
 void Tube::createTriangleStruct()
 {
     std::vector<FilamentPoint> filamentPoints = filament_.getFilamentPoints();
-    tubeVertices = verticesOfAllCircles(filamentPoints);
+    tubeVertices = filament_.getBubbleRingSkeleton();
 
     for (unsigned int v = 0; v < tubeVertices.size(); ++v)
     {

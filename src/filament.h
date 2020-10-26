@@ -1,11 +1,4 @@
-//=============================================================================
-//
-//   Exercise code for the lecture "Introduction to Computer Graphics"
-//     by Prof. Mario Botsch, Bielefeld University
-//
-//   Copyright (C) by Computer Graphics Group, Bielefeld University
-//
-//=============================================================================
+
 #ifndef FILAMENT_H
 #define FILAMENT_H
 //=============================================================================
@@ -34,12 +27,16 @@ public:
 
     std::vector<FilamentPoint> getFilamentPoints();
 
+    std::vector<vec3> getBubbleRingSkeleton();
+
 private:
 
     std::vector<FilamentPoint> controlPolygon_;
 
     // Todo
     void updateFilament();
+
+    std::vector<vec3> circleVertices_t(int n, vec3 normal);
 
 };
 
