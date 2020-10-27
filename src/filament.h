@@ -28,13 +28,18 @@ public:
     std::vector<FilamentPoint> getFilamentPoints();
 
     std::vector<vec3> getBubbleRingSkeleton();
-
+    
+    // Todo
+    void updateSkeleton();
 private:
 
     std::vector<FilamentPoint> controlPolygon_;
 
-    // Todo
-    void updateFilament();
+
+
+    // Biotsavart velocity
+    vec3 biotsavartedge(vec3 p, vec3 R0, vec3 R1, float Gamma, float a);
+    vec3 biotSavart();
 
     std::vector<vec3> circleVertices_t(int n, vec3 normal);
 
