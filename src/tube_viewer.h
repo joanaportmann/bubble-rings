@@ -33,15 +33,16 @@ public:
 
       // Control polygon for circle to be contoured
     std::vector<FilamentPoint> control_polygon_ = {
-        {{2.0, 0.0, 0.0}, 2.0},
-        {{1.4, 1.4, 0.0}, 0.9},
-        {{0.0, 2.0, 0.0}, 1.0},
-        {{-1.4, 1.4, 0.0}, 0.2},
-        {{-2.0, 0.0, 0.0}, 0.7},
-        {{-1.4, -1.4, 0.0}, 0.5},
-        {{0.0, -2.0, 0.0}, 1.1},
-        {{1.4, -1.4, 0.0}, 0.8}
-    };
+        {{2.0, 0.0, 0.0}, 0.5, 4, vec3(0, 0, 0)},
+        {{1.4, 1.4, 0.0}, 0.6, 4, vec3(0, 0, 0)},
+        {{0.0, 2.0, 0.0}, 0.5, 4, vec3(0, 0, 0)},
+        {{-1.4, 1.4, 0.0}, 0.3, 4, vec3(0, 0, 0)},
+        {{-2.0, 0.0, 0.0}, 0.1, 4, vec3(0, 0, 0)},
+        {{-1.4, -1.4, 0.0}, 0.5, 4, vec3(0, 0, 0)},
+        {{0.0, -2.0, 0.0}, 0.6, 4, vec3(0, 0, 0)},
+        {{1.4, -1.4, 0.0}, 0.8, 4, vec3(0, 0, 0)},
+        {{1.5, -1.1, 0.5}, 0.1, 3, vec3(0, 0, 0)}
+    }; 
 
 
 protected:
@@ -55,6 +56,8 @@ protected:
     /// paint function - called when the window should be refreshed
     virtual void paint();
 
+    virtual void timer();
+
     /// keyboard interaction
     virtual void keyboard(int key, int scancode, int action, int mods);
 
@@ -67,6 +70,9 @@ protected:
 
 
 private:
+
+    // filament object
+    Filament filament;
 
     // tube object
     Tube tube;
@@ -87,8 +93,7 @@ private:
 
     /// interval for the animation timer
     bool  timer_active_;
-    /// update factor for the animation
-    float time_step_;
+ 
 
     /// state whether the rendering should be in color or not
     bool greyscale_;

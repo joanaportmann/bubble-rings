@@ -25,9 +25,10 @@ using namespace std;
 
 //=============================================================================
 
-Tube_viewer::Tube_viewer(const char* _title, int _width, int _height)
+Tube_viewer::Tube_viewer(const char *_title, int _width, int _height)
 	: GLFW_window(_title, _width, _height),
-	tube(control_polygon_)
+	  filament(control_polygon_),
+	  tube(control_polygon_)
 {
 	// rendering parameters
 	greyscale_ = false;
@@ -40,7 +41,6 @@ Tube_viewer::Tube_viewer(const char* _title, int _width, int _height)
 	dist_factor_ = 9.0f;
 
 	srand((unsigned int)time(NULL));
-
 }
 
 //-----------------------------------------------------------------------------
@@ -134,7 +134,14 @@ std::vector<vec3> circleVertices(int n, vec3 center, vec3 normal, float radius)
 
 	return vertices;
 }
+//--------------------------------------------------------------------------------
 
+void Tube_viewer::timer()
+{
+
+	filament.updateSkeleton();
+
+}
 //--------------------------------------------------------------------------------
 
 void Tube_viewer::initialize()
@@ -215,7 +222,6 @@ void Tube_viewer::paint()
 	mat4 projection;
 	projection = MatUtils::perspective(fovy_, (float)width_ / (float)height_, near_, far_);
 	draw_scene(projection, view);
-	
 }
 
 //-----------------------------------------------------------------------------
@@ -241,12 +247,10 @@ void Tube_viewer::draw_scene(mat4 &_projection, mat4 &_view)
 	// mv_matrix = matrix;
 	// mvp_matrix = matrix;
 
-
 	// phong_shader_.use();
 	// phong_shader_.set_uniform("modelview_projection_matrix", matrix);
 	// phong_shader_.set_uniform("normal_matrix", matrix);
 	// tube.draw();
-
 
 	// solid_color_shader_.use();
 	// solid_color_shader_.set_uniform("modelview_projection_matrix", matrix);
@@ -260,12 +264,10 @@ void Tube_viewer::draw_scene(mat4 &_projection, mat4 &_view)
 	// test_tube_shader_.set_uniform("color", vec4(0.8, 0.8, 0.2, 0.6));
 	tube.draw();
 
-	
 	// render circles around polygonpath
 	//drawCircle(control_polygon_, 0.3);
 	// check for OpenGL errors
 	glCheckError();
 }
-
 
 //=============================================================================
