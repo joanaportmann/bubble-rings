@@ -23,7 +23,7 @@ class Tube
 
 public:
 
-    Tube(Filament filament);
+    Tube(Filament &filament);
 
     /// destructor
     ~Tube();
@@ -31,11 +31,15 @@ public:
     /// render mesh of the sphere
     void draw(GLenum mode=GL_TRIANGLES);
 
+    void initialize();
+    
+
+
+
 
 private:
 
-    /// generate sphere vertices/triangles and OpenGL buffers
-    void initialize();
+    void updateBuffers();
 
     /// Compute normal vectors for triangles and vertices
     void compute_normals();
@@ -85,7 +89,7 @@ private:
     std::vector<Triangle> triangles_;
 
     std::vector<vec3> tubeVertices;
-    Filament filament_;
+    Filament &filament_;
 
 };
 

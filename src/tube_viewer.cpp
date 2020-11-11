@@ -28,7 +28,7 @@ using namespace std;
 Tube_viewer::Tube_viewer(const char *_title, int _width, int _height)
 	: GLFW_window(_title, _width, _height),
 	  filament(control_polygon_),
-	  tube(control_polygon_)
+	  tube(filament)
 {
 	// rendering parameters
 	greyscale_ = false;
@@ -146,6 +146,7 @@ void Tube_viewer::timer()
 
 void Tube_viewer::initialize()
 {
+	tube.initialize();
 	// set initial state
 	glClearColor(0, 0, 0, 0);
 	glEnable(GL_DEPTH_TEST);

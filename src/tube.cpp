@@ -22,7 +22,7 @@ using namespace std;
 
 //=============================================================================
 
-Tube::Tube(Filament filament) 
+Tube::Tube(Filament &filament) 
     : filament_(filament)
 {    
 }
@@ -101,7 +101,19 @@ void Tube::compute_normals()
 
 //--------------------------------------------------------------------------------------
 
-void Tube::initialize()
+void Tube::initialize(){
+     // generate vertex array object
+    glGenVertexArrays(1, &vao_);
+  
+    // generate buffers
+    glGenBuffers(1, &vbo_);
+    glGenBuffers(1, &nbo_);
+    glGenBuffers(1, &ibo_);
+}
+
+//------------------------------------------------------------------------------------
+
+void Tube::updateBuffers()
 {
 
     Tube::createTriangleStruct();
@@ -144,13 +156,7 @@ void Tube::initialize()
     n_indices_ = 3 * triangles_.size();
 
     
-    // generate vertex array object
-    glGenVertexArrays(1, &vao_);
-  
-    // generate buffers
-    glGenBuffers(1, &vbo_);
-    glGenBuffers(1, &nbo_);
-    glGenBuffers(1, &ibo_);
+ 
 
     glBindVertexArray(vao_);
 
@@ -163,8 +169,7 @@ void Tube::initialize()
 
     // normal vectors -> attribute 1
 
-    cout << triangles_[0].normal << "\n";
-    cout << triangles_[1].normal << "\n";
+ 
 
     glBindBuffer(GL_ARRAY_BUFFER, nbo_);
     glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(float), &normals[0], GL_STATIC_DRAW);
@@ -182,8 +187,8 @@ void Tube::initialize()
 
 void Tube::draw(GLenum mode)
 {
-    if (n_indices_ == 0)
-        initialize();
+   //if (n_indices_ == 0)
+    updateBuffers();
 
     glBindVertexArray(vao_);
     glDrawElements(mode, n_indices_, GL_UNSIGNED_INT, NULL);
