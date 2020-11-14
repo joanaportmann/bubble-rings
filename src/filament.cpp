@@ -95,7 +95,8 @@ vec3 Filament::biotsavartedge(vec3 p, vec3 R0, vec3 R1, float Gamma, float a)
 
 //--------------------------------------------------------------------------------------
 
-int Filament::wrap(int i) {
+int Filament::wrap(int i)
+{
     return (i + controlPolygon_.size()) % controlPolygon_.size();
 }
 
@@ -103,8 +104,8 @@ int Filament::wrap(int i) {
 vec3 Filament::localizedInduction(int j, std::vector<FilamentPoint> temp_controlPolygon_)
 {
     // Grab data
-    vec3 e_next = temp_controlPolygon_[wrap(j+1)].position - temp_controlPolygon_[j].position;
-    vec3 e_prev = temp_controlPolygon_[j].position - temp_controlPolygon_[wrap(j-1)].position;
+    vec3 e_next = temp_controlPolygon_[wrap(j + 1)].position - temp_controlPolygon_[j].position;
+    vec3 e_prev = temp_controlPolygon_[j].position - temp_controlPolygon_[wrap(j - 1)].position;
     float l_prev = e_prev.norm();
     float l_next = e_next.norm();
     float a_prev = temp_controlPolygon_[j].a;
@@ -133,7 +134,7 @@ vec3 Filament::biotSavartAndLocalizedInduction(int j, std::vector<FilamentPoint>
     for (int j = 1; j < temp_controlPolygon_.size(); j++)
     {
         vec3 R0 = temp_controlPolygon_[j - 1].position;
-        vec3 R1 = temp_controlPolygon_[wrap(j+1)].position;
+        vec3 R1 = temp_controlPolygon_[wrap(j + 1)].position;
         float a = temp_controlPolygon_[j].a;
         float Gamma = circulation;
         temp_vel += biotsavartedge(position, R0, R1, Gamma, a);
@@ -165,7 +166,7 @@ vec3 Filament::boussinesq_on_edge(int i, std::vector<FilamentPoint> temp_control
 
     // Get points and tangents
     vec3 srcP = temp_controlPolygon_[i].position;
-    vec3 dstP = temp_controlPolygon_[wrap(i+1)].position;
+    vec3 dstP = temp_controlPolygon_[wrap(i + 1)].position;
     vec3 edge = dstP - srcP;
     vec3 T = edge.normalized();
 
@@ -194,7 +195,7 @@ vec3 Filament::oneStepOfRungeKutta(int i, std::vector<FilamentPoint> temp_contro
     v_temp = biotSavartAndLocalizedInduction(i, temp_controlPolygon_);
 
     // Calculating and adding normal flow velocity γ_normal and averaging to vertices
-    vec3 y_normal = (boussinesq_on_edge(i, temp_controlPolygon_) + boussinesq_on_edge((wrap(i+1)) % temp_controlPolygon_.size(), temp_controlPolygon_)) / 2;
+    vec3 y_normal = (boussinesq_on_edge(i, temp_controlPolygon_) + boussinesq_on_edge((wrap(i + 1)) % temp_controlPolygon_.size(), temp_controlPolygon_)) / 2;
 
     v_temp += y_normal;
     v_temp *= time_step_;
@@ -203,55 +204,60 @@ vec3 Filament::oneStepOfRungeKutta(int i, std::vector<FilamentPoint> temp_contro
 
 void Filament::updateFilament()
 {
+    std::vector<FilamentPoint> temp_polygon1, temp_polygon2, temp_polygon3;
+    temp_polygon1 = controlPolygon_;
+    std::vector<vec3> K1, K2, K3, K4;
 
     for (int i = 0; i < controlPolygon_.size(); i++)
     {
         vec3 velocity;
-        vec3 K1, K2, K3, K4;
-        std::vector<FilamentPoint> temp_polygon;
+        vec3 temp_K;
+        temp_K = Filament::oneStepOfRungeKutta(i, controlPolygon_);
+        K1.push_back(temp_K);
+        temp_polygon1[i].position += temp_K * 0.5;
+    }
 
-        temp_polygon = controlPolygon_;
+    temp_polygon2 = temp_polygon1;
 
-        K1 = Filament::oneStepOfRungeKutta(i, temp_polygon) * 0.0001;
+      for (int i = 0; i < controlPolygon_.size(); i++)
+    {
+        vec3 velocity;
+        vec3 temp_K;
+        temp_K = Filament::oneStepOfRungeKutta(i, temp_polygon1);
+        K2.push_back(temp_K);
+        temp_polygon2[i].position += temp_K * 0.5;
+    }
 
- cout << "_______________________________________" << "\n";
-           cout << K1 << "\n";
-     cout << "____________________________________" << "\n";
+   temp_polygon3 = temp_polygon2;
 
-        for (int i = 0; i < controlPolygon_.size(); i++)
-        {
-            temp_polygon[i].position += K1 * 0.5;
-        };
+      for (int i = 0; i < controlPolygon_.size(); i++)
+    {
+        vec3 velocity;
+        vec3 temp_K;
+        temp_K = Filament::oneStepOfRungeKutta(i, temp_polygon2);
+        K3.push_back(temp_K);
+        temp_polygon3[i].position += temp_K;
+    }
 
-        K2 = Filament::oneStepOfRungeKutta(i, temp_polygon);
+      for (int i = 0; i < controlPolygon_.size(); i++)
+    {
+        vec3 velocity;
+        vec3 temp_K;
+        temp_K = Filament::oneStepOfRungeKutta(i, temp_polygon2);
+        K4.push_back(temp_K);
+    }
 
-        for (int i = 0; i < controlPolygon_.size(); i++)
-        {
-            temp_polygon[i].position = controlPolygon_[i].position + K2 * 0.5;
-        };
 
-        K3 = Filament::oneStepOfRungeKutta(i, temp_polygon);
-
-        for (int i = 0; i < controlPolygon_.size(); i++)
-        {
-
-            temp_polygon[i].position += K3;
-        }
-
-        K4 = Filament::oneStepOfRungeKutta(i, temp_polygon);
-
-        for (int i = 0; i < controlPolygon_.size(); i++)
-        {
-            controlPolygon_[i].position += (K1 + 2 * K2 + 2 * K3 + K4) / 6 * 0.005;
-        }
-    };
+     for(int i = 0; i < controlPolygon_.size(); i++)
+     {
+         controlPolygon_[i].position += (K1[i] + 2 * K2[i] + 2 * K3[i] + K4[i]) / 6 * 0.02;
+     }
+    
 };
-
 
 void Filament::updateSkeleton()
 {
-   updateFilament();
- 
+    updateFilament();
 };
 
 //-----------------------------------------------------------------------------------
