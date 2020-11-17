@@ -112,7 +112,7 @@ vec3 Filament::localizedInduction(int j, std::vector<FilamentPoint> temp_control
     float a_next = temp_controlPolygon_[wrap(j + 1)].a;
 
     // Curvature
-    vec3 kB = 2.0 * (e_prev.normalized()).cross(e_next.normalized()) / (e_prev + e_next).norm();
+    vec3 kB = 2.0 * e_prev.normalized().cross(e_next.normalized()) / (e_prev + e_next).norm();
 
     // Circulation
     float C = 0.5 * (temp_controlPolygon_[j].C, temp_controlPolygon_[wrap(j + 1)].C);
@@ -250,14 +250,14 @@ void Filament::updateFilament()
 
      for(int i = 0; i < controlPolygon_.size(); i++)
      {
-         controlPolygon_[i].position += (K1[i] + 2 * K2[i] + 2 * K3[i] + K4[i]) / 6 * 0.02;
+         controlPolygon_[i].position += (K1[i] + 2 * K2[i] + 2 * K3[i] + K4[i]) / 6 * 0.002;
      }
     
 };
 
 void Filament::updateSkeleton()
 {
-    updateFilament();
+   // updateFilament();
 };
 
 //-----------------------------------------------------------------------------------
