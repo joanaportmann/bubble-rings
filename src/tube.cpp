@@ -127,17 +127,17 @@ void Tube::updateBuffers()
     int count = 0;
     for (Triangle &t : triangles_)
     {
-        positions[p++] = t.v0(0);
-        positions[p++] = t.v0(1);
-        positions[p++] = t.v0(2);
+        positions[p++] = tubeVertices[t.ind0](0);
+        positions[p++] = tubeVertices[t.ind0](1);
+        positions[p++] = tubeVertices[t.ind0](2);
 
-        positions[p++] = t.v1(0);
-        positions[p++] = t.v1(1);
-        positions[p++] = t.v1(2);
+       positions[p++] = tubeVertices[t.ind1](0);
+        positions[p++] = tubeVertices[t.ind1](1);
+        positions[p++] = tubeVertices[t.ind1](2);
 
-        positions[p++] = t.v2(0);
-        positions[p++] = t.v2(1);
-        positions[p++] = t.v2(2);
+      positions[p++] = tubeVertices[t.ind2](0);
+        positions[p++] = tubeVertices[t.ind2](1);
+        positions[p++] = tubeVertices[t.ind2](2);
 
         for (int i = 0; i < 3; i++)
         {

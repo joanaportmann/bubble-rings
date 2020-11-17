@@ -72,9 +72,6 @@ private:
     /// a triangle is specified by three indices and a normal
     struct Triangle
     {
-        vec3 v0;
-        vec3 v1;
-        vec3 v2;
         /// index of first vertex 
         int ind0;
         /// index of second vertex 
