@@ -257,7 +257,7 @@ void Filament::updateFilament()
 
 void Filament::updateSkeleton()
 {
-   // updateFilament();
+    updateFilament();
 };
 
 //-----------------------------------------------------------------------------------

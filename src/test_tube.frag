@@ -23,4 +23,5 @@ void main() {
     color.y = 0.1 + 0.45 * (normal_normalized.y + 1) * 0.45 * (normal_to_light + 1);
     color.z = 0.1 + 0.45 * (normal_normalized.z + 1) * 0.45 * (normal_to_light + 1);
     f_color = vec4(color, 1);
+   
 }

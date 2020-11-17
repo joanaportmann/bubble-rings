@@ -50,7 +50,7 @@ private:
     void createTriangleStruct();
 
     /// indices of the triangle vertices
-    unsigned int n_indices_ = 0;
+    unsigned int n_positions = 0;
 
     
 

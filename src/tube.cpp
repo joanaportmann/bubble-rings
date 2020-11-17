@@ -108,7 +108,6 @@ void Tube::initialize(){
     // generate buffers
     glGenBuffers(1, &vbo_);
     glGenBuffers(1, &nbo_);
-    glGenBuffers(1, &ibo_);
 }
 
 //------------------------------------------------------------------------------------
@@ -119,44 +118,40 @@ void Tube::updateBuffers()
     Tube::createTriangleStruct();
     Tube::compute_normals();
 
-    std::vector<GLfloat> positions(3 * tubeVertices.size());
-    std::vector<GLuint> indices(3 * triangles_.size());
-    std::vector<GLfloat> normals(3 * triangles_.size());
-    std::vector<GLfloat> texcoords(2 * tubeVertices.size());
+    std::vector<GLfloat> positions(3 * 3 * triangles_.size());
+    std::vector<GLfloat> normals(3 * 3 * triangles_.size());
 
     unsigned int p(0), i(0), n(0), t(0);
-
-    // generate vertices
-    for (int k = 0; k < tubeVertices.size(); k++)
-    {
-        positions[p++] = tubeVertices[k](0);
-        positions[p++] = tubeVertices[k](1);
-        positions[p++] = tubeVertices[k](2);
-
-        texcoords[t++] = 0.8;
-        texcoords[t++] = 0.5;
-    }
-
 
     // generate triangles
     int count = 0;
     for (Triangle &t : triangles_)
     {
-        indices[i++] = t.ind0;
-        indices[i++] = t.ind1;
-        indices[i++] = t.ind2;
+        positions[p++] = t.v0(0);
+        positions[p++] = t.v0(1);
+        positions[p++] = t.v0(2);
 
-        if (count++ % 2 == 1) continue;
+        positions[p++] = t.v1(0);
+        positions[p++] = t.v1(1);
+        positions[p++] = t.v1(2);
 
-        normals[n++] = t.normal(0);
-        normals[n++] = t.normal(1);
-        normals[n++] = t.normal(2);
+        positions[p++] = t.v2(0);
+        positions[p++] = t.v2(1);
+        positions[p++] = t.v2(2);
+
+        for (int i = 0; i < 3; i++)
+        {
+            normals[n++] = t.normal(0);
+            normals[n++] = t.normal(1);
+            normals[n++] = t.normal(2); 
+        }
+       
     }
 
-    n_indices_ = 3 * triangles_.size();
+ 
 
     
- 
+  n_positions = positions.size();
 
     glBindVertexArray(vao_);
 
@@ -175,12 +170,6 @@ void Tube::updateBuffers()
     glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(float), &normals[0], GL_STATIC_DRAW);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(1);
-
-
-    // triangle indices
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo_);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), &indices[0], GL_STATIC_DRAW);
 }
 
 //-----------------------------------------------------------------------------
@@ -191,7 +180,7 @@ void Tube::draw(GLenum mode)
     updateBuffers();
 
     glBindVertexArray(vao_);
-    glDrawElements(mode, n_indices_, GL_UNSIGNED_INT, NULL);
+    glDrawArrays(mode, 0, n_positions);
     glBindVertexArray(0);
 }
 
