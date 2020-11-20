@@ -15,19 +15,20 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <math.h>
+#include <filament.h>
 
 #include <Eigen/Dense>
 
 #define numberOfVerticesPerTubeCircle 30
 
-//using Eigen::Vector3d;
 using namespace std;
+using namespace Eigen;
 
 //=============================================================================
 
 Tube_viewer::Tube_viewer(const char *_title, int _width, int _height)
 	: GLFW_window(_title, _width, _height),
-	  filament(control_polygon_),
+	  filament(),
 	  tube(filament)
 {
 	// rendering parameters
@@ -39,6 +40,8 @@ Tube_viewer::Tube_viewer(const char *_title, int _width, int _height)
 	x_angle_ = -90.0f;
 	y_angle_ = 0.0f;
 	dist_factor_ = 9.0f;
+
+	
 
 	srand((unsigned int)time(NULL));
 }

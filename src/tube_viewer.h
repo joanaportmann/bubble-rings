@@ -18,6 +18,10 @@
 #include "tube.h"
 #include "filament.h"
 
+#include <Eigen/Dense>
+
+using namespace Eigen;
+
 /// OpenGL viewer that handles all the rendering for us
 class Tube_viewer : public GLFW_window
 {
@@ -48,36 +52,7 @@ public:
       {{-4.95, -0.7, 0.0}, 0.3, 0.7, vec3(0, 0, 0)},
       {{-5.5, 1.6, 0.5}, 0.1, 1.5, vec3(0, 0, 0)}};
 
-  std::vector<vec3> filamentPositions =
-      {
-          {-5.2, 3.2, 0.0},
-          {-4.4, 3.94, 0.0},
-          {-3.7, 4.4, 0.0},
-          {-2.85, 4.68, 0.0},
-          {-1.88, 4.72, 0.0},
-          {-0.43, 4.62, 0.0},
-          {0.2, 4.18, 0.0},
-          {0.87, 3.68, 0.0},
-          {1.09, 3.24, 0.0},
-          {1.2, 2.7, 0.0},
-          {1.45, 2.08, 0.0},
-          {1.5, 1.32, 0.0},
-          {1.3, 0.2, 0.0},
-          {-0.6, -1.45, 0.0},
-          {-2.8, -1.5, 0.0},
-          {-4.95, -0.7, 0.0},
-          {-5.5, 1.6, 0.5}
-      };
-
-  std::vector<float> thickness = 
-  {
-0.3, 0.4, 0.3, 0.5, 0.4, 0.4, 0.5, 0.4, 0.3, 0.4, 0.4, 0.5, 0.3, 0.2, 0.2, 0.1, 0.1
-  };
-
-  std::vector<float> circulation = 
-  {
-0.3, 0.4, 0.3, 0.5, 0.4, 0.4, 0.5, 0.4, 0.3, 0.4, 0.4, 0.5, 0.3, 0.2, 0.2, 0.1, 0.1
-  };
+ 
 
 protected:
   /// function that is called on the, creation of the widget for the initialisation of OpenGL

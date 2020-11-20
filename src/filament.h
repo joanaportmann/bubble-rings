@@ -9,7 +9,6 @@
 #include <vector>
 //=============================================================================
 
-
 struct FilamentPoint
 {
     vec3 position;
@@ -18,45 +17,39 @@ struct FilamentPoint
     vec3 K;
 };
 
-
 class Filament
 {
 
 public:
-
     // Constructor
-    Filament(std::vector<FilamentPoint> tubeVertices_);
+    Filament();
 
-    std::vector<FilamentPoint> getFilamentPoints();
+    MatrixXf getFilamentPoints();
 
     std::vector<vec3> getBubbleRingSkeleton();
 
-    float time_step_ = 0.0000000001f;
+    float time_step_ = 0.0000000000001f;
 
-    
-    
-    // Todo
+    VectorXf thickness;
+    VectorXf circulation;
+
     void updateSkeleton();
+
 private:
-
-    std::vector<FilamentPoint> controlPolygon_;
-
+    MatrixXf filamentPositions;
     int wrap(int i);
 
-
-    void updateFilament(); 
+    void updateFilament();
 
     // Biotsavart velocity
     vec3 biotsavartedge(vec3 p, vec3 R0, vec3 R1, float Gamma, float a);
     vec3 biotSavartAndLocalizedInduction(int j, std::vector<FilamentPoint> temp_controlPolygon_);
-    vec3 localizedInduction(int j, std::vector<FilamentPoint> temp_controlPolygon_);
+    vec3 localizedInduction(int i, MatrixXd temp_filamentPoints);
     vec3 boussinesq_on_edge(int i, std::vector<FilamentPoint> temp_controlPolygon_);
     vec3 oneStepOfRungeKutta(int i, std::vector<FilamentPoint> temp_controlPolygon_);
 
     std::vector<vec3> circleVertices_t(int n, vec3 normal);
-
 };
-
 
 //=============================================================================
 #endif
