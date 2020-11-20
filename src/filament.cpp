@@ -21,9 +21,7 @@ using namespace std;
 
 //=============================================================================
 
-Filament::Filament(std::vector<FilamentPoint> CP)
-    : controlPolygon_(CP)
-{
+Filament::Filament(){
 }
 
 std::vector<FilamentPoint> Filament::getFilamentPoints()

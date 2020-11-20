@@ -27,7 +27,7 @@ using namespace std;
 
 Tube_viewer::Tube_viewer(const char *_title, int _width, int _height)
 	: GLFW_window(_title, _width, _height),
-	  filament(control_polygon_),
+	  filament(),
 	  tube(filament)
 {
 	// rendering parameters
