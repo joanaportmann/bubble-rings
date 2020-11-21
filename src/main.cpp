@@ -20,6 +20,7 @@ int main(int argc, char *argv[])
     // any signs of a an application crash!
     SetErrorMode(0);
 #endif
+    // TODO: Maximize window
     Tube_viewer window("Tube System", 640, 480);
     return window.run();
 }

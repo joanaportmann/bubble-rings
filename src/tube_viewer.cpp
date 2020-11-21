@@ -139,7 +139,7 @@ std::vector<vec3> circleVertices(int n, vec3 center, vec3 normal, float radius)
 void Tube_viewer::timer()
 {
 
-	filament.updateSkeleton();
+	// filament.updateSkeleton();
 
 }
 //--------------------------------------------------------------------------------

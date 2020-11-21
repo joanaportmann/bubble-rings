@@ -89,7 +89,7 @@ protected:
   /// paint function - called when the window should be refreshed
   virtual void paint();
 
- virtual void timer();
+  virtual void timer();
 
   /// keyboard interaction
   virtual void keyboard(int key, int scancode, int action, int mods);

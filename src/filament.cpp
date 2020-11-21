@@ -21,7 +21,20 @@ using namespace std;
 
 //=============================================================================
 
-Filament::Filament(){
+Filament::Filament()
+{
+
+    // Set filament circle
+    for (float i = 0; i <= 2 * M_PI; i += 0.5)
+    {
+        controlPolygon_.push_back({{cos(i), sin(i), 0},
+                                   0.05,
+                                   1,
+                                   vec3(0, 0, 0)});
+        // cout << controlPolygon_[i-1].position << "_____________________________ \n" ;
+    }
+
+    // cout << controlPolygon_.size();
 }
 
 std::vector<FilamentPoint> Filament::getFilamentPoints()
@@ -217,7 +230,7 @@ void Filament::updateFilament()
 
     temp_polygon2 = temp_polygon1;
 
-      for (int i = 0; i < controlPolygon_.size(); i++)
+    for (int i = 0; i < controlPolygon_.size(); i++)
     {
         vec3 velocity;
         vec3 temp_K;
@@ -226,9 +239,9 @@ void Filament::updateFilament()
         temp_polygon2[i].position += temp_K * 0.5;
     }
 
-   temp_polygon3 = temp_polygon2;
+    temp_polygon3 = temp_polygon2;
 
-      for (int i = 0; i < controlPolygon_.size(); i++)
+    for (int i = 0; i < controlPolygon_.size(); i++)
     {
         vec3 velocity;
         vec3 temp_K;
@@ -237,7 +250,7 @@ void Filament::updateFilament()
         temp_polygon3[i].position += temp_K;
     }
 
-      for (int i = 0; i < controlPolygon_.size(); i++)
+    for (int i = 0; i < controlPolygon_.size(); i++)
     {
         vec3 velocity;
         vec3 temp_K;
@@ -245,12 +258,10 @@ void Filament::updateFilament()
         K4.push_back(temp_K);
     }
 
-
-     for(int i = 0; i < controlPolygon_.size(); i++)
-     {
-         controlPolygon_[i].position += (K1[i] + 2 * K2[i] + 2 * K3[i] + K4[i]) / 6 * 0.002;
-     }
-    
+    for (int i = 0; i < controlPolygon_.size(); i++)
+    {
+        controlPolygon_[i].position += (K1[i] + 2 * K2[i] + 2 * K3[i] + K4[i]) / 6 * 0.002;
+    }
 };
 
 void Filament::updateSkeleton()
