@@ -27,7 +27,7 @@ Filament::Filament()
     // Set filament circle
     for (float i = 0; i <= 2 * M_PI; i += 0.5)
     {
-        controlPolygon_.push_back({{cos(i), 0, sin(i)},
+        controlPolygon_.push_back({{cos(i), sin(i), 0},
                                    0.05,
                                    1,
                                    vec3(0, 0, 0)});

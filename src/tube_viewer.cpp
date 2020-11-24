@@ -36,7 +36,7 @@ Tube_viewer::Tube_viewer(const char *_title, int _width, int _height)
 	near_ = 0.01f;
 	far_ = 20;
 
-	x_angle_ = -45.0f;
+	x_angle_ = 0.0f;
 	y_angle_ = 0.0f;
 	dist_factor_ = 9.0f;
 
@@ -190,10 +190,13 @@ void Tube_viewer::paint()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	vec4 eye, center, up;
-	float x_angle, y_angle;
+	float x_rotation, y_rotation;
 	mat4 rotation;
 
 	center = vec4(0, 0, 0, 0);
+	
+	x_rotation = x_angle_;
+	y_rotation = y_angle_;
 
 	Eigen::Affine3f rotation_x;
 	rotation_x = Eigen::AngleAxisf(x_rotation, vec3::UnitX().cast<float>());
@@ -239,20 +242,20 @@ void Tube_viewer::draw_scene(mat4 &_projection, mat4 &_view)
 	// convert light into camera coordinates
 	light = _view * light;
 
-	Eigen::Affine3f rotation_x;
-	rotation_x = Eigen::AngleAxisf(45.0f, vec3::UnitX().cast<float>());
-	mat4 rotation_x_mat = rotation_x.matrix().cast<double>();
+	Eigen::Affine3f rotation_y;
+	rotation_y = Eigen::AngleAxisf(-45.0f, vec3::UnitY().cast<float>());
+	mat4 rotation_y_mat = rotation_y.matrix().cast<double>();
 
 	// render polygonpath
-	m_matrix = rotation_x_mat;
+	m_matrix = rotation_y_mat;
 	mv_matrix = _view * m_matrix;
 	mvp_matrix = _projection * mv_matrix;
 	mat4 matrix;
 	mat3 normal_matrix;
 	matrix = _projection * _view;
 	normal_matrix = mat3::Identity();
-	mv_matrix = matrix;
-	mvp_matrix = matrix;
+	//mv_matrix = matrix;
+	//mvp_matrix = matrix;
 
 	// phong_shader_.use();
 	// phong_shader_.set_uniform("modelview_projection_matrix", matrix);
@@ -265,7 +268,7 @@ void Tube_viewer::draw_scene(mat4 &_projection, mat4 &_view)
 	// ship_path_cp_renderer_.draw();
 
 	test_tube_shader_.use();
-	test_tube_shader_.set_uniform("modelview_projection_matrix", matrix);
+	test_tube_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
 	test_tube_shader_.set_uniform("normal_matrix", normal_matrix);
 	//test_tube_shader_.set_uniform("light_position", _view * vec4(0, 0, 0, 1));
 	// test_tube_shader_.set_uniform("color", vec4(0.8, 0.8, 0.2, 0.6));
