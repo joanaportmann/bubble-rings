@@ -174,6 +174,21 @@ void Tube::updateBuffers()
 
 //-----------------------------------------------------------------------------
 
+// Draw coordinate system
+
+float verts[] =
+    {
+        -0.6f, 0.0f, 0.0f, //x axis starting point
+        0.6f, 0.0f, 0.0f,  //end point of X axis
+
+        0.0f, -0.6f, 0.0f, //Y-axis starting point
+        0.0f, 0.6f, 0.0f,  //Y-axis end point
+        0.0f, 0.0f, -0.6f, //Z-axis starting point
+        0.0f, 0.0f, 0.6f,  //Z axis end point
+};
+
+//-------------------------------------------------------------------------------
+
 void Tube::draw(GLenum mode)
 {
    //if (n_indices_ == 0)

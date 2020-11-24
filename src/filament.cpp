@@ -25,15 +25,16 @@ Filament::Filament()
 {
 
     // Set filament circle
-    for (float i = 0; i <= 2 * M_PI; i += 0.5)
+    for (float i = 0; i <= 2 * M_PI; i += 0.2)
     {
         controlPolygon_.push_back({{cos(i), sin(i), 0},
-                                   0.05,
-                                   1,
+                                   0.12,
+                                   4,
                                    vec3(0, 0, 0)});
-        // cout << controlPolygon_[i-1].position << "_____________________________ \n" ;
     }
 }
+
+//----------------------------------------------------------------------------
 
 std::vector<FilamentPoint> Filament::getFilamentPoints()
 {
@@ -140,9 +141,9 @@ vec3 Filament::biotSavartAndLocalizedInduction(int j, std::vector<FilamentPoint>
     vec3 temp_vel = vec3(0, 0, 0);
     vec3 position = temp_controlPolygon_[j].position;
 
-    for (int j = 1; j < temp_controlPolygon_.size(); j++)
+    for (int j = 0; j < temp_controlPolygon_.size(); j++)
     {
-        vec3 R0 = temp_controlPolygon_[j - 1].position;
+        vec3 R0 = temp_controlPolygon_[wrap(j - 1)].position;
         vec3 R1 = temp_controlPolygon_[wrap(j + 1)].position;
         float a = temp_controlPolygon_[j].a;
         float Gamma = circulation;
@@ -168,10 +169,10 @@ vec3 Filament::boussinesq_on_edge(int i, std::vector<FilamentPoint> temp_control
     //  Boussinesq on edges
     // Read of edge
     float a = temp_controlPolygon_[i].a;
-    float C = temp_controlPolygon_[i].C;
+    float C = circulation;
 
     // Coefficients are defined as constants above
-    vec3 g = vec3(0, 0, gravity);
+    vec3 g = vec3(0,gravity, 0);
 
     // Get points and tangents
     vec3 srcP = temp_controlPolygon_[i].position;
@@ -197,14 +198,14 @@ vec3 Filament::oneStepOfRungeKutta(int i, std::vector<FilamentPoint> temp_contro
 {
     vec3 v_temp;
     float time_step_;
-    time_step_ = 0.03f;
+    time_step_ = 0.01f;
 
     // Calculating u_BS per vertex of filament
 
     v_temp = biotSavartAndLocalizedInduction(i, temp_controlPolygon_);
 
     // Calculating and adding normal flow velocity γ_normal and averaging to vertices
-    vec3 y_normal = (boussinesq_on_edge(i, temp_controlPolygon_) + boussinesq_on_edge((wrap(i + 1)) % temp_controlPolygon_.size(), temp_controlPolygon_)) / 2;
+    vec3 y_normal = (boussinesq_on_edge(i, temp_controlPolygon_) + boussinesq_on_edge((wrap(i + 1)), temp_controlPolygon_)) / 2;
 
     v_temp += y_normal;
     v_temp *= time_step_;
@@ -226,8 +227,7 @@ void Filament::updateFilament()
         temp_polygon1[i].position += temp_K * 0.5;
     }
 
-    temp_polygon2 = temp_polygon1;
-
+    temp_polygon2 = controlPolygon_;
     for (int i = 0; i < controlPolygon_.size(); i++)
     {
         vec3 velocity;
@@ -237,7 +237,7 @@ void Filament::updateFilament()
         temp_polygon2[i].position += temp_K * 0.5;
     }
 
-    temp_polygon3 = temp_polygon2;
+    temp_polygon3 = controlPolygon_;
 
     for (int i = 0; i < controlPolygon_.size(); i++)
     {
@@ -252,7 +252,7 @@ void Filament::updateFilament()
     {
         vec3 velocity;
         vec3 temp_K;
-        temp_K = Filament::oneStepOfRungeKutta(i, temp_polygon2);
+        temp_K = Filament::oneStepOfRungeKutta(i, temp_polygon3);
         K4.push_back(temp_K);
     }
 
