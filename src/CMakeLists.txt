@@ -13,7 +13,6 @@ set(SHADER_PATH  ${CMAKE_SOURCE_DIR}/src      CACHE PATH "location of shader pro
 add_definitions("-DTEXTURE_PATH=\"${TEXTURE_PATH}\"")
 add_definitions("-DSHADER_PATH=\"${SHADER_PATH}\"")
 
-
 find_package (Eigen3 3.3 REQUIRED NO_MODULE)
 
 # executable

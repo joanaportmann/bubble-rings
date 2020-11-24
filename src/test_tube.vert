@@ -19,9 +19,8 @@ flat out vec3 v2f_normal;
 //out vec3 v2f_view;
 
 uniform mat4 modelview_projection_matrix;
-//uniform mat4 modelview_matrix;
 uniform mat3 normal_matrix;
-// uniform vec4 light_position; //in eye space coordinates already
+uniform vec4 light_position; //in eye space coordinates already
 
 
 void main() {

@@ -3,11 +3,11 @@ project(TubeSystem)
 cmake_minimum_required(VERSION 3.0)
 
 add_compile_options(-fno-omit-frame-pointer) 
-add_compile_options(-fsanitize=address) 
+#add_compile_options(-fsanitize=address) 
 #add_compile_options(-lasan)
 
 # What we want: LDFLAGS="-fsanitize=address"
-link_libraries("-fsanitize=address") 
+#link_libraries("-fsanitize=address") 
 
 # set output paths
 set(PROJECT_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR})
@@ -105,3 +105,7 @@ add_subdirectory(${CMAKE_CURRENT_BINARY_DIR}/googletest-src
 if (CMAKE_VERSION VERSION_LESS 2.8.11)
   include_directories("${gtest_SOURCE_DIR}/include")
 endif()
+
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pg")
+SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pg")
+SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -pg")

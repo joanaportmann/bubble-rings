@@ -32,11 +32,11 @@ Tube_viewer::Tube_viewer(const char *_title, int _width, int _height)
 {
 	// rendering parameters
 	greyscale_ = false;
-	fovy_ = 45;
+	fovy_ = 70;
 	near_ = 0.01f;
 	far_ = 20;
 
-	x_angle_ = -90.0f;
+	x_angle_ = -45.0f;
 	y_angle_ = 0.0f;
 	dist_factor_ = 9.0f;
 
@@ -52,12 +52,7 @@ void Tube_viewer::
 	{
 		switch (key)
 		{
-		case GLFW_KEY_G:
-		{
-			greyscale_ = !greyscale_;
-			break;
-		}
-
+		
 		case GLFW_KEY_ESCAPE:
 		{
 			glfwSetWindowShouldClose(window_, GL_TRUE);
@@ -86,6 +81,13 @@ void Tube_viewer::
 		{
 			x_angle_ -= 0.05 * M_PI;
 			break;
+		}
+
+		case GLFW_KEY_S:
+		{
+			
+filament.updateSkeleton();
+break;
 		}
 
 			// Key 9 increases and key 8 decreases the `dist_factor_` within the range - 2.5 < `dist_factor_` < 20.0.
@@ -136,13 +138,6 @@ std::vector<vec3> circleVertices(int n, vec3 center, vec3 normal, float radius)
 }
 //--------------------------------------------------------------------------------
 
-void Tube_viewer::timer()
-{
-
-	// filament.updateSkeleton();
-
-}
-//--------------------------------------------------------------------------------
 
 void Tube_viewer::initialize()
 {
@@ -199,7 +194,7 @@ void Tube_viewer::paint()
 	mat4 rotation;
 
 	center = vec4(0, 0, 0, 0);
-
+	
 	x_rotation = x_angle_;
 	y_rotation = y_angle_;
 
@@ -224,6 +219,13 @@ void Tube_viewer::paint()
 	projection = MatUtils::perspective(fovy_, (float)width_ / (float)height_, near_, far_);
 	draw_scene(projection, view);
 }
+//-----------------------------------------------------------------------------
+
+
+// void Tube_viewer::timer()
+// {
+// 		filament.updateSkeleton();
+// }
 
 //-----------------------------------------------------------------------------
 
@@ -240,13 +242,20 @@ void Tube_viewer::draw_scene(mat4 &_projection, mat4 &_view)
 	// convert light into camera coordinates
 	light = _view * light;
 
+	Eigen::Affine3f rotation_x;
+	rotation_x = Eigen::AngleAxisf(45.0f, vec3::UnitX().cast<float>());
+	mat4 rotation_x_mat = rotation_x.matrix().cast<double>();
+
 	// render polygonpath
+	m_matrix = rotation_x_mat;
+	mv_matrix = _view * m_matrix;
+	mvp_matrix = _projection * mv_matrix;
 	mat4 matrix;
 	mat3 normal_matrix;
 	matrix = _projection * _view;
 	normal_matrix = mat3::Identity();
-	// mv_matrix = matrix;
-	// mvp_matrix = matrix;
+	mv_matrix = matrix;
+	mvp_matrix = matrix;
 
 	// phong_shader_.use();
 	// phong_shader_.set_uniform("modelview_projection_matrix", matrix);

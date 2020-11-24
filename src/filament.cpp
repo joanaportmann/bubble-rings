@@ -27,14 +27,12 @@ Filament::Filament()
     // Set filament circle
     for (float i = 0; i <= 2 * M_PI; i += 0.5)
     {
-        controlPolygon_.push_back({{cos(i), sin(i), 0},
+        controlPolygon_.push_back({{cos(i), 0, sin(i)},
                                    0.05,
                                    1,
                                    vec3(0, 0, 0)});
         // cout << controlPolygon_[i-1].position << "_____________________________ \n" ;
     }
-
-    // cout << controlPolygon_.size();
 }
 
 std::vector<FilamentPoint> Filament::getFilamentPoints()
@@ -199,7 +197,7 @@ vec3 Filament::oneStepOfRungeKutta(int i, std::vector<FilamentPoint> temp_contro
 {
     vec3 v_temp;
     float time_step_;
-    time_step_ = 1.0f;
+    time_step_ = 0.03f;
 
     // Calculating u_BS per vertex of filament
 
@@ -260,7 +258,7 @@ void Filament::updateFilament()
 
     for (int i = 0; i < controlPolygon_.size(); i++)
     {
-        controlPolygon_[i].position += (K1[i] + 2 * K2[i] + 2 * K3[i] + K4[i]) / 6 * 0.002;
+        controlPolygon_[i].position += (K1[i] + 2 * K2[i] + 2 * K3[i] + K4[i]) / 6 ;
     }
 };
 
