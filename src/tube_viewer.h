@@ -28,47 +28,7 @@ public:
   /// \_height the window's height
   Tube_viewer(const char *_title, int _width, int _height);
 
-  // Control polygon for circle to be contoured
-  std::vector<FilamentPoint> control_polygon_ = {
-      {{-5.2, 3.2, 0.0}, 0.5, 1, vec3(0, 0, 0)},
-      {{-4.4, 3.94, 0.0}, 0.5, 1, vec3(0, 0, 0)},
-      {{-3.7, 4.4, 0.0}, 0.5, 1, vec3(0, 0, 0)},
-      {{-2.85, 4.68, 0.0}, 0.4, 1, vec3(0, 0, 0)},
-      {{-1.88, 4.72, 0.0}, 0.5, 1, vec3(0, 0, 0)},
-      {{-0.43, 4.62, 0.0}, 0.5, 1, vec3(0, 0, 0)},
-      {{0.2, 4.18, 0.0}, 0.5, 1, vec3(0, 0, 0)},
-      {{0.87, 3.68, 0.0}, 0.5, 1, vec3(0, 0, 0)},
-      {{1.09, 3.24, 0.0}, 0.5, 1, vec3(0, 0, 0)},
-      {{1.2, 2.7, 0.0}, 0.3, 1.1, vec3(0, 0, 0)},
-      {{1.45, 2.08, 0.0}, 0.5, 1, vec3(0, 0, 0)},
-      {{1.5, 1.32, 0.0}, 0.5, 1.1, vec3(0, 0, 0)},
-      {{1.3, 0.2, 0.0}, 0.1, 0.9, vec3(0, 0, 0)},
-      {{-0.6, -1.45, 0.0}, 0.5,1.1, vec3(0, 0, 0)},
-      {{-2.8, -1.5, 0.0}, 0.3, 0.8, vec3(0, 0, 0)},
-      {{-4.95, -0.7, 0.0}, 0.3, 0.7, vec3(0, 0, 0)},
-      {{-5.5, 1.6, 0.5}, 0.1, 1.5, vec3(0, 0, 0)}};
-
-  std::vector<vec3> filamentPositions =
-      {
-          {-5.2, 3.2, 0.0},
-          {-4.4, 3.94, 0.0},
-          {-3.7, 4.4, 0.0},
-          {-2.85, 4.68, 0.0},
-          {-1.88, 4.72, 0.0},
-          {-0.43, 4.62, 0.0},
-          {0.2, 4.18, 0.0},
-          {0.87, 3.68, 0.0},
-          {1.09, 3.24, 0.0},
-          {1.2, 2.7, 0.0},
-          {1.45, 2.08, 0.0},
-          {1.5, 1.32, 0.0},
-          {1.3, 0.2, 0.0},
-          {-0.6, -1.45, 0.0},
-          {-2.8, -1.5, 0.0},
-          {-4.95, -0.7, 0.0},
-          {-5.5, 1.6, 0.5}
-      };
-
+  
   std::vector<float> thickness = 
   {
 0.3, 0.4, 0.3, 0.5, 0.4, 0.4, 0.5, 0.4, 0.3, 0.4, 0.4, 0.5, 0.3, 0.2, 0.2, 0.1, 0.1
@@ -94,7 +54,7 @@ protected:
   /// keyboard interaction
   virtual void keyboard(int key, int scancode, int action, int mods);
 
-  /// function that draws the planet system
+  /// function that draws the bubble ring
   /// \param _projection the projection matrix for the scene
   /// \param _view the view matrix for the scene
   void draw_scene(mat4 &_projection, mat4 &_view);
