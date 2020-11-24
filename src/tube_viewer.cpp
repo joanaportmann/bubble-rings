@@ -190,13 +190,10 @@ void Tube_viewer::paint()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	vec4 eye, center, up;
-	float x_rotation, y_rotation;
+	float x_angle, y_angle;
 	mat4 rotation;
 
 	center = vec4(0, 0, 0, 0);
-	
-	x_rotation = x_angle_;
-	y_rotation = y_angle_;
 
 	Eigen::Affine3f rotation_x;
 	rotation_x = Eigen::AngleAxisf(x_rotation, vec3::UnitX().cast<float>());
