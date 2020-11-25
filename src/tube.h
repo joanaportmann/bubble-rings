@@ -69,6 +69,8 @@ private:
     /// index buffer object
     GLuint ibo_ = 0;
 
+    GLuint lineVAO, lineVBO;
+
     /// a triangle is specified by three indices and a normal
     struct Triangle
     {

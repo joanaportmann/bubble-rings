@@ -148,7 +148,6 @@ void Tube::updateBuffers()
        
     }
 
- 
 
     
   n_positions = positions.size();
@@ -170,24 +169,31 @@ void Tube::updateBuffers()
     glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(float), &normals[0], GL_STATIC_DRAW);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(1);
+
+    // Coordinate axes
+    // GLfloat lineSeg[] =
+    // {
+    //     0.0f, 0.0f, 0.0f, // first vertex
+    //     2.0f, 0.0f, 2.0f // second vertex
+    // };
+    // glGenVertexArrays(1, &lineVAO);
+    // glGenBuffers(1, &lineVBO);
+    // glBindVertexArray(lineVAO);
+    // glBindBuffer(GL_ARRAY_BUFFER, lineVBO);
+    // glBufferData(GL_ARRAY_BUFFER, sizeof(lineSeg), &lineSeg, GL_STATIC_DRAW);
+    // glEnableVertexAttribArray(0);
+    // glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)0);
+
+    // //glEnable(GL_LINE_SMOOTH);
+    // //glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+    // glBindVertexArray(lineVAO);
+    // glLineWidth(3.3f);
+    // glDrawArrays(GL_LINES, 0, 2);
+    // glLineWidth(1.0f);
 }
 
 //-----------------------------------------------------------------------------
 
-// Draw coordinate system
-
-float verts[] =
-    {
-        -0.6f, 0.0f, 0.0f, //x axis starting point
-        0.6f, 0.0f, 0.0f,  //end point of X axis
-
-        0.0f, -0.6f, 0.0f, //Y-axis starting point
-        0.0f, 0.6f, 0.0f,  //Y-axis end point
-        0.0f, 0.0f, -0.6f, //Z-axis starting point
-        0.0f, 0.0f, 0.6f,  //Z axis end point
-};
-
-//-------------------------------------------------------------------------------
 
 void Tube::draw(GLenum mode)
 {
