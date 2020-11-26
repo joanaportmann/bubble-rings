@@ -4,32 +4,10 @@
 #include "shader.h"
 #include <Eigen/Geometry>
 
-// Represents and visualizes a 3D reference frame adapted to a curve:
-//      t:      unit vector tangent to the curve
-//      up:     some unit vector perpendicular to t
-//      left:   up.cross(t)
 struct Frame {
-    Frame() : t(0.0, 0.0, 1.0), up(0.0, 1.0, 0.), left(1.0, 0.0, 0.0) { }
+    Frame() {}
 
-    vec3 t, up, left;
-    // Align the frame with the tangent vector "tnew" either using parallel transport
-    // from the current tangent vector or setting the vector as close to +y as possible.
-    void alignTo(vec3 tnew) {
-        tnew.normalize();
-        if (m_useParallelTransport) {
-            vec3 sinThetaAxis = t.cross(tnew);
-            float cosTheta = t.dot(tnew);
-            t    = tnew;
-            up   = (sinThetaAxis.dot(up)  / (1 + cosTheta)) * sinThetaAxis + sinThetaAxis.cross(up) + cosTheta * up;
-            left = ( sinThetaAxis.dot(left) / (1 + cosTheta)) * sinThetaAxis + sinThetaAxis.cross(left)+ cosTheta * left;
-        }
-        else {
-            t    = tnew;
-            left = (vec3(0.0, 1.0, 0.0).cross(t)).normalized();
-            up   = (t.cross(left)).normalized();
-        }
-    }
-
+   
     // Initialize the OpenGL arrays/buffers with the arrow geometry for frame
     // visualization
     void initialize() {
@@ -43,7 +21,7 @@ struct Frame {
         // Arrow geometry along the x axis.
         // Shaft cylinder
         const size_t nsubdiv = 20;
-        const float radius = 0.08;
+        const float radius = 0.02;
         for (size_t i = 0; i < nsubdiv; ++i) {
             float theta = (2 * M_PI * i) / nsubdiv;
             coords.push_back(0);
@@ -96,55 +74,35 @@ struct Frame {
         glBindVertexArray(m_arrowVAO);
 
         Eigen::Affine3f scaling;
-        scaling = Eigen::Scaling(0.25f);
+        scaling = Eigen::Scaling(1.0f);
         mat4 scaling_matrix = scaling.matrix().cast<double>();
 
-        //Includes translation
-        auto model = xyzToFrame(pos);
-
         Eigen::Affine3f rotation_z;
-        rotation_z = Eigen::AngleAxisf(0.25*M_PI, vec3::UnitZ().cast<float>());
+        rotation_z = Eigen::AngleAxisf(-0.5 * M_PI, vec3::UnitZ().cast<float>());
         mat4 rotation_z_matrix = rotation_z.matrix().cast<double>();
 
         Eigen::Affine3f rotation_y;
-        rotation_y = Eigen::AngleAxisf(-0.25*M_PI, vec3::UnitY().cast<float>());
+        rotation_y = Eigen::AngleAxisf(0.5 * M_PI, vec3::UnitY().cast<float>());
         mat4 rotation_y_matrix = rotation_y.matrix().cast<double>();
 
         mat4 M_1, M_2;
-        mat4 M_0 = vp * model * scaling_matrix;
-        M_1 = vp * model * rotation_z_matrix * scaling_matrix;
-        M_2 = vp * model * rotation_y_matrix * scaling_matrix;
+        mat4 M_0 = vp * scaling_matrix;
+        M_1 = vp * rotation_z_matrix * scaling_matrix;
+        M_2 = vp * rotation_y_matrix * scaling_matrix;
         s.use();
-        s.set_uniform<mat4>("modelview_projection_matrix", M_0);
-        s.set_uniform("color", vec4(1.0, 0.0, 0.0, 1.0));
-        glDrawElements(GL_TRIANGLES, m_nidx, GL_UNSIGNED_INT, NULL);
+        s.set_uniform<mat4>("modelview_projection_matrix", M_0); 
+        s.set_uniform("color", vec4(1.0, 0.0, 0.0, 1.0)); 
+        glDrawElements(GL_TRIANGLES, m_nidx, GL_UNSIGNED_INT, NULL); // x-Achse
 
         s.set_uniform("color", vec4(0.0, 1.0, 0.0, 1.0));
         s.set_uniform("modelview_projection_matrix", M_1);
-        glDrawElements(GL_TRIANGLES, m_nidx, GL_UNSIGNED_INT, NULL);
+        glDrawElements(GL_TRIANGLES, m_nidx, GL_UNSIGNED_INT, NULL); // y-Achse
 
         s.set_uniform("color", vec4(0.0, 0.0, 1.0, 1.0));
         s.set_uniform("modelview_projection_matrix", M_2);
-        glDrawElements(GL_TRIANGLES, m_nidx, GL_UNSIGNED_INT, NULL);
+        glDrawElements(GL_TRIANGLES, m_nidx, GL_UNSIGNED_INT, NULL); // z -Achse
 
         glBindVertexArray(0);
-    }
-
-    void toggleParallelTransport() { m_useParallelTransport = !m_useParallelTransport; }
-    bool usingParallelTransport() { return m_useParallelTransport; }
-
-    // Note: in its object coordinates, the spaceship points in the +z direction, with +y up, +x left.
-    // We display the proper (x, y, z) axes for orienting the ship,
-    // which should point in the +t direction and have the proper up vector.
-    // Construct the rotation matrix mapping the (x, y, z) axis vectors to (left, up, t).
-    mat4 xyzToFrame(const vec3 &translation) const {
-        mat4 m;
-        m(0, 0) = left[0]; m(0, 1) = up[0]; m(0, 2) = t[0]; m(0, 3) = translation[0];
-        m(1, 0) = left[1]; m(1, 1) = up[1]; m(1, 2) = t[1]; m(1, 3) = translation[1];
-        m(2, 0) = left[2]; m(2, 1) = up[2]; m(2, 2) = t[2]; m(2, 3) = translation[2];
-        m(3, 0) = 0; m(3, 1) = 0; m(3, 2) = 0; m(3, 3) = 1;
-
-        return m;
     }
 
     ~Frame() {

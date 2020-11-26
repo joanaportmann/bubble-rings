@@ -100,6 +100,7 @@ private:
 
   Path ship_path_renderer_, ship_path_cp_renderer_, circle2, circle1;
   Frame ship_path_frame_;
+  vec3 center_of_coordinatesystem;
 
   /// the field of view for the camera
   float fovy_;

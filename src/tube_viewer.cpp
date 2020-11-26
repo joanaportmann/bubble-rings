@@ -207,7 +207,7 @@ void Tube_viewer::paint()
 	mat4 rotation_y_matrix = rotation_y.matrix().cast<double>();
 
 	rotation = rotation_y_matrix * rotation_x_matrix;
-	eye = center + rotation * vec4(0, 0, -(dist_factor_), 0);
+	eye = center + rotation * vec4((dist_factor_), (dist_factor_), (dist_factor_), 0);
 	up = rotation * vec4(0, 1, 0, 0);
 
 	mat4 view;
@@ -243,29 +243,18 @@ void Tube_viewer::draw_scene(mat4 &_projection, mat4 &_view)
 	light = _view * light;
 
 	Eigen::Affine3f rotation_y;
-	rotation_y = Eigen::AngleAxisf(-45.0f, vec3::UnitY().cast<float>());
+	rotation_y = Eigen::AngleAxisf(0.0f, vec3::UnitY().cast<float>());
 	mat4 rotation_y_mat = rotation_y.matrix().cast<double>();
 
 	// render polygonpath
-	m_matrix = rotation_y_mat;
+	m_matrix = mat4::Identity();
 	mv_matrix = _view * m_matrix;
 	mvp_matrix = _projection * mv_matrix;
 	mat4 matrix;
 	mat3 normal_matrix;
 	matrix = _projection * _view;
 	normal_matrix = mat3::Identity();
-	//mv_matrix = matrix;
-	//mvp_matrix = matrix;
 
-	// phong_shader_.use();
-	// phong_shader_.set_uniform("modelview_projection_matrix", matrix);
-	// phong_shader_.set_uniform("normal_matrix", matrix);
-	// tube.draw();
-
-	// solid_color_shader_.use();
-	// solid_color_shader_.set_uniform("modelview_projection_matrix", matrix);
-	// solid_color_shader_.set_uniform("color", vec4(0.8, 0.8, 0.2, 0.6));
-	// ship_path_cp_renderer_.draw();
 
 	test_tube_shader_.use();
 	test_tube_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
@@ -273,6 +262,9 @@ void Tube_viewer::draw_scene(mat4 &_projection, mat4 &_view)
 	//test_tube_shader_.set_uniform("light_position", _view * vec4(0, 0, 0, 1));
 	// test_tube_shader_.set_uniform("color", vec4(0.8, 0.8, 0.2, 0.6));
 	tube.draw();
+	center_of_coordinatesystem = vec3(0, 0, 0);
+
+	ship_path_frame_.draw(solid_color_shader_, _projection * _view, center_of_coordinatesystem);
 
 	// render circles around polygonpath
 	//drawCircle(control_polygon_, 0.3);
