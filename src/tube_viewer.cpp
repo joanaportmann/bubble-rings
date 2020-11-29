@@ -195,8 +195,8 @@ void Tube_viewer::paint()
 
 	center = vec4(0, 0, 0, 0);
 	
-	x_rotation = x_angle_;
-	y_rotation = y_angle_;
+	x_rotation = -x_angle_;
+	y_rotation = -y_angle_;
 
 	Eigen::Affine3f rotation_x;
 	rotation_x = Eigen::AngleAxisf(x_rotation, vec3::UnitX().cast<float>());
@@ -208,7 +208,7 @@ void Tube_viewer::paint()
 
 	rotation = rotation_y_matrix * rotation_x_matrix;
 	eye = center + rotation * vec4((dist_factor_), (dist_factor_), (dist_factor_), 0);
-	up =  vec4(0, 1, 0, 0);
+	up =  rotation * vec4(0, 1, 0, 0);
 
 	mat4 view;
 	view = MatUtils::look_at(
