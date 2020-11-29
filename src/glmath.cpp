@@ -20,13 +20,14 @@ mat4 MatUtils::look_at(const vec4& eye_4d, const vec4& center_4d, const vec4& up
     vec3 y = (z.cross(x)).normalized();
 
     mat4 m;
-    m(0,0)=x[0]; m(0,1)=x[1]; m(0,2)=x[2]; m(0,3)=-x.dot(eye);
-    m(1,0)=y[0]; m(1,1)=y[1]; m(1,2)=y[2]; m(1,3)=-y.dot(eye);
-    m(2,0)=z[0]; m(2,1)=z[1]; m(2,2)=z[2]; m(2,3)=-z.dot(eye);
+    m(0,0)=x[0]; m(0,1)=x[1]; m(0,2)=x[2]; m(0,3)=-(x.dot(eye));
+    m(1,0)=y[0]; m(1,1)=y[1]; m(1,2)=y[2]; m(1,3)=-(y.dot(eye));
+    m(2,0)=z[0]; m(2,1)=z[1]; m(2,2)=z[2]; m(2,3)=-(z.dot(eye));
     m(3,0)=0.0;  m(3,1)=0.0;  m(3,2)=0.0;  m(3,3)=1.0;
 
     return m;
 }
+
 
 //-----------------------------------------------------------------------------
 
@@ -56,5 +57,4 @@ mat4 MatUtils::perspective(float fovy, float aspect, float near, float far)
 
     return MatUtils::frustum(l, r, b, t, near, far);
 }
-
 

@@ -78,11 +78,11 @@ struct Frame {
         mat4 scaling_matrix = scaling.matrix().cast<double>();
 
         Eigen::Affine3f rotation_z;
-        rotation_z = Eigen::AngleAxisf(-0.5 * M_PI, vec3::UnitZ().cast<float>());
+        rotation_z = Eigen::AngleAxisf(0.5 * M_PI, vec3::UnitZ().cast<float>());
         mat4 rotation_z_matrix = rotation_z.matrix().cast<double>();
 
         Eigen::Affine3f rotation_y;
-        rotation_y = Eigen::AngleAxisf(0.5 * M_PI, vec3::UnitY().cast<float>());
+        rotation_y = Eigen::AngleAxisf(-0.5 * M_PI, vec3::UnitY().cast<float>());
         mat4 rotation_y_matrix = rotation_y.matrix().cast<double>();
 
         mat4 M_1, M_2;
@@ -115,7 +115,6 @@ private:
            m_arrowVBO = 0,
            m_arrowIBO = 0;
     size_t m_nidx = 0;
-    bool m_useParallelTransport = false;
 };
 
 #endif /* end of include guard: FRAME_H */

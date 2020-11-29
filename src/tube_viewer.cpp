@@ -208,7 +208,7 @@ void Tube_viewer::paint()
 
 	rotation = rotation_y_matrix * rotation_x_matrix;
 	eye = center + rotation * vec4((dist_factor_), (dist_factor_), (dist_factor_), 0);
-	up = rotation * vec4(0, 1, 0, 0);
+	up =  vec4(0, 1, 0, 0);
 
 	mat4 view;
 	view = MatUtils::look_at(
@@ -246,13 +246,11 @@ void Tube_viewer::draw_scene(mat4 &_projection, mat4 &_view)
 	rotation_y = Eigen::AngleAxisf(0.0f, vec3::UnitY().cast<float>());
 	mat4 rotation_y_mat = rotation_y.matrix().cast<double>();
 
-	// render polygonpath
+	// render tube
 	m_matrix = mat4::Identity();
 	mv_matrix = _view * m_matrix;
 	mvp_matrix = _projection * mv_matrix;
-	mat4 matrix;
 	mat3 normal_matrix;
-	matrix = _projection * _view;
 	normal_matrix = mat3::Identity();
 
 

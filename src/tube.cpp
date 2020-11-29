@@ -15,6 +15,7 @@
 #include <iostream>
 #include <string>
 #include <stdlib.h> 
+#include "filament.h"
 
 #define numberOfVerticesPerTubeCircle 30
 
@@ -170,26 +171,6 @@ void Tube::updateBuffers()
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(1);
 
-    // Coordinate axes
-    // GLfloat lineSeg[] =
-    // {
-    //     0.0f, 0.0f, 0.0f, // first vertex
-    //     2.0f, 0.0f, 2.0f // second vertex
-    // };
-    // glGenVertexArrays(1, &lineVAO);
-    // glGenBuffers(1, &lineVBO);
-    // glBindVertexArray(lineVAO);
-    // glBindBuffer(GL_ARRAY_BUFFER, lineVBO);
-    // glBufferData(GL_ARRAY_BUFFER, sizeof(lineSeg), &lineSeg, GL_STATIC_DRAW);
-    // glEnableVertexAttribArray(0);
-    // glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)0);
-
-    // //glEnable(GL_LINE_SMOOTH);
-    // //glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
-    // glBindVertexArray(lineVAO);
-    // glLineWidth(3.3f);
-    // glDrawArrays(GL_LINES, 0, 2);
-    // glLineWidth(1.0f);
 }
 
 //-----------------------------------------------------------------------------
@@ -198,7 +179,10 @@ void Tube::updateBuffers()
 void Tube::draw(GLenum mode)
 {
    //if (n_indices_ == 0)
-    updateBuffers();
+   if(filament_.updatedFilament) {
+       updateBuffers();
+       filament_.updatedFilament = false;
+   }
 
     glBindVertexArray(vao_);
     glDrawArrays(mode, 0, n_positions);

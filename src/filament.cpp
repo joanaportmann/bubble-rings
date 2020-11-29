@@ -125,7 +125,7 @@ int Filament::wrap(int i)
 }
 
 // Calculating u_LIA
-vec3 Filament::localizedInduction(int j, std::vector<FilamentPoint> temp_controlPolygon_)
+vec3 Filament::localizedInduction(int j, const std::vector<FilamentPoint> &temp_controlPolygon_)
 {
     // Grab data
     vec3 e_next = temp_controlPolygon_[wrap(j + 1)].position - temp_controlPolygon_[j].position;
@@ -150,7 +150,7 @@ vec3 Filament::localizedInduction(int j, std::vector<FilamentPoint> temp_control
 
 //-------------------------------------------------------------------------------------
 
-vec3 Filament::biotSavartAndLocalizedInduction(int j, std::vector<FilamentPoint> temp_controlPolygon_)
+vec3 Filament::biotSavartAndLocalizedInduction(int j, const std::vector<FilamentPoint> &temp_controlPolygon_)
 {
     vec3 temp_vel = vec3(0, 0, 0);
     vec3 position = temp_controlPolygon_[j].position;
@@ -178,7 +178,7 @@ vec3 Filament::biotSavartAndLocalizedInduction(int j, std::vector<FilamentPoint>
  * The tangential part (Eq. (13b)) equation does not change the shape of the curve and can 
  * be reduced to Burgers’ equation for the cross sectional area A=πa2 on a fixed curve.
  **/
-vec3 Filament::boussinesq_on_edge(int i, std::vector<FilamentPoint> temp_controlPolygon_)
+vec3 Filament::boussinesq_on_edge(int i, const std::vector<FilamentPoint> &temp_controlPolygon_)
 {
     //  Boussinesq on edges
     // Read of edge
@@ -208,7 +208,7 @@ vec3 Filament::boussinesq_on_edge(int i, std::vector<FilamentPoint> temp_control
            denom;
 };
 
-vec3 Filament::oneStepOfRungeKutta(int i, std::vector<FilamentPoint> temp_controlPolygon_)
+vec3 Filament::oneStepOfRungeKutta(int i, const std::vector<FilamentPoint> &temp_controlPolygon_)
 {
     vec3 v_temp;
     float time_step_;
@@ -279,6 +279,7 @@ void Filament::updateFilament()
 void Filament::updateSkeleton()
 {
     updateFilament();
+    updatedFilament = true;
 };
 
 //-----------------------------------------------------------------------------------
