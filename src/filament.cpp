@@ -9,7 +9,7 @@
 
 using namespace std;
 
-#define numberOfVerticesPerTubeCircle 30
+#define numberOfVerticesPerTubeCircle 10
 #define _USE_MATH_DEFINES
 #define RM_mu 0.4723665527
 #define delta 0.6420127083
