@@ -17,7 +17,8 @@
 #include <stdlib.h> 
 #include "filament.h"
 
-#define numberOfVerticesPerTubeCircle 30
+// ATTENTION: Keep in sync with the one in filament.cpp
+#define numberOfVerticesPerTubeCircle 20
 
 using namespace std;
 
@@ -115,7 +116,6 @@ void Tube::initialize(){
 
 void Tube::updateBuffers()
 {
-
     Tube::createTriangleStruct();
     Tube::compute_normals();
 
@@ -132,11 +132,11 @@ void Tube::updateBuffers()
         positions[p++] = tubeVertices[t.ind0](1);
         positions[p++] = tubeVertices[t.ind0](2);
 
-       positions[p++] = tubeVertices[t.ind1](0);
+        positions[p++] = tubeVertices[t.ind1](0);
         positions[p++] = tubeVertices[t.ind1](1);
         positions[p++] = tubeVertices[t.ind1](2);
 
-      positions[p++] = tubeVertices[t.ind2](0);
+        positions[p++] = tubeVertices[t.ind2](0);
         positions[p++] = tubeVertices[t.ind2](1);
         positions[p++] = tubeVertices[t.ind2](2);
 
@@ -146,12 +146,9 @@ void Tube::updateBuffers()
             normals[n++] = t.normal(1);
             normals[n++] = t.normal(2); 
         }
-       
     }
-
-
     
-  n_positions = positions.size();
+    n_positions = positions.size();
 
     glBindVertexArray(vao_);
 
@@ -164,13 +161,10 @@ void Tube::updateBuffers()
 
     // normal vectors -> attribute 1
 
- 
-
     glBindBuffer(GL_ARRAY_BUFFER, nbo_);
     glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(float), &normals[0], GL_STATIC_DRAW);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(1);
-
 }
 
 //-----------------------------------------------------------------------------

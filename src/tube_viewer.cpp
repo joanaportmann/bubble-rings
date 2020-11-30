@@ -93,7 +93,7 @@ break;
 			// Key 9 increases and key 8 decreases the `dist_factor_` within the range - 2.5 < `dist_factor_` < 20.0.
 		case GLFW_KEY_8:
 		{
-			if (dist_factor_ >= 3.0)
+			if (dist_factor_ >= 1.0)
 				dist_factor_ -= 0.2;
 			break;
 		}

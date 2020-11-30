@@ -9,7 +9,8 @@
 
 using namespace std;
 
-#define numberOfVerticesPerTubeCircle 10
+// ATTENTION: Keep in sync with the one in tube.cpp
+#define numberOfVerticesPerTubeCircle 20
 #define _USE_MATH_DEFINES
 #define RM_mu 0.4723665527
 #define delta 0.6420127083
@@ -23,21 +24,7 @@ using namespace std;
 
 Filament::Filament()
 {
-    // Coordinate axes
-    GLfloat lineSeg[] =
-    {
-        0.0f, 0.0f, 0.0f, // first vertex
-        2.0f, 0.0f, 2.0f // second vertex
-    };
-    GLuint lineVAO, lineVBO;
-    glGenVertexArrays(1, &lineVAO);
-    glGenBuffers(1, &lineVBO);
-    glBindVertexArray(lineVAO);
-    glBindBuffer(GL_ARRAY_BUFFER, lineVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(lineSeg), &lineSeg, GL_STATIC_DRAW);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)0);
-
+   
     // Set filament circle
     for (float i = 0; i <= 2 * M_PI; i += 0.2)
     {
