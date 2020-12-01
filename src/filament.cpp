@@ -263,6 +263,50 @@ void Filament::updateFilament()
     }
 };
 
+void preComputations(
+    const std::vector<FilamentPoint> &controlPolygon_,
+    std::vector<vec3> edges,
+    std::vector<vec3> tangents,
+    std::vector<float> lengths,
+    std::vector<float> point_lengths,
+    std::vector<float> areas,
+    std::vector<float> effectiveGravities)
+{
+    for (int i = 0; i < controlPolygon_.size(); i++)
+    {
+        vec3 edge = controlPolygon_[(i + 1) % controlPolygon_.size()].position - controlPolygon_[i].position;
+        edges.push_back(edge);
+    }
+    for (int i = 0; i < edges.size(); i++)
+    {
+        vec3 tangent = edges[i].normalized();
+        tangents.push_back(tangent);
+    }
+    for (int i = 0; i < edges.size(); i++)
+    {
+        float length = edges[i].norm();
+        lengths.push_back(length);
+    }
+    for (int i = 0; i < controlPolygon_.size(); i++)
+    {
+        float area = pow(controlPolygon_[i].a, 2) * M_PI;
+        areas.push_back(area);
+    }
+
+    for (int i = 0; i < controlPolygon_.size(); i++)
+    {
+        float effectiveGravity = (vec3(0, gravity, 0) * At).dot(tangents[i]);
+        effectiveGravities.push_back(effectiveGravity);
+    }
+}
+
+void pointComputations(
+
+)
+{
+
+};
+
 void Filament::updateSkeleton()
 {
     updateFilament();
