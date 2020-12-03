@@ -55,14 +55,30 @@ private:
 
     std::vector<vec3> circleVertices_t(int n, vec3 normal);
 
-    void preComputations (
-        const std::vector<FilamentPoint> &controlPolygon_, 
-        std::vector<vec3> edges,
-        std::vector<vec3> tangents,
-        std::vector<float> lengths,
-        std::vector<float> point_lengths,
-        std::vector<float> areas,
-        std::vector<float> effectiveGravity);
+
+    // Thickness flow: Burger's equation
+    
+    std::vector<vec3> edges;
+    std::vector<vec3> tangents;
+    std::vector<float> lengths;
+    std::vector<float> point_lengths;
+    //std::vector<float> areas;
+    //std::vector<float> effectiveGravities;
+    std::vector<float> flux;
+    float AreaUsed;
+
+    // void preComputations (
+    //     const std::vector<FilamentPoint> &controlPolygon_, 
+    //     std::vector<vec3> edges,
+    //     std::vector<vec3> tangents,
+    //     std::vector<float> lengths,
+    //     std::vector<float> point_lengths,
+    //     std::vector<float> areas,
+    //     std::vector<float> effectiveGravity,
+    //     std::vector<float> flux,
+    //     float AreaUsed);
+    
+    // void doBurgerStepOnBubbleRing();
 
 };
 
