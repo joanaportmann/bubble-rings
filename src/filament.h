@@ -58,14 +58,14 @@ private:
 
     // Thickness flow: Burger's equation
     
-    std::vector<vec3> edges;
-    std::vector<vec3> tangents;
-    std::vector<float> lengths;
-    std::vector<float> point_lengths;
-    //std::vector<float> areas;
-    //std::vector<float> effectiveGravities;
-    std::vector<float> flux;
-    float AreaUsed;
+    // std::vector<vec3> edges;
+    // std::vector<vec3> tangents;
+    // std::vector<float> lengths;
+    // std::vector<float> point_lengths;
+    // std::vector<float> areas;
+    // std::vector<float> effectiveGravities;
+    // std::vector<float> flux;
+    // float AreaUsed;
 
     // void preComputations (
     //     const std::vector<FilamentPoint> &controlPolygon_, 
