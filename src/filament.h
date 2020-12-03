@@ -32,7 +32,7 @@ public:
     std::vector<vec3> getBubbleRingSkeleton();
 
     float time_step_ = 0.0000000001f;
-    bool updatedFilament;
+    bool updatedFilament = true;
     
     // Todo
     void updateSkeleton();
@@ -58,27 +58,27 @@ private:
 
     // Thickness flow: Burger's equation
     
-    // std::vector<vec3> edges;
-    // std::vector<vec3> tangents;
-    // std::vector<float> lengths;
-    // std::vector<float> point_lengths;
-    // std::vector<float> areas;
-    // std::vector<float> effectiveGravities;
-    // std::vector<float> flux;
-    // float AreaUsed;
+    std::vector<vec3> edges;
+    std::vector<vec3> tangents;
+    std::vector<float> lengths;
+    std::vector<float> point_lengths;
+    std::vector<float> areas;
+    std::vector<float> effectiveGravities;
+    std::vector<float> flux;
+    float AreaUsed;
 
-    // void preComputations (
-    //     const std::vector<FilamentPoint> &controlPolygon_, 
-    //     std::vector<vec3> edges,
-    //     std::vector<vec3> tangents,
-    //     std::vector<float> lengths,
-    //     std::vector<float> point_lengths,
-    //     std::vector<float> areas,
-    //     std::vector<float> effectiveGravity,
-    //     std::vector<float> flux,
-    //     float AreaUsed);
+    void preComputations (
+        const std::vector<FilamentPoint> &controlPolygon_, 
+        std::vector<vec3> edges,
+        std::vector<vec3> tangents,
+        std::vector<float> lengths,
+        std::vector<float> point_lengths,
+        std::vector<float> areas,
+        std::vector<float> effectiveGravity,
+        std::vector<float> flux,
+        float AreaUsed);
     
-    // void doBurgerStepOnBubbleRing();
+    void doBurgerStepOnBubbleRing();
 
 };
 
