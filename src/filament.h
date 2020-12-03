@@ -40,6 +40,7 @@ public:
 private:
 
     std::vector<FilamentPoint> controlPolygon_ ;
+    int size;
 
     int wrap(int i);
 
@@ -58,18 +59,17 @@ private:
 
     // Thickness flow: Burger's equation
     
-    std::vector<vec3> edges;
-    std::vector<vec3> tangents;
-    std::vector<float> lengths;
-    std::vector<float> point_lengths;
-    std::vector<float> areas;
-    std::vector<float> effectiveGravities;
-    std::vector<float> flux;
-    float AreaUsed;
+    std::vector<vec3> edges_;
+    std::vector<vec3> tangents_;
+    std::vector<float> lengths_;
+    std::vector<float> point_lengths_;
+    std::vector<float> areas_;
+    std::vector<float> effectiveGravities_;
+    std::vector<float> flux_;
+    float AreaUsed_;
 
     void preComputations (
-        const std::vector<FilamentPoint> &controlPolygon_, 
-        std::vector<vec3> edges,
+        const std::vector<FilamentPoint> controlPolygon_, 
         std::vector<vec3> tangents,
         std::vector<float> lengths,
         std::vector<float> point_lengths,

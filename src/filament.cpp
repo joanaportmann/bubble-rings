@@ -33,6 +33,8 @@ Filament::Filament()
                                    4,
                                    vec3(0, 0, 0)});
     }
+
+    size = controlPolygon_.size();
 }
 
 //----------------------------------------------------------------------------
@@ -69,10 +71,10 @@ std::vector<vec3> Filament::getBubbleRingSkeleton()
 {
     std::vector<vec3> verticesOfTube;
 
-    for (int i = 0; i < controlPolygon_.size(); i++)
+    for (int i = 0; i < size; i++)
     {
-        vec3 edgeAfter = controlPolygon_[(i + 1) % controlPolygon_.size()].position - controlPolygon_[i].position;
-        vec3 edgeBefore = controlPolygon_[i].position - controlPolygon_[(i - 1 + controlPolygon_.size()) % controlPolygon_.size()].position;
+        vec3 edgeAfter = controlPolygon_[(i + 1) % size].position - controlPolygon_[i].position;
+        vec3 edgeBefore = controlPolygon_[i].position - controlPolygon_[(i - 1 + size) % size].position;
         std::vector<vec3> verticesOfOneCircle = verticesofOneCircle_(
             numberOfVerticesPerTubeCircle,
             controlPolygon_[i].position,
@@ -108,7 +110,7 @@ vec3 Filament::biotsavartedge(vec3 p, vec3 R0, vec3 R1, float Gamma, float a)
 
 int Filament::wrap(int i)
 {
-    return (i + controlPolygon_.size()) % controlPolygon_.size();
+    return (i + size) % size;
 }
 
 // Calculating u_LIA
@@ -142,7 +144,7 @@ vec3 Filament::biotSavartAndLocalizedInduction(int j, const std::vector<Filament
     vec3 temp_vel = vec3(0, 0, 0);
     vec3 position = temp_controlPolygon_[j].position;
 
-    for (int j = 0; j < temp_controlPolygon_.size(); j++)
+    for (int j = 0; j < size; j++)
     {
         vec3 R0 = temp_controlPolygon_[wrap(j - 1)].position;
         vec3 R1 = temp_controlPolygon_[wrap(j + 1)].position;
@@ -219,7 +221,7 @@ void Filament::updateFilament()
     temp_polygon1 = controlPolygon_;
     std::vector<vec3> K1, K2, K3, K4;
 
-    for (int i = 0; i < controlPolygon_.size(); i++)
+    for (int i = 0; i < size; i++)
     {
         vec3 velocity;
         vec3 temp_K;
@@ -229,7 +231,7 @@ void Filament::updateFilament()
     }
 
     temp_polygon2 = controlPolygon_;
-    for (int i = 0; i < controlPolygon_.size(); i++)
+    for (int i = 0; i < size; i++)
     {
         vec3 velocity;
         vec3 temp_K;
@@ -240,7 +242,7 @@ void Filament::updateFilament()
 
     temp_polygon3 = controlPolygon_;
 
-    for (int i = 0; i < controlPolygon_.size(); i++)
+    for (int i = 0; i < size; i++)
     {
         vec3 velocity;
         vec3 temp_K;
@@ -249,7 +251,7 @@ void Filament::updateFilament()
         temp_polygon3[i].position += temp_K;
     }
 
-    for (int i = 0; i < controlPolygon_.size(); i++)
+    for (int i = 0; i < size; i++)
     {
         vec3 velocity;
         vec3 temp_K;
@@ -257,15 +259,14 @@ void Filament::updateFilament()
         K4.push_back(temp_K);
     }
 
-    for (int i = 0; i < controlPolygon_.size(); i++)
+    for (int i = 0; i < size; i++)
     {
         controlPolygon_[i].position += (K1[i] + 2 * K2[i] + 2 * K3[i] + K4[i]) / 6;
     }
 };
 
 void Filament::preComputations(
-    const std::vector<FilamentPoint> &controlPolygon_,
-    std::vector<vec3> edges,
+    const std::vector<FilamentPoint> controlPolygon_,
     std::vector<vec3> tangents,
     std::vector<float> lengths,
     std::vector<float> point_lengths,
@@ -274,25 +275,25 @@ void Filament::preComputations(
     std::vector<float> flux,
     float AreaUsed)
 {
-    for (int i = 0; i < controlPolygon_.size(); i++)
-        edges.push_back(controlPolygon_[wrap(i + 1)].position - controlPolygon_[i].position);
-    for (int i = 0; i < edges.size(); i++)
-        tangents.push_back(edges[i].normalized());
-    for (int i = 0; i < edges.size(); i++)
-        lengths.push_back(edges[i].norm());
-    for (int i = 0; i < controlPolygon_.size(); i++)
+    for (int i = 0; i < size; i++)
+        edges_.push_back(controlPolygon_[wrap(i + 1)].position - controlPolygon_[i].position);
+    for (int i = 0; i < edges_.size(); i++)
+        tangents.push_back(edges_[i].normalized());
+    for (int i = 0; i < edges_.size(); i++)
+        lengths.push_back(edges_[i].norm());
+    for (int i = 0; i < size; i++)
         areas.push_back(pow(controlPolygon_[i].a, 2) * M_PI);
-    for (int i = 0; i < controlPolygon_.size(); i++)
+    for (int i = 0; i < size; i++)
         effectiveGravities.push_back((vec3(0, gravity, 0) * At).dot(tangents[i]));
 
     //TODO: Average a and C (edge -> point)
 
-    for (int i = 0; i < controlPolygon_.size(); i++)
+    for (int i = 0; i < size; i++)
         point_lengths.push_back((lengths[i] + lengths[wrap(i - 1)]) / 2);
 
     // compute point flux as in Godunov's method
 
-    for (int i = 0; i < controlPolygon_.size(); i++)
+    for (int i = 0; i < size; i++)
     {
         // compute (gravity(prevPrim) = gravity(i-1))
         float minus = effectiveGravities[wrap(i - 1)] * areas[wrap(i - 1)];
@@ -321,16 +322,26 @@ void Filament::preComputations(
 
     void Filament::doBurgerStepOnBubbleRing()
     {
-        preComputations(controlPolygon_, edges, tangents, lengths, point_lengths, areas, effectiveGravities, flux, AreaUsed);
-     
+        
+     preComputations(controlPolygon_, tangents_, lengths_, point_lengths_, areas_, effectiveGravities_, flux_, AreaUsed_);
         // Create M (edgeLength diagonal matrix) Mass matrix
-        Eigen::MatrixXd M;  
+        //igen::MatrixXd M;  
+        Eigen::VectorXf vec(size);
+        for( int j = 0; j < size; j++) 
+        {
+            //vec(j) = lengths[j];
+        };
+
+        auto M = vec.asDiagonal();
+        cout << vec.size() << "-----------------" << edges_.size() << "+++++++++++++++++++++" << endl;
     };
 
 void Filament::updateSkeleton()
 {
     updateFilament();
     updatedFilament = true;
+    
+    doBurgerStepOnBubbleRing();
 };
 
 //-----------------------------------------------------------------------------------
