@@ -312,63 +312,85 @@ void Filament::preComputations()
             flux_.push_back(0.0f);
         }
     };
-
 };
 
-    void Filament::doBurgerStepOnBubbleRing()
+void Filament::doBurgerStepOnBubbleRing()
+{
+
+    preComputations();
+
+    // Create F (flux * nu)
+    Eigen::VectorXd F(size);
+    for (int j = 0; j < size; j++)
     {
-        
-     preComputations();
-        // Create M (edgeLength diagonal matrix) Mass matrix
-        Eigen::VectorXf vec_1_temp(size);
-        for( int j = 0; j < size; j++) 
-        {
-            vec_1_temp(j) = lengths_[j];
-        };
+        F(j) = flux_[j] * nu;
+    }
 
-        auto M = vec_1_temp.asDiagonal();
+    //-----------------------------------------------------------------------
 
-        // Create F (flux * nu)
-        Eigen::VectorXf F(size);
-        for (int j = 0; j < size; j++)
-        {
-            F(j) = flux_[j] * nu;
-        }
+    // Prep for Laplacian (L = -d^T * star1 * d^T)
 
-        // Create d
-        std::vector<T> trp;
-        for (int i = 0; i < size; i++) 
-        {
-            trp.push_back(T(i, i, -1));
-            trp.push_back(T(i, (i+1) % size, 1));
-        }
+    // Create d
+    std::vector<T> trp;
+    for (int i = 0; i < size; i++)
+    {
+        trp.push_back(T(i, i, -1));
+        trp.push_back(T(i, (i + 1) % size, 1));
+    }
 
-        Eigen::SparseMatrix<double> d(size, size);         // default is column major
-        d.setFromTriplets(trp.begin(), trp.end());
-        d.makeCompressed();                                // optional
+    Eigen::SparseMatrix<double> d(size, size); // default is column major
+    d.setFromTriplets(trp.begin(), trp.end());
+    //d.makeCompressed(); // optional
 
-        // Create L Laplacian
-        Eigen::VectorXf vec_2_temp(size);
-        for( int j = 0; j < size; j++) 
-        {
-            vec_2_temp(j) = point_lengths_[j];
-        };
-
-        auto star1 = vec_2_temp.asDiagonal();
-
-        Eigen::VectorXf vec_3_temp(size);
-        for( int j = 0; j < size; j++) 
-        {
-            vec_3_temp(j) = pow(controlPolygon_[j].C, 2);
-        };
-
+    Eigen::VectorXd vec_2_temp(size);
+    for (int j = 0; j < size; j++)
+    {
+        vec_2_temp(j) = point_lengths_[j];
     };
+    Eigen::MatrixXd star1 = vec_2_temp.asDiagonal();
+
+    // Create Circulation matrix Cmat and update star1
+    Eigen::VectorXd vec_3_temp(size);
+    for (int j = 0; j < size; j++)
+    {
+        vec_3_temp(j) = pow(controlPolygon_[j].C, 2);
+    };
+
+    Eigen::MatrixXd C = vec_3_temp.asDiagonal();
+    star1 = C * star1;
+
+    // Build Laplacian L
+     Eigen::MatrixXd L = -d.transpose() * star1 * d;
+
+    // (Check sizes of matrices) cout << d.size() << "------------" << star1.size() << "++++++++++++++++++++++";
+    //-----------------------------------------------------------------------
+
+    // Create M (edgeLength diagonal matrix) Mass matrix (star0 in Houdini)
+    Eigen::VectorXd vec_1_temp(size);
+    for (int j = 0; j < size; j++)
+    {
+        vec_1_temp(j) = lengths_[j];
+    };
+
+    auto M = vec_1_temp.asDiagonal();
+
+    //-------------------------------------------------------------------------
+
+    // Constants
+    float coef = 1.0/(64. * M_PI * M_PI);
+    float nuIdt = nu / time_step_;
+
+    //------------------------------------------------------------------------
+
+    // Backward Euler 
+
+};
 
 void Filament::updateSkeleton()
 {
     updateFilament();
     updatedFilament = true;
-    
+
     doBurgerStepOnBubbleRing();
 };
 
