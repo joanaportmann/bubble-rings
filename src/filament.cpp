@@ -6,8 +6,11 @@
 #include <iostream>
 #include <string>
 #include <stdlib.h>
+#include <Eigen/Sparse>
 
 using namespace std;
+
+typedef Eigen::Triplet<double> T;
 
 // ATTENTION: Keep in sync with the one in tube.cpp
 #define numberOfVerticesPerTubeCircle 20
@@ -265,56 +268,48 @@ void Filament::updateFilament()
     }
 };
 
-void Filament::preComputations(
-    const std::vector<FilamentPoint> controlPolygon_,
-    std::vector<vec3> tangents,
-    std::vector<float> lengths,
-    std::vector<float> point_lengths,
-    std::vector<float> areas,
-    std::vector<float> effectiveGravities,
-    std::vector<float> flux,
-    float AreaUsed)
+void Filament::preComputations()
 {
     for (int i = 0; i < size; i++)
         edges_.push_back(controlPolygon_[wrap(i + 1)].position - controlPolygon_[i].position);
     for (int i = 0; i < edges_.size(); i++)
-        tangents.push_back(edges_[i].normalized());
+        tangents_.push_back(edges_[i].normalized());
     for (int i = 0; i < edges_.size(); i++)
-        lengths.push_back(edges_[i].norm());
+        lengths_.push_back(edges_[i].norm());
     for (int i = 0; i < size; i++)
-        areas.push_back(pow(controlPolygon_[i].a, 2) * M_PI);
+        areas_.push_back(pow(controlPolygon_[i].a, 2) * M_PI);
     for (int i = 0; i < size; i++)
-        effectiveGravities.push_back((vec3(0, gravity, 0) * At).dot(tangents[i]));
+        effectiveGravities_.push_back((vec3(0, gravity, 0) * At).dot(tangents_[i]));
 
     //TODO: Average a and C (edge -> point)
 
     for (int i = 0; i < size; i++)
-        point_lengths.push_back((lengths[i] + lengths[wrap(i - 1)]) / 2);
+        point_lengths_.push_back((lengths_[i] + lengths_[wrap(i - 1)]) / 2);
 
     // compute point flux as in Godunov's method
 
     for (int i = 0; i < size; i++)
     {
         // compute (gravity(prevPrim) = gravity(i-1))
-        float minus = effectiveGravities[wrap(i - 1)] * areas[wrap(i - 1)];
-        float plus = effectiveGravities[i] * areas[i];
+        float minus = effectiveGravities_[wrap(i - 1)] * areas_[wrap(i - 1)];
+        float plus = effectiveGravities_[i] * areas_[i];
 
         if (minus > std::max(0.0f, -plus))
         {
             // positive case
-            flux.push_back(1.0 / (8 * M_PI) * minus * areas[wrap(i - 1)]);
-            AreaUsed = areas[wrap(i - 1)];
+            flux_.push_back(1.0 / (8 * M_PI) * minus * areas_[wrap(i - 1)]);
+            AreaUsed_ = areas_[wrap(i - 1)];
         }
         else if (plus < std::min(0.0f, -minus))
         {
             // negative case
-            flux.push_back(1.0 / (8 * M_PI) * plus * areas[i]);
-            AreaUsed = areas[i];
+            flux_.push_back(1.0 / (8 * M_PI) * plus * areas_[i]);
+            AreaUsed_ = areas_[i];
         }
         else
         {
             // neutral
-            flux.push_back(0.0f);
+            flux_.push_back(0.0f);
         }
     };
 
@@ -323,17 +318,50 @@ void Filament::preComputations(
     void Filament::doBurgerStepOnBubbleRing()
     {
         
-     preComputations(controlPolygon_, tangents_, lengths_, point_lengths_, areas_, effectiveGravities_, flux_, AreaUsed_);
+     preComputations();
         // Create M (edgeLength diagonal matrix) Mass matrix
-        //igen::MatrixXd M;  
-        Eigen::VectorXf vec(size);
+        Eigen::VectorXf vec_1_temp(size);
         for( int j = 0; j < size; j++) 
         {
-            //vec(j) = lengths[j];
+            vec_1_temp(j) = lengths_[j];
         };
 
-        auto M = vec.asDiagonal();
-        cout << vec.size() << "-----------------" << edges_.size() << "+++++++++++++++++++++" << endl;
+        auto M = vec_1_temp.asDiagonal();
+
+        // Create F (flux * nu)
+        Eigen::VectorXf F(size);
+        for (int j = 0; j < size; j++)
+        {
+            F(j) = flux_[j] * nu;
+        }
+
+        // Create d
+        std::vector<T> trp;
+        for (int i = 0; i < size; i++) 
+        {
+            trp.push_back(T(i, i, -1));
+            trp.push_back(T(i, (i+1) % size, 1));
+        }
+
+        Eigen::SparseMatrix<double> d(size, size);         // default is column major
+        d.setFromTriplets(trp.begin(), trp.end());
+        d.makeCompressed();                                // optional
+
+        // Create L Laplacian
+        Eigen::VectorXf vec_2_temp(size);
+        for( int j = 0; j < size; j++) 
+        {
+            vec_2_temp(j) = point_lengths_[j];
+        };
+
+        auto star1 = vec_2_temp.asDiagonal();
+
+        Eigen::VectorXf vec_3_temp(size);
+        for( int j = 0; j < size; j++) 
+        {
+            vec_3_temp(j) = pow(controlPolygon_[j].C, 2);
+        };
+
     };
 
 void Filament::updateSkeleton()

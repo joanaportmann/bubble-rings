@@ -18,6 +18,11 @@ struct FilamentPoint
     vec3 K;
 };
 
+// struct Triplet
+// {
+//   int  one_, two_, three_;
+// };
+
 
 class Filament
 {
@@ -68,15 +73,7 @@ private:
     std::vector<float> flux_;
     float AreaUsed_;
 
-    void preComputations (
-        const std::vector<FilamentPoint> controlPolygon_, 
-        std::vector<vec3> tangents,
-        std::vector<float> lengths,
-        std::vector<float> point_lengths,
-        std::vector<float> areas,
-        std::vector<float> effectiveGravity,
-        std::vector<float> flux,
-        float AreaUsed);
+    void preComputations ();
     
     void doBurgerStepOnBubbleRing();
 
