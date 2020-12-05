@@ -319,6 +319,13 @@ void Filament::doBurgerStepOnBubbleRing()
 
     preComputations();
 
+    // Create A
+    Eigen::VectorXd A(size);
+    for (int j = 0; j < size; j++)
+    {
+        A(j) = areas_[j];
+    }
+
     // Create F (flux * nu)
     Eigen::VectorXd F(size);
     for (int j = 0; j < size; j++)
@@ -360,7 +367,7 @@ void Filament::doBurgerStepOnBubbleRing()
     star1 = C * star1;
 
     // Build Laplacian L
-     Eigen::MatrixXd L = -d.transpose() * star1 * d;
+    Eigen::MatrixXd L = -d.transpose() * star1 * d;
 
     // (Check sizes of matrices) cout << d.size() << "------------" << star1.size() << "++++++++++++++++++++++";
     //-----------------------------------------------------------------------
@@ -372,17 +379,19 @@ void Filament::doBurgerStepOnBubbleRing()
         vec_1_temp(j) = lengths_[j];
     };
 
-    auto M = vec_1_temp.asDiagonal();
+    Eigen::MatrixXd M = vec_1_temp.asDiagonal();
 
     //-------------------------------------------------------------------------
 
     // Constants
-    float coef = 1.0/(64. * M_PI * M_PI);
-    float nuIdt = nu / time_step_;
+    double coef = 1.0/(64. * M_PI * M_PI);
+    double nuIdt = nu / time_step_;
 
     //------------------------------------------------------------------------
 
     // Backward Euler 
+    Eigen::MatrixXd LHS = (nuIdt * M) - (0.5 * coef * L);
+    Eigen::MatrixXd RHS = nuIdt * M * A + d.transpose() * F;
 
 };
 
