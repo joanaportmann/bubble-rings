@@ -410,6 +410,12 @@ x = cg.solve(RHS);
 std::cout << "#iterations:     " << cg.iterations() << std::endl;
 std::cout << "estimated error: " << cg.error()      << std::endl;
 
+for (int i = 0; i < size; i++) 
+{
+    // controlPolygon_[i].a = sqrt(x(i) / (2 * M_PI));
+    controlPolygon_[i].a =+ 0.5;
+
+};
 
 
 };
