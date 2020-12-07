@@ -389,9 +389,28 @@ void Filament::doBurgerStepOnBubbleRing()
 
     //------------------------------------------------------------------------
 
-    // Backward Euler 
-    Eigen::MatrixXd LHS = (nuIdt * M) - (0.5 * coef * L);
-    Eigen::MatrixXd RHS = nuIdt * M * A + d.transpose() * F;
+    // Backward Euler  (Ax = b)
+    Eigen::SparseMatrix<double> RHS(size, size);
+    Eigen::MatrixXd LHS_dense = (nuIdt * M) - (0.5 * coef * L);
+    Eigen::SparseMatrix<double> LHS(size, size);
+    LHS = LHS_dense.sparseView();
+    Eigen::MatrixXd RHS_dense = nuIdt * M * A + d.transpose() * F;
+    RHS = RHS_dense.sparseView();
+
+    // SCALE DUE TO PRECISION
+    double scale = 1.0/RHS.norm(); 
+
+    
+Eigen::VectorXd x(size);
+
+// fill A = LHS and b = RHS
+Eigen::ConjugateGradient<Eigen::SparseMatrix<double>, Eigen::Lower|Eigen::Upper> cg;
+cg.compute(LHS);
+x = cg.solve(RHS);
+std::cout << "#iterations:     " << cg.iterations() << std::endl;
+std::cout << "estimated error: " << cg.error()      << std::endl;
+
+
 
 };
 
