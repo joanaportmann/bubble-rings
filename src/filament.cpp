@@ -32,12 +32,13 @@ Filament::Filament()
     for (float i = 0; i <= 2 * M_PI; i += 0.2)
     {
         controlPolygon_.push_back({{cos(i), sin(i), 0},
-                                   0.12,
-                                   4,
+                                   0.202,
+                                   7,
                                    vec3(0, 0, 0)});
     }
 
     size = controlPolygon_.size();
+    cout << "a before: ----------------" << controlPolygon_[1].a;
 }
 
 //----------------------------------------------------------------------------
@@ -395,7 +396,6 @@ void Filament::doBurgerStepOnBubbleRing()
     Eigen::SparseMatrix<double> LHS(size, size);
     LHS = LHS_dense.sparseView();
     Eigen::MatrixXd RHS_dense = nuIdt * M * A + d.transpose() * F;
-    RHS = RHS_dense.sparseView();
 
     // SCALE DUE TO PRECISION
     double scale = 1.0/RHS.norm(); 
@@ -406,14 +406,18 @@ Eigen::VectorXd x(size);
 // fill A = LHS and b = RHS
 Eigen::ConjugateGradient<Eigen::SparseMatrix<double>, Eigen::Lower|Eigen::Upper> cg;
 cg.compute(LHS);
-x = cg.solve(RHS);
-std::cout << "#iterations:     " << cg.iterations() << std::endl;
-std::cout << "estimated error: " << cg.error()      << std::endl;
+x = cg.solve(RHS * scale);
+x = x / scale;
+//std::cout << "#iterations:     " << cg.iterations() << std::endl;
+//std::cout << "estimated error: " << cg.error()      << std::endl;
+std::cout << "x[1] " << x     << "\n" << std::endl;
+std::cout << "---------------------x[2]: " << x     << std::endl;
 
 for (int i = 0; i < size; i++) 
 {
-    // controlPolygon_[i].a = sqrt(x(i) / (2 * M_PI));
-    controlPolygon_[i].a =+ 0.5;
+    controlPolygon_[i].a = sqrt(x[i] / (2 * M_PI));
+    cout << "thickness 1:   " << controlPolygon_[1].a << endl;
+   // controlPolygon_[i].a = 2;
 
 };
 
