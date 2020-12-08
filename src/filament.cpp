@@ -38,7 +38,6 @@ Filament::Filament()
     }
 
     size = controlPolygon_.size();
-    cout << "a before: ----------------" << controlPolygon_[1].a;
 }
 
 //----------------------------------------------------------------------------
@@ -270,7 +269,15 @@ void Filament::updateFilament()
 };
 
 void Filament::preComputations()
-{
+{   
+    edges_.clear();
+    tangents_.clear();
+    lengths_.clear();
+    areas_.clear();
+    effectiveGravities_.clear();
+    point_lengths_.clear();
+    flux_.clear();
+
     for (int i = 0; i < size; i++)
         edges_.push_back(controlPolygon_[wrap(i + 1)].position - controlPolygon_[i].position);
     for (int i = 0; i < edges_.size(); i++)
@@ -285,7 +292,7 @@ void Filament::preComputations()
     //TODO: Average a and C (edge -> point)
 
     for (int i = 0; i < size; i++)
-        point_lengths_.push_back((lengths_[i] + lengths_[wrap(i - 1)]) / 2);
+    point_lengths_.push_back( (lengths_[i] + lengths_[wrap(i - 1)]) / 2);
 
     // compute point flux as in Godunov's method
 
@@ -339,64 +346,63 @@ void Filament::doBurgerStepOnBubbleRing()
     // Prep for Laplacian (L = -d^T * star1 * d^T)
 
     // Create d
-    std::vector<T> trp;
+    std::vector<T> trp_d;
     for (int i = 0; i < size; i++)
     {
-        trp.push_back(T(i, i, -1));
-        trp.push_back(T(i, (i + 1) % size, 1));
+        trp_d.push_back(T(i, i, -1));
+        trp_d.push_back(T(i, (i + 1) % size, 1));
     }
 
     Eigen::SparseMatrix<double> d(size, size); // default is column major
-    d.setFromTriplets(trp.begin(), trp.end());
+    d.setFromTriplets(trp_d.begin(), trp_d.end());
+
+    Eigen::SparseMatrix<double> d_transpose = d.transpose();
+
+    cout << "d: " << d << endl;
+    cout << "d_transpose: " << d_transpose << endl;
+
     //d.makeCompressed(); // optional
 
-    Eigen::VectorXd vec_2_temp(size);
-    for (int j = 0; j < size; j++)
+    std::vector<T> trp_C_square_div_pointLength;
+    for (int i = 0; i < size; i++)
     {
-        vec_2_temp(j) = point_lengths_[j];
-    };
-    Eigen::MatrixXd star1 = vec_2_temp.asDiagonal();
+        double entry = std::pow(controlPolygon_[i].C, 2) / point_lengths_[i];
+        trp_C_square_div_pointLength.push_back(T(i, i, entry));
+    }
 
-    // Create Circulation matrix Cmat and update star1
-    Eigen::VectorXd vec_3_temp(size);
-    for (int j = 0; j < size; j++)
-    {
-        vec_3_temp(j) = pow(controlPolygon_[j].C, 2);
-    };
+    Eigen::SparseMatrix<double> star1(size, size); // default is column major
+    star1.setFromTriplets(trp_C_square_div_pointLength.begin(), trp_C_square_div_pointLength.end());
 
-    Eigen::MatrixXd C = vec_3_temp.asDiagonal();
-    star1 = C * star1;
+    cout << "star1: " << star1 << endl;
 
     // Build Laplacian L
-    Eigen::MatrixXd L = -d.transpose() * star1 * d;
+    Eigen::SparseMatrix<double> L = -d.transpose() * star1 * d;
+
+    cout << "L: " << L << endl;
 
     // (Check sizes of matrices) cout << d.size() << "------------" << star1.size() << "++++++++++++++++++++++";
     //-----------------------------------------------------------------------
 
-    // Create M (edgeLength diagonal matrix) Mass matrix (star0 in Houdini)
-    Eigen::VectorXd vec_1_temp(size);
-    for (int j = 0; j < size; j++)
+    // Create M (edgeLength diagonal matrix) Mass matrix (star0 in Houdini) multiplied with nu / time_step_
+ std::vector<T> trp_lengths;
+    for (int i = 0; i < size; i++)
     {
-        vec_1_temp(j) = lengths_[j];
-    };
-
-    Eigen::MatrixXd M = vec_1_temp.asDiagonal();
+        trp_lengths.push_back(T(i, i, lengths_[i] * nu / time_step_));
+    }
+    Eigen::SparseMatrix<double> M(size, size); // default is column major
+    M.setFromTriplets(trp_lengths.begin(), trp_lengths.end());
 
     //-------------------------------------------------------------------------
 
     // Constants
     double coef = 1.0/(64. * M_PI * M_PI);
-    double nuIdt = nu / time_step_;
 
     //------------------------------------------------------------------------
 
     // Backward Euler  (Ax = b)
-    Eigen::SparseMatrix<double> RHS(size, size);
-    Eigen::MatrixXd LHS_dense = (nuIdt * M) - (0.5 * coef * L);
-    Eigen::SparseMatrix<double> LHS(size, size);
-    LHS = LHS_dense.sparseView();
-    Eigen::MatrixXd RHS_dense = nuIdt * M * A + d.transpose() * F;
-
+    Eigen::SparseMatrix<double> LHS = M - (0.5 * coef * L);
+    Eigen::MatrixXd RHS = M * A + d.transpose() * F ;
+   
     // SCALE DUE TO PRECISION
     double scale = 1.0/RHS.norm(); 
 
@@ -410,15 +416,11 @@ x = cg.solve(RHS * scale);
 x = x / scale;
 //std::cout << "#iterations:     " << cg.iterations() << std::endl;
 //std::cout << "estimated error: " << cg.error()      << std::endl;
-std::cout << "x[1] " << x     << "\n" << std::endl;
-std::cout << "---------------------x[2]: " << x     << std::endl;
 
 for (int i = 0; i < size; i++) 
 {
-    controlPolygon_[i].a = sqrt(x[i] / (2 * M_PI));
-    cout << "thickness 1:   " << controlPolygon_[1].a << endl;
-   // controlPolygon_[i].a = 2;
-
+   controlPolygon_[i].a = sqrt(x[i] / (2 * M_PI));
+   //controlPolygon_[i].a = 2;
 };
 
 
