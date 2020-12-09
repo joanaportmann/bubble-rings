@@ -36,7 +36,7 @@ public:
 
     std::vector<vec3> getBubbleRingSkeleton();
 
-    float time_step_ = 0.0000000001f;
+    float time_step_ = 0.01f;
     bool updatedFilament = true;
     
     // Todo

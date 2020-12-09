@@ -29,15 +29,16 @@ Filament::Filament()
 {
 
     // Set filament circle
-    for (float i = 0; i <= 2 * M_PI; i += 0.2)
+    for (float i = 0; i <= 2 * M_PI; i += 0.17)
     {
         controlPolygon_.push_back({{cos(i), sin(i), 0},
-                                   0.202,
-                                   7,
+                                   0.12,
+                                   4.2,
                                    vec3(0, 0, 0)});
     }
 
     size = controlPolygon_.size();
+    cout << "size: " << size << endl;
 }
 
 //----------------------------------------------------------------------------
@@ -203,8 +204,6 @@ vec3 Filament::boussinesq_on_edge(int i, const std::vector<FilamentPoint> &temp_
 vec3 Filament::oneStepOfRungeKutta(int i, const std::vector<FilamentPoint> &temp_controlPolygon_)
 {
     vec3 v_temp;
-    float time_step_;
-    time_step_ = 0.01f;
 
     // Calculating u_BS per vertex of filament
 
@@ -285,7 +284,7 @@ void Filament::preComputations()
     for (int i = 0; i < edges_.size(); i++)
         lengths_.push_back(edges_[i].norm());
     for (int i = 0; i < size; i++)
-        areas_.push_back(pow(controlPolygon_[i].a, 2) * M_PI);
+        areas_.push_back(std::pow(controlPolygon_[i].a, 2) * M_PI);
     for (int i = 0; i < size; i++)
         effectiveGravities_.push_back((vec3(0, gravity, 0) * At).dot(tangents_[i]));
 
@@ -302,13 +301,13 @@ void Filament::preComputations()
         float minus = effectiveGravities_[wrap(i - 1)] * areas_[wrap(i - 1)];
         float plus = effectiveGravities_[i] * areas_[i];
 
-        if (minus > std::max(0.0f, -plus))
+        if (minus > std::max(0.0f, (-plus)))
         {
             // positive case
             flux_.push_back(1.0 / (8 * M_PI) * minus * areas_[wrap(i - 1)]);
             AreaUsed_ = areas_[wrap(i - 1)];
         }
-        else if (plus < std::min(0.0f, -minus))
+        else if (plus < std::min(0.0f, (-minus)))
         {
             // negative case
             flux_.push_back(1.0 / (8 * M_PI) * plus * areas_[i]);
@@ -318,6 +317,7 @@ void Filament::preComputations()
         {
             // neutral
             flux_.push_back(0.0f);
+            AreaUsed_ = 0;
         }
     };
 };
@@ -338,7 +338,7 @@ void Filament::doBurgerStepOnBubbleRing()
     Eigen::VectorXd F(size);
     for (int j = 0; j < size; j++)
     {
-        F(j) = flux_[j] * nu;
+        F(j) = flux_[j];
     }
 
     //-----------------------------------------------------------------------
@@ -358,14 +358,15 @@ void Filament::doBurgerStepOnBubbleRing()
 
     Eigen::SparseMatrix<double> d_transpose = d.transpose();
 
-    cout << "d: " << d << endl;
-    cout << "d_transpose: " << d_transpose << endl;
+    //cout << "d: " << d << endl;
+    //cout << "d_transpose: " << d_transpose << endl;
 
     //d.makeCompressed(); // optional
 
     std::vector<T> trp_C_square_div_pointLength;
     for (int i = 0; i < size; i++)
     {
+        
         double entry = std::pow(controlPolygon_[i].C, 2) / point_lengths_[i];
         trp_C_square_div_pointLength.push_back(T(i, i, entry));
     }
@@ -373,12 +374,12 @@ void Filament::doBurgerStepOnBubbleRing()
     Eigen::SparseMatrix<double> star1(size, size); // default is column major
     star1.setFromTriplets(trp_C_square_div_pointLength.begin(), trp_C_square_div_pointLength.end());
 
-    cout << "star1: " << star1 << endl;
+    
 
     // Build Laplacian L
     Eigen::SparseMatrix<double> L = -d.transpose() * star1 * d;
 
-    cout << "L: " << L << endl;
+    //cout << "L: " << L << endl;
 
     // (Check sizes of matrices) cout << d.size() << "------------" << star1.size() << "++++++++++++++++++++++";
     //-----------------------------------------------------------------------
@@ -391,6 +392,7 @@ void Filament::doBurgerStepOnBubbleRing()
     }
     Eigen::SparseMatrix<double> M(size, size); // default is column major
     M.setFromTriplets(trp_lengths.begin(), trp_lengths.end());
+    cout << "M: " << M << endl;
 
     //-------------------------------------------------------------------------
 
@@ -419,7 +421,8 @@ x = x / scale;
 
 for (int i = 0; i < size; i++) 
 {
-   controlPolygon_[i].a = sqrt(x[i] / (2 * M_PI));
+    //cout << "update: --------------- + " << std::pow(x[i] / (2 * M_PI),2) << endl;
+   controlPolygon_[i].a += sqrt(sqrt(std::pow(x[i] / (2 * M_PI), 2)));
    //controlPolygon_[i].a = 2;
 };
 
