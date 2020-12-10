@@ -340,7 +340,7 @@ void Filament::doBurgerStepOnBubbleRing()
     Eigen::VectorXd F(size);
     for (int j = 0; j < size; j++)
     {
-        F(j) = flux_[j] * nu / time_step_;
+        F(j) = flux_[j];
     }
 
     //-----------------------------------------------------------------------
