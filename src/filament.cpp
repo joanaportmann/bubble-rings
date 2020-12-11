@@ -7,6 +7,7 @@
 #include <string>
 #include <stdlib.h>
 #include <Eigen/Sparse>
+#include "FloatExceptionEnabler.hh"
 
 using namespace std;
 
@@ -276,9 +277,12 @@ void Filament::preComputations()
     effectiveGravities_.clear();
     point_lengths_.clear();
     flux_.clear();
-
+    AreaUsed_ = 0;
+    
+    //edge computations
     for (int i = 0; i < size; i++)
-        edges_.push_back(controlPolygon_[wrap(i + 1)].position - controlPolygon_[i].position);
+        {edges_.push_back(controlPolygon_[wrap(i + 1)].position - controlPolygon_[i].position);
+        cout << "edges: "<< edges_[i] << "\n"; };
     for (int i = 0; i < edges_.size(); i++)
         tangents_.push_back(edges_[i].normalized());
     for (int i = 0; i < edges_.size(); i++)
@@ -325,7 +329,10 @@ void Filament::preComputations()
 
 void Filament::doBurgerStepOnBubbleRing()
 {
-
+  
+    {
+        FloatExceptionEnabler foo;
+    };
     preComputations();
 
     // Create A
@@ -448,9 +455,8 @@ for (int i = 0; i < size; i++)
 void Filament::updateSkeleton()
 {
     updateFilament();
-    updatedFilament = true;
-
     doBurgerStepOnBubbleRing();
+    updatedFilament = true;
 };
 
 //-----------------------------------------------------------------------------------

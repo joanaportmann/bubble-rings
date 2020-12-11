@@ -7,6 +7,7 @@
 #include <Eigen/Dense>
 #include "glmath.h"
 #include <vector>
+#include "FloatExceptionEnabler.hh"
 //=============================================================================
 
 
