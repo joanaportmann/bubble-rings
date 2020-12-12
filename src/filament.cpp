@@ -31,7 +31,7 @@ Filament::Filament()
     // Set filament circle
     for (float i = 0; i <= 2 * M_PI; i += 0.17)
     {
-        controlPolygon_.push_back({{0.6*cos(i), 0.6*sin(i), 0.12},
+        controlPolygon_.push_back({{0.6 * cos(i), 0.6 * sin(i), 0.12},
                                    0.12,
                                    4.2,
                                    vec3(0, 0, 0)});
@@ -268,7 +268,7 @@ void Filament::updateFilament()
 };
 
 void Filament::preComputations()
-{   
+{
     edges_.clear();
     tangents_.clear();
     lengths_.clear();
@@ -291,8 +291,7 @@ void Filament::preComputations()
     //TODO: Average a and C (edge -> point)
 
     for (int i = 0; i < size; i++)
-    point_lengths_.push_back( (lengths_[i] + lengths_[wrap(i - 1)]) / 2);
-   
+        point_lengths_.push_back((lengths_[i] + lengths_[wrap(i - 1)]) / 2);
 
     // compute point flux as in Godunov's method
 
@@ -302,7 +301,7 @@ void Filament::preComputations()
         float minus = effectiveGravities_[wrap(i - 1)] * areas_[wrap(i - 1)];
         float plus = effectiveGravities_[i] * areas_[i];
 
-        if (minus > std::max(0.0f, (-plus)))
+        if (minus > std::max(0.0f, -plus))
         {
             // positive case
             flux_.push_back(1.0 / (8 * M_PI) * minus * areas_[wrap(i - 1)]);
@@ -325,7 +324,6 @@ void Filament::preComputations()
 
 void Filament::doBurgerStepOnBubbleRing()
 {
-
     preComputations();
 
     // Create A
@@ -368,7 +366,7 @@ void Filament::doBurgerStepOnBubbleRing()
     std::vector<T> trp_C_square_div_pointLength;
     for (int i = 0; i < size; i++)
     {
-        
+
         double entry = std::pow(controlPolygon_[i].C, 2) / point_lengths_[i];
         trp_C_square_div_pointLength.push_back(T(i, i, entry));
         //cout << "C: "<< i << "C: " << controlPolygon_[i].C << "\n";
@@ -382,13 +380,13 @@ void Filament::doBurgerStepOnBubbleRing()
     // Build Laplacian L
     Eigen::SparseMatrix<double> L = -d.transpose() * star1 * d;
 
-   // cout << "L: " << L << endl;
+    // cout << "L: " << L << endl;
 
     // (Check sizes of matrices) cout << d.size() << "------------" << star1.size() << "++++++++++++++++++++++";
     //-----------------------------------------------------------------------
 
     // Create M (edgeLength diagonal matrix) Mass matrix (star0 in Houdini) multiplied with nu / time_step_
- std::vector<T> trp_lengths;
+    std::vector<T> trp_lengths;
     for (int i = 0; i < size; i++)
     {
         trp_lengths.push_back(T(i, i, lengths_[i] * nu / time_step_));
@@ -400,16 +398,16 @@ void Filament::doBurgerStepOnBubbleRing()
     //-------------------------------------------------------------------------
 
     // Constants
-    double coef = 1.0/(64. * M_PI * M_PI);
+    double coef = 1.0 / (64. * M_PI * M_PI);
 
     //------------------------------------------------------------------------
 
     // Backward Euler  (Ax = b)
     Eigen::SparseMatrix<double> LHS = M - (0.5 * coef * L);
-    Eigen::MatrixXd RHS = M * A + d.transpose() * F ;
-   
+    Eigen::MatrixXd RHS = M * A + d.transpose() * F;
+
     // SCALE DUE TO PRECISION
-    double scale = 1.0/RHS.norm(); 
+    double scale = 1.0 / RHS.norm();
 
     // cout << "nuIdt: " << nu / time_step_ << "\n";
     // cout << "coef: " << coef << "\n";
@@ -417,33 +415,30 @@ void Filament::doBurgerStepOnBubbleRing()
     // cout << "L: " << L << "\n";
     // cout << "A: " << A << "\n";
     // cout << "d: " << d << "\n";
-     //cout << "F: " << F << "\n";
+    //cout << "F: " << F << "\n";
 
-    
-Eigen::VectorXd x(size);
+    Eigen::VectorXd x(size);
 
-// fill A = LHS and b = RHS
-Eigen::ConjugateGradient<Eigen::SparseMatrix<double>, Eigen::Lower|Eigen::Upper> cg;
-cg.compute(LHS);
-x = cg.solve(RHS * scale);
-cout << "RHS: " << RHS << "\n";
-cout << "LHS: " << LHS << "\n";
-x = x / scale;
-//std::cout << "#iterations:     " << cg.iterations() << std::endl;
-//std::cout << "estimated error: " << cg.error()      << std::endl;
-// cout << "RHS: " << RHS << "\n";
-//  cout << "LHS: " << LHS << "\n";
-//  cout << "scale: --------------------------------" << scale << "\n";
+    // fill A = LHS and b = RHS
+    Eigen::ConjugateGradient<Eigen::SparseMatrix<double>, Eigen::Lower | Eigen::Upper> cg;
+    cg.compute(LHS);
+    x = cg.solve(RHS * scale);
+    cout << "RHS: " << RHS << "\n";
+    cout << "LHS: " << LHS << "\n";
+    x = x / scale;
+    //std::cout << "#iterations:     " << cg.iterations() << std::endl;
+    //std::cout << "estimated error: " << cg.error()      << std::endl;
+    // cout << "RHS: " << RHS << "\n";
+    //  cout << "LHS: " << LHS << "\n";
+    //  cout << "scale: --------------------------------" << scale << "\n";
 
-for (int i = 0; i < size; i++) 
-{
-    //cout << "update: --------------- + " << std::pow(x[i] / (2 * M_PI),2) << endl;
-   controlPolygon_[i].a += sqrt(sqrt(std::pow(x[i] / (2 * M_PI), 2)));
-   //controlPolygon_[i].a = 2;
-};
-
-
-};
+    for (int i = 0; i < size; i++)
+    {
+        //cout << "update: --------------- + " << std::pow(x[i] / (2 * M_PI),2) << endl;
+        controlPolygon_[i].a = sqrt(sqrt(std::pow(x[i] / (2 * M_PI), 2)));
+        //controlPolygon_[i].a = 2;
+    }
+}
 
 void Filament::updateSkeleton()
 {
