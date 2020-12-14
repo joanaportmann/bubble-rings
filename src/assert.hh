@@ -5,7 +5,7 @@
 
 #include <string>
 #include <cassert>
-#include "assert.cc"
+
 
 #ifdef _MSC_VER
 #  define NORETURN(x) __declspec(noreturn) x

@@ -3,10 +3,8 @@ find_package(OpenGL)
 ADD_DEFINITIONS(-DGLEW_STATIC)
 
 # source files
-file(GLOB SOURCES ./*.cc)
-file(GLOB SOURCES ./*.cpp)
-file(GLOB HEADERS ./*.h)
-file(GLOB HEADERS ./*.hh)
+file(GLOB SOURCES ./*.cc ./*.cpp)
+file(GLOB HEADERS ./*.h ./*hh)
 file(GLOB SHADERS ./*.vert ./*.frag)
 
 # Make sure the textures and shaders are available
