@@ -5,6 +5,7 @@
 
 #include <string>
 #include <cassert>
+#include "assert.cc"
 
 #ifdef _MSC_VER
 #  define NORETURN(x) __declspec(noreturn) x
@@ -30,11 +31,11 @@
 # define debug_assert(expr) debug_assert_extra(expr, "")
 
 
-#ifdef assert
-#undef assert
-#endif
+// #ifdef assert
+// #undef assert
+// #endif
 
-#define assert(x) debug_assert(x)
+//#define assert(x) debug_assert(x)
 
 NORETURN(void __release_assert_fail (const char *__assertion, const char *__file,
                  unsigned int __line, const char *__function, const std::string &extra));

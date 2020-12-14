@@ -1,4 +1,3 @@
-
 #include "assert.hh"
 
 #include <array>
