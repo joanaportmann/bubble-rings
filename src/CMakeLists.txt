@@ -7,6 +7,10 @@ file(GLOB SOURCES ./*.cpp)
 file(GLOB HEADERS ./*.h)
 file(GLOB SHADERS ./*.vert ./*.frag)
 
+# libraries
+add_library(TubeSystem_lib "")
+
+
 # Make sure the textures and shaders are available
 set(TEXTURE_PATH ${CMAKE_SOURCE_DIR}/textures CACHE PATH "location of texture images")
 set(SHADER_PATH  ${CMAKE_SOURCE_DIR}/src      CACHE PATH "location of shader programs")
@@ -26,3 +30,16 @@ target_link_libraries(TubeSystem lodePNG glfw ${GLEW_LIBRARIES} ${OPENGL_LIBRARI
 #add_executable(exampleTest filament_unittest.cpp)
 #target_link_libraries(exampleTest gtest gtest_main)
 #add_test(NAME example_test COMMAND exampleTest)
+
+
+target_sources(
+    TubeSystem_lib
+    PRIVATE
+        filament.cpp
+    PUBLIC
+        ${CMAKE_CURRENT_LIST_DIR}/filament.h
+)
+
+target_include_directories(TubeSystem_lib SYSTEM PUBLIC ${GLEW_INCLUDE_DIRS})
+# Note: target_link_libraries(glfw) should actually bring in the necessary header files.
+target_link_libraries(TubeSystem_lib lodePNG glfw ${GLEW_LIBRARIES} ${OPENGL_LIBRARIES})
