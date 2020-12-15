@@ -343,7 +343,6 @@ void Filament::doBurgerStepOnBubbleRing()
         A(j) = areas_e[j];
     }
 
-    //cout << "A:_______________________" << A;
     // Create F (flux * nu)
     Eigen::VectorXd F(size);
     for (int j = 0; j < size; j++)
@@ -368,31 +367,21 @@ void Filament::doBurgerStepOnBubbleRing()
 
     Eigen::SparseMatrix<double> d_transpose = d.transpose();
 
-    //cout << "d: " << d << endl;
-    //cout << "d_transpose: " << d_transpose << endl;
-
     //d.makeCompressed(); // optional
 
     std::vector<T> trp_C_square_div_pointLength;
     for (int i = 0; i < size; i++)
     {
-
         double entry = std::pow(controlPolygon_[i].C, 2) / point_lengths_v[i];
         trp_C_square_div_pointLength.push_back(T(i, i, entry));
-        //cout << "C: "<< i << "C: " << controlPolygon_[i].C << "\n";
     }
 
     Eigen::SparseMatrix<double> star1(size, size); // default is column major
     star1.setFromTriplets(trp_C_square_div_pointLength.begin(), trp_C_square_div_pointLength.end());
 
-    // cout << star1;
-
     // Build Laplacian L
     Eigen::SparseMatrix<double> L = -d.transpose() * star1 * d;
 
-    // cout << "L: " << L << endl;
-
-    // (Check sizes of matrices) cout << d.size() << "------------" << star1.size() << "++++++++++++++++++++++";
     //-----------------------------------------------------------------------
 
     // Create M (edgeLength diagonal matrix) Mass matrix (star0 in Houdini) multiplied with nu / time_step_
@@ -403,7 +392,7 @@ void Filament::doBurgerStepOnBubbleRing()
     }
     Eigen::SparseMatrix<double> M(size, size); // default is column major
     M.setFromTriplets(trp_lengths.begin(), trp_lengths.end());
-    //cout << "M: " << M << endl;
+  
 
     //-------------------------------------------------------------------------
 
@@ -420,34 +409,16 @@ void Filament::doBurgerStepOnBubbleRing()
     // SCALE DUE TO PRECISION
     double scale = 1.0 / RHS.norm();
 
-    // cout << "nuIdt: " << nu / time_step_ << "\n";
-    // cout << "coef: " << coef << "\n";
-    // cout << "M ( = lengths * nu): " << M << "\n";
-    // cout << "L: " << L << "\n";
-    // cout << "A: " << A << "\n";
-    // cout << "d: " << d << "\n";
-    //cout << "F: " << F << "\n";
-
-    //Eigen::VectorXd x(size);
-
     // fill A = LHS and b = RHS
     Eigen::ConjugateGradient<Eigen::SparseMatrix<double>, Eigen::Lower | Eigen::Upper> cg;
     cg.compute(LHS);
     Eigen::VectorXd x = cg.solve(RHS * scale);
-    //cout << "RHS: " << RHS << "\n";
-    //cout << "LHS: " << LHS << "\n";
     x = x / scale;
-    //std::cout << "#iterations:     " << cg.iterations() << std::endl;
-    //std::cout << "estimated error: " << cg.error()      << std::endl;
-    // cout << "RHS: " << RHS << "\n";
-    //  cout << "LHS: " << LHS << "\n";
-    //  cout << "scale: --------------------------------" << scale << "\n";
+
 
     for (int i = 0; i < size; i++)
     {
-        //cout << "update: --------------- + " << std::pow(x[i] / (2 * M_PI),2) << endl;
         controlPolygon_[i].a = sqrt( sqrt( std::pow(x(i) / (M_PI), 2) ) );
-        //controlPolygon_[i].a = 2;
     }
 }
 
