@@ -267,57 +267,67 @@ void Filament::updateFilament()
     }
 };
 
-void Filament::preComputations()
+
+/* Precomputations for Burger's equation. 
+* _e: Per edge (in Houdini)
+* _v: Per vertes (in Houdini)
+*/
+void Filament::preComputations() 
 {
-    edges_.clear();
-    tangents_.clear();
-    lengths_.clear();
-    areas_.clear();
-    effectiveGravities_.clear();
-    point_lengths_.clear();
-    flux_.clear();
+    // edge computations
+    edges_e.clear();
+    tangents_e.clear();
+    lengths_e.clear();
+    areas_e.clear();
+    effectiveGravities_e.clear();
+    point_lengths_v.clear();
+    flux_v.clear();
 
     for (int i = 0; i < size; i++)
-        edges_.push_back(controlPolygon_[wrap(i + 1)].position - controlPolygon_[i].position);
-    for (int i = 0; i < edges_.size(); i++)
-        tangents_.push_back(edges_[i].normalized());
-    for (int i = 0; i < edges_.size(); i++)
-        lengths_.push_back(edges_[i].norm());
+        edges_e.push_back(controlPolygon_[wrap(i + 1)].position - controlPolygon_[i].position);
+    for (int i = 0; i < edges_e.size(); i++)
+        tangents_e.push_back(edges_e[i].normalized());
+    for (int i = 0; i < edges_e.size(); i++)
+        lengths_e.push_back(edges_e[i].norm());
     for (int i = 0; i < size; i++)
-        areas_.push_back(std::pow(controlPolygon_[i].a, 2) * M_PI);
+        areas_e.push_back(std::pow(controlPolygon_[i].a, 2) * M_PI);
     for (int i = 0; i < size; i++)
-        effectiveGravities_.push_back((vec3(0, gravity, 0) * At).dot(tangents_[i]));
+        effectiveGravities_e.push_back((vec3(0, gravity, 0) * At).dot(tangents_e[i]));
 
-    //TODO: Average a and C (edge -> point)
+    //TODO: Average a  and C (just for stats in Houdini?)
 
     for (int i = 0; i < size; i++)
-        point_lengths_.push_back((lengths_[i] + lengths_[wrap(i - 1)]) / 2);
+        point_lengths_v.push_back((lengths_e[i] + lengths_e[wrap(i - 1)]) / 2);
 
     // compute point flux as in Godunov's method
 
     for (int i = 0; i < size; i++)
     {
-        // compute (gravity(prevPrim) = gravity(i-1))
-        float minus = effectiveGravities_[wrap(i - 1)] * areas_[wrap(i - 1)];
-        float plus = effectiveGravities_[i] * areas_[i];
+        /* compute (gravity(prevPrim) = gravity(i-1))
+        * minus -> area and gravity from previous vertex
+        * plus -> area and gravity from next edge
+        */
+
+        float minus = effectiveGravities_e[wrap(i - 1)] * areas_e[wrap(i - 1)];
+        float plus = effectiveGravities_e[i] * areas_e[i];
 
         if (minus > std::max(0.0f, -plus))
         {
             // positive case
-            flux_.push_back(1.0 / (8 * M_PI) * minus * areas_[wrap(i - 1)]);
-            AreaUsed_ = areas_[wrap(i - 1)];
+            flux_v.push_back(1.0 / (8 * M_PI) * minus * areas_e[wrap(i - 1)]);
+            AreaUsed_v = areas_e[wrap(i - 1)];
         }
         else if (plus < std::min(0.0f, (-minus)))
         {
             // negative case
-            flux_.push_back(1.0 / (8 * M_PI) * plus * areas_[i]);
-            AreaUsed_ = areas_[i];
+            flux_v.push_back(1.0 / (8 * M_PI) * plus * areas_e[i]);
+            AreaUsed_v = areas_e[i];
         }
         else
         {
             // neutral
-            flux_.push_back(0.0f);
-            AreaUsed_ = 0;
+            flux_v.push_back(0.0f);
+            AreaUsed_v = 0;
         }
     };
 };
@@ -330,7 +340,7 @@ void Filament::doBurgerStepOnBubbleRing()
     Eigen::VectorXd A(size);
     for (int j = 0; j < size; j++)
     {
-        A(j) = areas_[j];
+        A(j) = areas_e[j];
     }
 
     //cout << "A:_______________________" << A;
@@ -338,7 +348,7 @@ void Filament::doBurgerStepOnBubbleRing()
     Eigen::VectorXd F(size);
     for (int j = 0; j < size; j++)
     {
-        F(j) = flux_[j];
+        F(j) = flux_v[j];
     }
 
     //-----------------------------------------------------------------------
@@ -367,7 +377,7 @@ void Filament::doBurgerStepOnBubbleRing()
     for (int i = 0; i < size; i++)
     {
 
-        double entry = std::pow(controlPolygon_[i].C, 2) / point_lengths_[i];
+        double entry = std::pow(controlPolygon_[i].C, 2) / point_lengths_v[i];
         trp_C_square_div_pointLength.push_back(T(i, i, entry));
         //cout << "C: "<< i << "C: " << controlPolygon_[i].C << "\n";
     }
@@ -389,7 +399,7 @@ void Filament::doBurgerStepOnBubbleRing()
     std::vector<T> trp_lengths;
     for (int i = 0; i < size; i++)
     {
-        trp_lengths.push_back(T(i, i, lengths_[i] * nu / time_step_));
+        trp_lengths.push_back(T(i, i, lengths_e[i]));
     }
     Eigen::SparseMatrix<double> M(size, size); // default is column major
     M.setFromTriplets(trp_lengths.begin(), trp_lengths.end());
@@ -399,12 +409,13 @@ void Filament::doBurgerStepOnBubbleRing()
 
     // Constants
     double coef = 1.0 / (64. * M_PI * M_PI);
+    double nuIdt = nu / time_step_;
 
     //------------------------------------------------------------------------
 
     // Backward Euler  (Ax = b)
-    Eigen::SparseMatrix<double> LHS = M - (0.5 * coef * L);
-    Eigen::MatrixXd RHS = M * A + d.transpose() * F;
+    Eigen::SparseMatrix<double> LHS = nuIdt * M - (0.5 * coef * L);
+    Eigen::MatrixXd RHS = nuIdt * M * A + d.transpose() * F;
 
     // SCALE DUE TO PRECISION
     double scale = 1.0 / RHS.norm();
@@ -417,14 +428,14 @@ void Filament::doBurgerStepOnBubbleRing()
     // cout << "d: " << d << "\n";
     //cout << "F: " << F << "\n";
 
-    Eigen::VectorXd x(size);
+    //Eigen::VectorXd x(size);
 
     // fill A = LHS and b = RHS
     Eigen::ConjugateGradient<Eigen::SparseMatrix<double>, Eigen::Lower | Eigen::Upper> cg;
     cg.compute(LHS);
-    x = cg.solve(RHS * scale);
-    cout << "RHS: " << RHS << "\n";
-    cout << "LHS: " << LHS << "\n";
+    Eigen::VectorXd x = cg.solve(RHS * scale);
+    //cout << "RHS: " << RHS << "\n";
+    //cout << "LHS: " << LHS << "\n";
     x = x / scale;
     //std::cout << "#iterations:     " << cg.iterations() << std::endl;
     //std::cout << "estimated error: " << cg.error()      << std::endl;
@@ -435,7 +446,7 @@ void Filament::doBurgerStepOnBubbleRing()
     for (int i = 0; i < size; i++)
     {
         //cout << "update: --------------- + " << std::pow(x[i] / (2 * M_PI),2) << endl;
-        controlPolygon_[i].a = sqrt(sqrt(std::pow(x[i] / (2 * M_PI), 2)));
+        controlPolygon_[i].a = sqrt( sqrt( std::pow(x(i) / (M_PI), 2) ) );
         //controlPolygon_[i].a = 2;
     }
 }

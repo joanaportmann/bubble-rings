@@ -1,6 +1,6 @@
 add_executable(
     testunit
-    example_add.cpp
+    example.cpp
     )
 
 target_link_libraries(

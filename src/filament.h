@@ -64,14 +64,14 @@ private:
 
     // Thickness flow: Burger's equation
     
-    std::vector<vec3> edges_;
-    std::vector<vec3> tangents_;
-    std::vector<float> lengths_;
-    std::vector<float> point_lengths_;
-    std::vector<float> areas_;
-    std::vector<float> effectiveGravities_;
-    std::vector<float> flux_;
-    float AreaUsed_;
+    std::vector<vec3> edges_e;
+    std::vector<vec3> tangents_e;
+    std::vector<float> lengths_e;
+    std::vector<float> point_lengths_v;
+    std::vector<float> areas_e;
+    std::vector<float> effectiveGravities_e;
+    std::vector<float> flux_v;
+    float AreaUsed_v;
 
     void preComputations ();
     
