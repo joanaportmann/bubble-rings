@@ -42,6 +42,8 @@ public:
     // Todo
     void updateSkeleton();
     
+    friend class FilamentTest;
+
 private:
 
     std::vector<FilamentPoint> controlPolygon_ ;
@@ -50,7 +52,7 @@ private:
     int wrap(int i);
 
 
-    void updateFilament(); 
+    void BiotSavartAndLocalizedInduction(); 
 
     // Biotsavart velocity
     vec3 biotsavartedge(vec3 p, vec3 R0, vec3 R1, float Gamma, float a);
@@ -75,7 +77,7 @@ private:
 
     void preComputations ();
     
-    void doBurgerStepOnBubbleRing();
+    Eigen::VectorXd doBurgerStepOnBubbleRing();
 
 };
 

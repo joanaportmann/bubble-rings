@@ -217,7 +217,7 @@ vec3 Filament::oneStepOfRungeKutta(int i, const std::vector<FilamentPoint> &temp
     return v_temp;
 };
 
-void Filament::updateFilament()
+void Filament::BiotSavartAndLocalizedInduction()
 {
     std::vector<FilamentPoint> temp_polygon1, temp_polygon2, temp_polygon3;
     temp_polygon1 = controlPolygon_;
@@ -267,12 +267,11 @@ void Filament::updateFilament()
     }
 };
 
-
 /* Precomputations for Burger's equation. 
 * _e: Per edge (in Houdini)
 * _v: Per vertes (in Houdini)
 */
-void Filament::preComputations() 
+void Filament::preComputations()
 {
     // edge computations
     edges_e.clear();
@@ -332,10 +331,8 @@ void Filament::preComputations()
     };
 };
 
-void Filament::doBurgerStepOnBubbleRing()
+Eigen::VectorXd Filament::doBurgerStepOnBubbleRing()
 {
-    preComputations();
-
     // Create A
     Eigen::VectorXd A(size);
     for (int j = 0; j < size; j++)
@@ -392,7 +389,6 @@ void Filament::doBurgerStepOnBubbleRing()
     }
     Eigen::SparseMatrix<double> M(size, size); // default is column major
     M.setFromTriplets(trp_lengths.begin(), trp_lengths.end());
-  
 
     //-------------------------------------------------------------------------
 
@@ -412,22 +408,20 @@ void Filament::doBurgerStepOnBubbleRing()
     // fill A = LHS and b = RHS
     Eigen::ConjugateGradient<Eigen::SparseMatrix<double>, Eigen::Lower | Eigen::Upper> cg;
     cg.compute(LHS);
-    Eigen::VectorXd x = cg.solve(RHS * scale);
-    x = x / scale;
-
-
-    for (int i = 0; i < size; i++)
-    {
-        controlPolygon_[i].a = sqrt( sqrt( std::pow(x(i) / (M_PI), 2) ) );
-    }
+    return (cg.solve(RHS * scale)) / scale;
+    
 }
 
 void Filament::updateSkeleton()
 {
-    updateFilament();
+    BiotSavartAndLocalizedInduction();
+    preComputations(); // for Burger's equation
+    Eigen::VectorXd x = doBurgerStepOnBubbleRing();
+    for (int i = 0; i < controlPolygon_.size(); i++)
+    {
+        controlPolygon_[i].a = sqrt(sqrt(std::pow(x(i) / (M_PI), 2)));
+    }
     updatedFilament = true;
-
-    doBurgerStepOnBubbleRing();
 };
 
 //-----------------------------------------------------------------------------------

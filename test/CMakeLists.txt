@@ -7,6 +7,7 @@ add_executable(
 target_link_libraries(
     testunit
     gtest_main
+    gmock_main
     TubeSystem_lib
    lodePNG glfw ${GLEW_LIBRARIES} ${OPENGL_LIBRARIES})
 
