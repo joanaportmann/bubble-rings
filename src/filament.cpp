@@ -33,8 +33,7 @@ Filament::Filament()
     {
         controlPolygon_.push_back({{0.6 * cos(i), 0.6 * sin(i), 0.12},
                                    0.12,
-                                   7.2,
-                                   vec3(0, 0, 0)});
+                                   4});
     }
 
     size = controlPolygon_.size();

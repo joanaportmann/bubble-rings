@@ -15,14 +15,7 @@ struct FilamentPoint
     vec3 position;
     float a;
     float C;
-    vec3 K;
 };
-
-// struct Triplet
-// {
-//   int  one_, two_, three_;
-// };
-
 
 class Filament
 {
@@ -41,13 +34,30 @@ public:
     
     // Todo
     void updateSkeleton();
+
+
+ 
     
+
     friend class FilamentTest;
 
 private:
 
+   // Thickness flow: Burger's equation
+    
+    std::vector<vec3> edges_e;
+    std::vector<vec3> tangents_e;
+    std::vector<float> lengths_e;
+    std::vector<float> point_lengths_v;
+    std::vector<float> areas_e;
+    std::vector<float> effectiveGravities_e;
+    std::vector<float> flux_v;
+    float AreaUsed_v;
+
     std::vector<FilamentPoint> controlPolygon_ ;
     int size;
+
+    Eigen::VectorXd doBurgerStepOnBubbleRing();
 
     int wrap(int i);
 
@@ -64,20 +74,10 @@ private:
     std::vector<vec3> circleVertices_t(int n, vec3 normal);
 
 
-    // Thickness flow: Burger's equation
-    
-    std::vector<vec3> edges_e;
-    std::vector<vec3> tangents_e;
-    std::vector<float> lengths_e;
-    std::vector<float> point_lengths_v;
-    std::vector<float> areas_e;
-    std::vector<float> effectiveGravities_e;
-    std::vector<float> flux_v;
-    float AreaUsed_v;
 
     void preComputations ();
     
-    Eigen::VectorXd doBurgerStepOnBubbleRing();
+   
 
 };
 
