@@ -354,12 +354,17 @@ Eigen::VectorXd Filament::doBurgerStepOnBubbleRing()
     std::vector<T> trp_d;
     for (int i = 0; i < size; i++)
     {
-        trp_d.push_back(T(i, i, -1));
-        trp_d.push_back(T(i, (i + 1) % size, 1));
+        trp_d.push_back(T(i, i, 1));
+        trp_d.push_back(T(i, (i-1 + size) % size,  -1));
     }
 
     Eigen::SparseMatrix<double> d(size, size); // default is column major
     d.setFromTriplets(trp_d.begin(), trp_d.end());
+
+    // d.coeffRef(size-1, 0) = 0;
+    // d.coeffRef(0, size-1) = -1;
+
+    //cout << "d: -.-.-.-.-.-." << d << "\n" << endl;
 
     Eigen::SparseMatrix<double> d_transpose = d.transpose();
 
@@ -375,8 +380,12 @@ Eigen::VectorXd Filament::doBurgerStepOnBubbleRing()
     Eigen::SparseMatrix<double> star1(size, size); // default is column major
     star1.setFromTriplets(trp_C_square_div_pointLength.begin(), trp_C_square_div_pointLength.end());
 
+    //cout << "star1: -.-.-.-.-.-." << star1 << "\n" << endl;
+
     // Build Laplacian L
     Eigen::SparseMatrix<double> L = -d.transpose() * star1 * d;
+
+    //cout << "L: -.-.-.-.-.-." << L << "\n" << endl;
 
     //-----------------------------------------------------------------------
 

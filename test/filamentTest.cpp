@@ -2,6 +2,12 @@
 #include "gmock/gmock.h"
 #include "filament.h"
 #include <vector>
+#include <iostream>
+#include <string>
+#include <stdlib.h>
+
+
+using namespace std;
 
 class FilamentTest : public ::testing::Test
 {
@@ -30,20 +36,23 @@ protected:
 
     Eigen::VectorXd doBurgerStepOnBubbleRing() 
     {
-        filament.doBurgerStepOnBubbleRing();
+        return filament.doBurgerStepOnBubbleRing();
     }
 
     // SetUp and TearDown
     void SetUp() override {}
     void TearDown() override {}
 
+    //private: 
     Filament filament;
 };
 
 using ::testing::ElementsAre;
 
 TEST_F(FilamentTest, doBurgerStepOnBubbleRingTest)
-{
+{   
+    filament = Filament();
+
     setSize(26);
     
     float lengths[] = {0.1443928, 0.14378038, 0.14596489, 0.14522029, 0.14391315, 0.1442105,
@@ -84,11 +93,19 @@ TEST_F(FilamentTest, doBurgerStepOnBubbleRingTest)
 
     Eigen::VectorXd result_burger;
     result_burger = doBurgerStepOnBubbleRing();
+   
+    // // ASSERT_EQ(result, vec3(0, 1, 0));
+    // // ASSERT_EQ(result, ElementsAre(0, 1, 0));
 
-    // ASSERT_EQ(result, vec3(0, 1, 0));
-    // ASSERT_EQ(result, ElementsAre(0, 1, 0));
+    // // ASSERT_TRUE(result.isApprox(vec3(0, 1, 0)));
+    cout << "result_burger: " << result_burger << endl;
 
-    // ASSERT_TRUE(result.isApprox(vec3(0, 1, 0)));
+    double expected_result[] = {0.04800835, 0.05702037, 0.06561341 ,0.07314099, 0.0791778 , 0.08307021 , 0.08512572 ,0.08354294 ,0.0792586 , 0.07309467,
+     0.06545621, 0.05695891, 0.0480035 , 0.03891299, 0.0306024 , 0.0234225,  0.01729339,0.01274469, 0.01072873 ,0.01074678, 0.01086909 ,0.01306779,
+      0.01729234 ,0.02327722, 0.03053587, 0.03900016};
 
-    ASSERT_EQ(result_burger(0), 0.04800835);
+      std::vector<float> expected_results(std::begin(expected_result), std::end(expected_result));
+
+//EXPECT_NEAR(result_burger(3), expected_results[3], 0.0001);
+   for(int i = 0; i < 26 ; i++ ) EXPECT_NEAR(result_burger(i), expected_results[i], 0.00000001);
 }

@@ -34,14 +34,15 @@ public:
     
     // Todo
     void updateSkeleton();
+    
 
-
- 
     
 
     friend class FilamentTest;
 
 private:
+
+   Eigen::VectorXd doBurgerStepOnBubbleRing();
 
    // Thickness flow: Burger's equation
     
@@ -53,11 +54,11 @@ private:
     std::vector<float> effectiveGravities_e;
     std::vector<float> flux_v;
     float AreaUsed_v;
-
+    // Eigen::SparseMatrix<double> L_matrix;
     std::vector<FilamentPoint> controlPolygon_ ;
     int size;
 
-    Eigen::VectorXd doBurgerStepOnBubbleRing();
+    
 
     int wrap(int i);
 
