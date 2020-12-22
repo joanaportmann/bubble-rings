@@ -188,7 +188,7 @@ int GLFW_window::run()
         paint();
 
         // swap buffers
-        glfwSwapBuffers(window_);
+        // glfwSwapBuffers(window_);
 
         // handle events
         // Poll and handle events (inputs, window resize, etc.)
@@ -200,31 +200,30 @@ int GLFW_window::run()
 
         // Our state
         bool show_demo_window = true;
-         glClearColor(0.45f, 0.55f, 0.60f, 1.00f);
-    glClear(GL_COLOR_BUFFER_BIT);
+        glClearColor(0.45f, 0.55f, 0.60f, 1.00f);
 
         // Start the Dear ImGui frame
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-       // render your GUI
-    ImGui::Begin("Demo window");
-    ImGui::Button("Hello!");
-    ImGui::End();
+        // render your GUI
+        ImGui::Begin("Demo window");
+        ImGui::Button("Hello!");
+        ImGui::End();
 
-    // Render dear imgui into screen
-    ImGui::Render();
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        // Render dear imgui into screen
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-     int display_w, display_h;
-    glfwGetFramebufferSize(window_, &display_w, &display_h);
-    glViewport(0, 0, display_w, display_h);
-    glfwSwapBuffers(window_);
-
+        int display_w, display_h;
+        glfwGetFramebufferSize(window_, &display_w, &display_h);
+        glViewport(0, 0, display_w, display_h);
+        glfwSwapBuffers(window_);
     }
 
     glfwDestroyWindow(window_);
+    glClear(GL_COLOR_BUFFER_BIT);
 
     return EXIT_SUCCESS;
 }
