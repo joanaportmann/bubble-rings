@@ -28,13 +28,6 @@ public:
   /// \_height the window's height
   Tube_viewer(const char *_title, int _width, int _height);
 
-  std::vector<float> thickness =
-      {
-          0.3, 0.4, 0.3, 0.5, 0.4, 0.4, 0.5, 0.4, 0.3, 0.4, 0.4, 0.5, 0.3, 0.2, 0.2, 0.1, 0.1};
-
-  std::vector<float> circulation =
-      {
-          0.3, 0.4, 0.3, 0.5, 0.4, 0.4, 0.5, 0.4, 0.3, 0.4, 0.4, 0.5, 0.3, 0.2, 0.2, 0.1, 0.1};
 
 protected:
   /// function that is called on the, creation of the widget for the initialisation of OpenGL

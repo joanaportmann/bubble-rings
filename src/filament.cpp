@@ -32,8 +32,8 @@ Filament::Filament()
     for (float i = 0; i <= 2 * M_PI; i += 0.17)
     {
         controlPolygon_.push_back({{0.6 * cos(i), 0.6 * sin(i), 0.12},
-                                   0.12,
-                                   4});
+                                   thickness,
+                                   circulation});
     }
 
     size = controlPolygon_.size();

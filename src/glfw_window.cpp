@@ -4,6 +4,8 @@
 #include <iostream>
 #include "imgui_impl_opengl3.h"
 #include "imgui_impl_glfw.h"
+#include "filament.h"
+
 
 // About Desktop OpenGL function loaders:
 //  Modern desktop OpenGL doesn't have a standard portable header file to load OpenGL function pointers.
@@ -198,28 +200,6 @@ int GLFW_window::run()
         // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
         glfwPollEvents();
 
-        // Our state
-        bool show_demo_window = true;
-        glClearColor(0.45f, 0.55f, 0.60f, 1.00f);
-
-        // Start the Dear ImGui frame
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
-
-        // render your GUI
-        ImGui::Begin("Demo window");
-        ImGui::Button("Hello!");
-        ImGui::End();
-
-        // Render dear imgui into screen
-        ImGui::Render();
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-        int display_w, display_h;
-        glfwGetFramebufferSize(window_, &display_w, &display_h);
-        glViewport(0, 0, display_w, display_h);
-        glfwSwapBuffers(window_);
     }
 
     glfwDestroyWindow(window_);

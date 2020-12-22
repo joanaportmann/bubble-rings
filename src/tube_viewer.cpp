@@ -15,6 +15,11 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <math.h>
+#include "glfw_window.h"
+#include <iostream>
+#include "imgui_impl_opengl3.h"
+#include "imgui_impl_glfw.h"
+
 
 #include <Eigen/Dense>
 
@@ -224,6 +229,35 @@ void Tube_viewer::paint()
 	mat4 projection;
 	projection = MatUtils::perspective(fovy_, (float)width_ / (float)height_, near_, far_);
 	draw_scene(projection, view);
+
+
+        // Our state
+        bool show_demo_window = false;
+        glClearColor(0.08f, 0.12f, 0.38f, 1.00f);
+
+        // Start the Dear ImGui frame
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+
+        // render GUI
+        ImGui::Begin("Settings");
+        ImGui::Text("Set start configuration of bubble ring."); 
+        ImGui::SliderFloat("Thickness", &filament.thickness, 0.0f, 4.0f);
+        ImGui::SliderFloat("Circulation", &filament.circulation, 0.0f, 10.0f);
+        ImGui::End();
+
+        if (show_demo_window)
+            ImGui::ShowDemoWindow(&show_demo_window);
+
+        // Render dear imgui into screen
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+        int display_w, display_h;
+        glfwGetFramebufferSize(window_, &display_w, &display_h);
+        glViewport(0, 0, display_w, display_h);
+        glfwSwapBuffers(window_);
 }
 //-----------------------------------------------------------------------------
 
