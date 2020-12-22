@@ -1,6 +1,8 @@
-
-
 #include "tube_viewer.h"
+
+#include "imgui_impl_opengl3.h"
+
+#include "imgui_impl_glfw.h"
 
 
 #ifdef _WIN32
@@ -12,6 +14,7 @@
 //=============================================================================
 
 
+
 int main(int argc, char *argv[])
 {
 #ifdef _WIN32
@@ -20,10 +23,10 @@ int main(int argc, char *argv[])
     // any signs of a an application crash!
     SetErrorMode(0);
 #endif
+    IMGUI_CHECKVERSION();
     // TODO: Maximize window
     Tube_viewer window("Tube System", 640, 480);
     return window.run();
 }
 
 
-//=============================================================================

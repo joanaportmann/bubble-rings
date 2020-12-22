@@ -26,10 +26,6 @@ target_include_directories(TubeSystem SYSTEM PUBLIC ${GLEW_INCLUDE_DIRS})
 # Note: target_link_libraries(glfw) should actually bring in the necessary header files.
 target_link_libraries(TubeSystem lodePNG glfw ${GLEW_LIBRARIES} ${OPENGL_LIBRARIES})
 
-# Now simply link against gtest or gtest_main as needed. Eg
-#add_executable(exampleTest filament_unittest.cpp)
-#target_link_libraries(exampleTest gtest gtest_main)
-#add_test(NAME example_test COMMAND exampleTest)
 
 
 target_sources(

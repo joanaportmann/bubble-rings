@@ -28,16 +28,13 @@ public:
   /// \_height the window's height
   Tube_viewer(const char *_title, int _width, int _height);
 
-  
-  std::vector<float> thickness = 
-  {
-0.3, 0.4, 0.3, 0.5, 0.4, 0.4, 0.5, 0.4, 0.3, 0.4, 0.4, 0.5, 0.3, 0.2, 0.2, 0.1, 0.1
-  };
+  std::vector<float> thickness =
+      {
+          0.3, 0.4, 0.3, 0.5, 0.4, 0.4, 0.5, 0.4, 0.3, 0.4, 0.4, 0.5, 0.3, 0.2, 0.2, 0.1, 0.1};
 
-  std::vector<float> circulation = 
-  {
-0.3, 0.4, 0.3, 0.5, 0.4, 0.4, 0.5, 0.4, 0.3, 0.4, 0.4, 0.5, 0.3, 0.2, 0.2, 0.1, 0.1
-  };
+  std::vector<float> circulation =
+      {
+          0.3, 0.4, 0.3, 0.5, 0.4, 0.4, 0.5, 0.4, 0.3, 0.4, 0.4, 0.5, 0.3, 0.2, 0.2, 0.1, 0.1};
 
 protected:
   /// function that is called on the, creation of the widget for the initialisation of OpenGL
@@ -49,7 +46,7 @@ protected:
   /// paint function - called when the window should be refreshed
   virtual void paint();
 
-  //virtual void timer();
+  virtual void timer();
 
   /// keyboard interaction
   virtual void keyboard(int key, int scancode, int action, int mods);
@@ -64,6 +61,8 @@ protected:
 private:
   // filament object
   Filament filament;
+
+  bool timer_active_ = false;
 
   // tube object
   Tube tube;
@@ -81,9 +80,6 @@ private:
 
   /// Shader
   Shader test_tube_shader_;
-
-  /// interval for the animation timer
-  bool timer_active_;
 
   /// state whether the rendering should be in color or not
   bool greyscale_;

@@ -47,7 +47,7 @@ Tube_viewer::Tube_viewer(const char *_title, int _width, int _height)
 
 void Tube_viewer::
 	keyboard(int key, int scancode, int action, int mods)
-{
+{	
 	if (action == GLFW_PRESS || action == GLFW_REPEAT)
 	{
 		switch (key)
@@ -82,6 +82,12 @@ void Tube_viewer::
 			x_angle_ -= 0.05 * M_PI;
 			break;
 		}
+
+		 case GLFW_KEY_SPACE:
+            {
+                timer_active_ = !timer_active_;
+                break;
+            }
 
 		case GLFW_KEY_S:
 		{
@@ -222,10 +228,10 @@ void Tube_viewer::paint()
 //-----------------------------------------------------------------------------
 
 
-// void Tube_viewer::timer()
-// {
-// 		filament.updateSkeleton();
-// }
+void Tube_viewer::timer()
+{
+	if(timer_active_) filament.updateSkeleton();
+}
 
 //-----------------------------------------------------------------------------
 
