@@ -40,6 +40,10 @@ Filament::Filament()
     cout << "size: " << size;
 }
 
+//---------------------------------------------------------------------------
+
+Filament::~Filament(){}
+
 //----------------------------------------------------------------------------
 
 std::vector<FilamentPoint> Filament::getFilamentPoints()

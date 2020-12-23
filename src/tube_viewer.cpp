@@ -20,7 +20,6 @@
 #include "imgui_impl_opengl3.h"
 #include "imgui_impl_glfw.h"
 
-
 #include <Eigen/Dense>
 
 #define numberOfVerticesPerTubeCircle 30
@@ -50,14 +49,32 @@ Tube_viewer::Tube_viewer(const char *_title, int _width, int _height)
 
 //-----------------------------------------------------------------------------
 
+void Tube_viewer::replaceFilamentBy(Filament *&filament, Filament *newFilament)
+{
+	delete filament;
+	free(filament);
+ 	filament = NULL;
+	filament = newFilament;
+};
+
+void Tube_viewer::replaceTubeBy(Tube *&tube, Tube *newTube)
+{
+	delete tube;
+	free(tube);
+ 	tube = NULL;
+	tube = newTube;
+};
+
+//----------------------------------------------------------------------------
+
 void Tube_viewer::
 	keyboard(int key, int scancode, int action, int mods)
-{	
+{
 	if (action == GLFW_PRESS || action == GLFW_REPEAT)
 	{
 		switch (key)
 		{
-		
+
 		case GLFW_KEY_ESCAPE:
 		{
 			glfwSetWindowShouldClose(window_, GL_TRUE);
@@ -67,6 +84,27 @@ void Tube_viewer::
 		case GLFW_KEY_LEFT:
 		{
 			y_angle_ -= 0.05 * M_PI;
+			break;
+		}
+
+		case GLFW_KEY_R:
+		{
+			Filament newFilament_;
+			Filament *ptr_newfilament_;
+			Filament *ptr_filament;
+			ptr_newfilament_ = &newFilament_;
+			ptr_filament = &filament;
+
+			this->replaceFilamentBy(ptr_filament, ptr_newfilament_);
+
+			Tube newTube_(filament);
+			Tube *ptr_newTube;
+			Tube *ptr_tube;
+			ptr_tube = &tube;
+			ptr_newTube = &newTube_;
+
+			this->replaceTubeBy(ptr_tube, ptr_newTube);
+
 			break;
 		}
 
@@ -88,17 +126,17 @@ void Tube_viewer::
 			break;
 		}
 
-		 case GLFW_KEY_SPACE:
-            {
-                timer_active_ = !timer_active_;
-                break;
-            }
+		case GLFW_KEY_SPACE:
+		{
+			timer_active_ = !timer_active_;
+			break;
+		}
 
 		case GLFW_KEY_S:
 		{
-			
-filament.updateSkeleton();
-break;
+
+			filament.updateSkeleton();
+			break;
 		}
 
 			// Key 9 increases and key 8 decreases the `dist_factor_` within the range - 2.5 < `dist_factor_` < 20.0.
@@ -148,7 +186,6 @@ std::vector<vec3> circleVertices(int n, vec3 center, vec3 normal, float radius)
 	return vertices;
 }
 //--------------------------------------------------------------------------------
-
 
 void Tube_viewer::initialize()
 {
@@ -205,7 +242,7 @@ void Tube_viewer::paint()
 	mat4 rotation;
 
 	center = vec4(0, 0, 0, 0);
-	
+
 	x_rotation = -x_angle_;
 	y_rotation = -y_angle_;
 
@@ -219,7 +256,7 @@ void Tube_viewer::paint()
 
 	rotation = rotation_y_matrix * rotation_x_matrix;
 	eye = center + rotation * vec4((dist_factor_), (dist_factor_), (dist_factor_), 0);
-	up =  rotation * vec4(0, 1, 0, 0);
+	up = rotation * vec4(0, 1, 0, 0);
 
 	mat4 view;
 	view = MatUtils::look_at(
@@ -230,41 +267,40 @@ void Tube_viewer::paint()
 	projection = MatUtils::perspective(fovy_, (float)width_ / (float)height_, near_, far_);
 	draw_scene(projection, view);
 
+	// Our state
+	bool show_demo_window = false;
+	glClearColor(0.08f, 0.12f, 0.38f, 1.00f);
 
-        // Our state
-        bool show_demo_window = false;
-        glClearColor(0.08f, 0.12f, 0.38f, 1.00f);
+	// Start the Dear ImGui frame
+	ImGui_ImplOpenGL3_NewFrame();
+	ImGui_ImplGlfw_NewFrame();
+	ImGui::NewFrame();
 
-        // Start the Dear ImGui frame
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
+	// render GUI
+	ImGui::Begin("Settings");
+	ImGui::Text("Set start configuration of bubble ring.");
+	ImGui::SliderFloat("Thickness", &filament.thickness, 0.0f, 4.0f);
+	ImGui::SliderFloat("Circulation", &filament.circulation, 0.0f, 10.0f);
+	ImGui::End();
 
-        // render GUI
-        ImGui::Begin("Settings");
-        ImGui::Text("Set start configuration of bubble ring."); 
-        ImGui::SliderFloat("Thickness", &filament.thickness, 0.0f, 4.0f);
-        ImGui::SliderFloat("Circulation", &filament.circulation, 0.0f, 10.0f);
-        ImGui::End();
+	if (show_demo_window)
+		ImGui::ShowDemoWindow(&show_demo_window);
 
-        if (show_demo_window)
-            ImGui::ShowDemoWindow(&show_demo_window);
+	// Render dear imgui into screen
+	ImGui::Render();
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-        // Render dear imgui into screen
-        ImGui::Render();
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-        int display_w, display_h;
-        glfwGetFramebufferSize(window_, &display_w, &display_h);
-        glViewport(0, 0, display_w, display_h);
-        glfwSwapBuffers(window_);
+	int display_w, display_h;
+	glfwGetFramebufferSize(window_, &display_w, &display_h);
+	glViewport(0, 0, display_w, display_h);
+	glfwSwapBuffers(window_);
 }
 //-----------------------------------------------------------------------------
 
-
 void Tube_viewer::timer()
 {
-	if(timer_active_) filament.updateSkeleton();
+	if (timer_active_)
+		filament.updateSkeleton();
 }
 
 //-----------------------------------------------------------------------------
@@ -292,7 +328,6 @@ void Tube_viewer::draw_scene(mat4 &_projection, mat4 &_view)
 	mvp_matrix = _projection * mv_matrix;
 	mat3 normal_matrix;
 	normal_matrix = mat3::Identity();
-
 
 	test_tube_shader_.use();
 	test_tube_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);

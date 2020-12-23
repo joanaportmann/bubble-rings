@@ -25,6 +25,8 @@ public:
     // Constructor
     Filament();
 
+    ~Filament();
+
     std::vector<FilamentPoint> getFilamentPoints();
 
     std::vector<vec3> getBubbleRingSkeleton();
