@@ -23,7 +23,7 @@ class Filament
 public:
 
     // Constructor
-    Filament();
+    Filament(float thickness, float circulation);
 
     ~Filament();
 
@@ -34,10 +34,6 @@ public:
     float time_step_ = 0.01f;
     bool updatedFilament = true;
 
-    // Start configuration of filament
-    float circulation = 4;
-    float thickness = 0.12;
-    
     // Todo
     void updateSkeleton();
     

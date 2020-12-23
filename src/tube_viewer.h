@@ -60,8 +60,8 @@ private:
   // tube object
   Tube tube;
 
-  void replaceFilamentBy(Filament *&filament, Filament *newFilament);
-  void replaceTubeBy(Tube *&tube, Tube *newTube);
+  float thickness = 0.12;
+  float circulation = 4;
 
   /// default color shader (renders only texture)
   Shader color_shader_;

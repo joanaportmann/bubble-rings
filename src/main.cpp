@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
 #endif
     IMGUI_CHECKVERSION();
     // TODO: Maximize window
-    Tube_viewer window("Tube System", 640, 480);
+    Tube_viewer window("Tube System", 1200, 640);
     return window.run();
 }
 

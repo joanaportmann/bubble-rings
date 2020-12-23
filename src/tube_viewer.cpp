@@ -31,7 +31,7 @@ using namespace std;
 
 Tube_viewer::Tube_viewer(const char *_title, int _width, int _height)
 	: GLFW_window(_title, _width, _height),
-	  filament(),
+	  filament(0.12, 4),
 	  tube(filament)
 {
 	// rendering parameters
@@ -46,24 +46,6 @@ Tube_viewer::Tube_viewer(const char *_title, int _width, int _height)
 
 	srand((unsigned int)time(NULL));
 }
-
-//-----------------------------------------------------------------------------
-
-void Tube_viewer::replaceFilamentBy(Filament *&filament, Filament *newFilament)
-{
-	delete filament;
-	free(filament);
- 	filament = NULL;
-	filament = newFilament;
-};
-
-void Tube_viewer::replaceTubeBy(Tube *&tube, Tube *newTube)
-{
-	delete tube;
-	free(tube);
- 	tube = NULL;
-	tube = newTube;
-};
 
 //----------------------------------------------------------------------------
 
@@ -89,21 +71,10 @@ void Tube_viewer::
 
 		case GLFW_KEY_R:
 		{
-			Filament newFilament_;
-			Filament *ptr_newfilament_;
-			Filament *ptr_filament;
-			ptr_newfilament_ = &newFilament_;
-			ptr_filament = &filament;
-
-			this->replaceFilamentBy(ptr_filament, ptr_newfilament_);
-
-			Tube newTube_(filament);
-			Tube *ptr_newTube;
-			Tube *ptr_tube;
-			ptr_tube = &tube;
-			ptr_newTube = &newTube_;
-
-			this->replaceTubeBy(ptr_tube, ptr_newTube);
+			filament = Filament(thickness, circulation);
+			Tube tube_(filament);
+			Tube *tube;
+			tube = &tube_;
 
 			break;
 		}
@@ -279,8 +250,29 @@ void Tube_viewer::paint()
 	// render GUI
 	ImGui::Begin("Settings");
 	ImGui::Text("Set start configuration of bubble ring.");
-	ImGui::SliderFloat("Thickness", &filament.thickness, 0.0f, 4.0f);
-	ImGui::SliderFloat("Circulation", &filament.circulation, 0.0f, 10.0f);
+	ImGui::SliderFloat("Thickness", &thickness, 0.0f, 0.5f);
+	ImGui::SliderFloat("Circulation", &circulation, 0.0f, 10.0f);
+	if (ImGui::Button("Reset"))
+	{
+		
+		filament = Filament(thickness, circulation);
+		Tube tube_(filament);
+		Tube *tube;
+		tube = &tube_;
+		timer_active_ = false;
+	} 
+	if (ImGui::Button("Start"))
+	{
+		timer_active_ = true;
+	} ImGui::SameLine();
+	if (ImGui::Button("Stop"))
+	{
+		timer_active_ = false;
+	} ImGui::SameLine();
+		if (ImGui::Button("One step"))
+	{
+			filament.updateSkeleton();
+	}
 	ImGui::End();
 
 	if (show_demo_window)

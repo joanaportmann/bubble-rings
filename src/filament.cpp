@@ -25,15 +25,15 @@ typedef Eigen::Triplet<double> T;
 
 //=============================================================================
 
-Filament::Filament()
+Filament::Filament(float thickness_, float circulation_)
 {
 
     // Set filament circle
     for (float i = 0; i <= 2 * M_PI; i += 0.17)
     {
         controlPolygon_.push_back({{0.6 * cos(i), 0.6 * sin(i), 0.12},
-                                   thickness,
-                                   circulation});
+                                   thickness_,
+                                   circulation_});
     }
 
     size = controlPolygon_.size();
