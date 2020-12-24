@@ -95,7 +95,6 @@ TEST_F(FilamentTest, doBurgerStepOnBubbleRingTest)
     // // ASSERT_EQ(result, ElementsAre(0, 1, 0));
 
     // // ASSERT_TRUE(result.isApprox(vec3(0, 1, 0)));
-    cout << "result_burger: " << result_burger << endl;
 
     double expected_result[] = {0.04800835, 0.05702037, 0.06561341 ,0.07314099, 0.0791778 , 0.08307021 , 0.08512572 ,0.08354294 ,0.0792586 , 0.07309467,
      0.06545621, 0.05695891, 0.0480035 , 0.03891299, 0.0306024 , 0.0234225,  0.01729339,0.01274469, 0.01072873 ,0.01074678, 0.01086909 ,0.01306779,
