@@ -248,30 +248,35 @@ void Tube_viewer::paint()
 	ImGui::NewFrame();
 
 	// render GUI
+
+	static const ImVec4 pressColor{0.5f, 0, 0, 1.0f};
+	static const ImVec4 releaseColor{0, 0.5f, 0, 1.0f};
 	ImGui::Begin("Settings");
 	ImGui::Text("Set start configuration of bubble ring.");
 	ImGui::SliderFloat("Thickness", &thickness, 0.0f, 0.5f);
 	ImGui::SliderFloat("Circulation", &circulation, 0.0f, 10.0f);
 	if (ImGui::Button("Reset"))
 	{
-		
+
 		filament = Filament(thickness, circulation);
 		Tube tube_(filament);
 		Tube *tube;
 		tube = &tube_;
 		timer_active_ = false;
-	} 
+	}
 	if (ImGui::Button("Start"))
 	{
 		timer_active_ = true;
-	} ImGui::SameLine();
+	}
+	ImGui::SameLine();
 	if (ImGui::Button("Stop"))
 	{
 		timer_active_ = false;
-	} ImGui::SameLine();
-		if (ImGui::Button("One step"))
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("One step"))
 	{
-			filament.updateSkeleton();
+		filament.updateSkeleton();
 	}
 	ImGui::End();
 
