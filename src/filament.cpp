@@ -156,7 +156,7 @@ vec3 Filament::biotSavartAndLocalizedInduction(int j, const std::vector<Filament
         vec3 R0 = temp_controlPolygon_[wrap(j - 1)].position;
         vec3 R1 = temp_controlPolygon_[wrap(j + 1)].position;
         float a = temp_controlPolygon_[j].a;
-        float Gamma = circulation;
+        float Gamma = temp_controlPolygon_[j].C;
         temp_vel += biotsavartedge(position, R0, R1, Gamma, a);
     }
 
@@ -179,7 +179,7 @@ vec3 Filament::boussinesq_on_edge(int i, const std::vector<FilamentPoint> &temp_
     //  Boussinesq on edges
     // Read of edge
     float a = temp_controlPolygon_[i].a;
-    float C = circulation;
+    float C = temp_controlPolygon_[i].C;
 
     // Coefficients are defined as constants above
     vec3 g = vec3(0, gravity, 0);

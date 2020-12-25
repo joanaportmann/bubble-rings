@@ -105,3 +105,10 @@ TEST_F(FilamentTest, doBurgerStepOnBubbleRingTest)
 //EXPECT_NEAR(result_burger(3), expected_results[3], 0.0001);
    for(int i = 0; i < 26 ; i++ ) EXPECT_NEAR(result_burger(i), expected_results[i], 0.00000001);
 }
+
+using ::testing::ElementsAre;
+
+TEST_F(FilamentTest, doBurgerStepOnBubbleRingTest)
+{
+    
+}
