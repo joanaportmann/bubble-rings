@@ -36,9 +36,6 @@ public:
 
     // Todo
     void updateSkeleton();
-    
-
-    
 
     friend class FilamentTest;
 
@@ -56,9 +53,7 @@ private:
     std::vector<float> effectiveGravities_e;
     std::vector<float> flux_v;
     float AreaUsed_v;
-    // Eigen::SparseMatrix<double> L_matrix;
     std::vector<FilamentPoint> controlPolygon_ ;
-    int size;
 
     
 

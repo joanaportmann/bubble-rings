@@ -6,27 +6,25 @@
 #include <string>
 #include <stdlib.h>
 
-
 using namespace std;
 
 class FilamentTest : public ::testing::Test
 {
 
 protected:
-
     // Setters
-    void setSize(int size) { filament.size = size; }
+    void setControlPolygon(std::vector<FilamentPoint> filament_points_) { filament.controlPolygon_ = filament_points_; }
     void setCirculations(int C)
     {
-        for (int i = 0; i < filament.size; i++)
+        for (int i = 0; i < filament.controlPolygon_.size(); i++)
         {
             filament.controlPolygon_[i].C = C;
         }
     }
-    void setLengths(std::vector<float> lengths_) {filament.lengths_e = lengths_;}
-    void setPointLengths(std::vector<float> pointLengths_) {filament.point_lengths_v = pointLengths_;}
-    void setAreas(std::vector<float> areas_) {filament.areas_e = areas_;}
-    void setFlux(std::vector<float> flux_) {filament.flux_v = flux_;}
+    void setLengths(std::vector<float> lengths_) { filament.lengths_e = lengths_; }
+    void setPointLengths(std::vector<float> pointLengths_) { filament.point_lengths_v = pointLengths_; }
+    void setAreas(std::vector<float> areas_) { filament.areas_e = areas_; }
+    void setFlux(std::vector<float> flux_) { filament.flux_v = flux_; }
 
     // Access private functions of filament.cpp
     vec3 biotsavartedge(vec3 p, vec3 R0, vec3 R1, float gamma, float a)
@@ -34,7 +32,17 @@ protected:
         filament.biotsavartedge(p, R0, R1, gamma, a);
     }
 
-    Eigen::VectorXd doBurgerStepOnBubbleRing() 
+    vec3 localizedInduction(int j, const std::vector<FilamentPoint> &temp_controlPolygon_)
+    {
+        filament.localizedInduction(j, temp_controlPolygon_);
+    }
+
+    vec3 biotSavartAndLocalizedInduction(int j, const std::vector<FilamentPoint> &temp_controlPolygon_)
+    {
+        filament.biotSavartAndLocalizedInduction(j, temp_controlPolygon_);
+    }
+
+    Eigen::VectorXd doBurgerStepOnBubbleRing()
     {
         return filament.doBurgerStepOnBubbleRing();
     }
@@ -44,14 +52,17 @@ protected:
     void TearDown() override {}
 
     Filament filament = Filament(0.12, 4);
+    std::vector<FilamentPoint> filamentPoints_;
 };
 
 using ::testing::ElementsAre;
 
 TEST_F(FilamentTest, doBurgerStepOnBubbleRingTest)
 {
-    setSize(26);
-    
+    // Simulate a control polygon of size 26 (positions don't matter)
+    filamentPoints_.resize(26, FilamentPoint{vec3(0, 0, 0), 0.12f, 4.0f});
+    setControlPolygon(filamentPoints_);
+
     float lengths[] = {0.1443928, 0.14378038, 0.14596489, 0.14522029, 0.14391315, 0.1442105,
                        0.14567757, 0.14529918, 0.14378813, 0.14460708, 0.144272, 0.14492798,
                        0.14524907, 0.14507067, 0.1436004, 0.14522156, 0.14491448, 0.14476931,
@@ -90,25 +101,56 @@ TEST_F(FilamentTest, doBurgerStepOnBubbleRingTest)
 
     Eigen::VectorXd result_burger;
     result_burger = doBurgerStepOnBubbleRing();
-   
+
     // // ASSERT_EQ(result, vec3(0, 1, 0));
     // // ASSERT_EQ(result, ElementsAre(0, 1, 0));
 
     // // ASSERT_TRUE(result.isApprox(vec3(0, 1, 0)));
 
-    double expected_result[] = {0.04800835, 0.05702037, 0.06561341 ,0.07314099, 0.0791778 , 0.08307021 , 0.08512572 ,0.08354294 ,0.0792586 , 0.07309467,
-     0.06545621, 0.05695891, 0.0480035 , 0.03891299, 0.0306024 , 0.0234225,  0.01729339,0.01274469, 0.01072873 ,0.01074678, 0.01086909 ,0.01306779,
-      0.01729234 ,0.02327722, 0.03053587, 0.03900016};
+    double expected_result[] = {0.04800835, 0.05702037, 0.06561341, 0.07314099, 0.0791778, 0.08307021, 0.08512572, 0.08354294, 0.0792586, 0.07309467,
+                                0.06545621, 0.05695891, 0.0480035, 0.03891299, 0.0306024, 0.0234225, 0.01729339, 0.01274469, 0.01072873, 0.01074678, 0.01086909, 0.01306779,
+                                0.01729234, 0.02327722, 0.03053587, 0.03900016};
 
-      std::vector<float> expected_results(std::begin(expected_result), std::end(expected_result));
+    std::vector<float> expected_results(std::begin(expected_result), std::end(expected_result));
 
-//EXPECT_NEAR(result_burger(3), expected_results[3], 0.0001);
-   for(int i = 0; i < 26 ; i++ ) EXPECT_NEAR(result_burger(i), expected_results[i], 0.00000001);
+    //EXPECT_NEAR(result_burger(3), expected_results[3], 0.0001);
+    for (int i = 0; i < 26; i++)
+        EXPECT_NEAR(result_burger(i), expected_results[i], 0.00000001);
 }
 
 using ::testing::ElementsAre;
 
-TEST_F(FilamentTest, biotsavarttest)
+TEST_F(FilamentTest, biotSavartAndLocalizedInduction)
 {
-    
+    filamentPoints_.push_back({{0.611779, 0.0, 0.0},
+                               0.12,
+                               4});
+    filamentPoints_.push_back({{0.319311, 0.519615, 0.0},
+                               0.12,
+                               4});
+    filamentPoints_.push_back({{-0.280896, 0.519615, 0.0},
+                               0.12,
+                               4});
+    filamentPoints_.push_back({{-0.586356, -5.24537e-08, 0.0},
+                               0.12,
+                               4});
+    filamentPoints_.push_back({{-0.293264, -0.519615, 0.0},
+                               0.12,
+                               4});
+    filamentPoints_.push_back({{0.313135, -0.519615, 0.0},
+                               0.12,
+                               4});
+    setControlPolygon(filamentPoints_);
+
+    vec3 temp_vel_0_filamentPoint;
+    temp_vel_0_filamentPoint = biotSavartAndLocalizedInduction(3, filamentPoints_);
+
+    cout << "position: " << filamentPoints_[3].position << "\n";
+    cout << "temp_vel(0): " << temp_vel_0_filamentPoint[0] << "\n";
+    cout << "temp_vel(1): " << temp_vel_0_filamentPoint[1] << "\n";
+    cout << "temp_vel(2): " << temp_vel_0_filamentPoint[2] << "\n";
+
+    EXPECT_NEAR(temp_vel_0_filamentPoint(0), 0.0, 0.01);
+    EXPECT_NEAR(temp_vel_0_filamentPoint(1), 0.0, 0.01);
+    EXPECT_NEAR(temp_vel_0_filamentPoint(2), 0.75, 0.01);
 }
