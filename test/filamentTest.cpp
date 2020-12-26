@@ -108,7 +108,7 @@ TEST_F(FilamentTest, doBurgerStepOnBubbleRingTest)
 
 using ::testing::ElementsAre;
 
-TEST_F(FilamentTest, doBurgerStepOnBubbleRingTest)
+TEST_F(FilamentTest, biotsavarttest)
 {
     
 }

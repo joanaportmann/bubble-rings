@@ -1,6 +1,5 @@
 add_executable(
     testunit
-    example.cpp
     filamentTest.cpp
 )
 
