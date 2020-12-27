@@ -1,5 +1,15 @@
 # Bubble rings
 
+## Requirements
+
+### GLFW
+
+Installation on Debian/Ubuntu: `sudo apt install libglfw3-dev`
+
+### GLEW
+
+Installation on Debian/Ubuntu: `sudo apt install libglew-dev`
+
 ## Build and execution
 
 ```
