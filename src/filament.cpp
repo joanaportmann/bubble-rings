@@ -15,7 +15,7 @@ typedef Eigen::Triplet<double> T;
 // ATTENTION: Keep in sync with the one in tube.cpp
 #define numberOfVerticesPerTubeCircle 20
 #define _USE_MATH_DEFINES
-#define RM_mu 0.4723665527
+#define RM_mu 0.4723665527f
 #define delta 0.6420127083
 #define circulation 4
 #define gravity -9.8
@@ -107,9 +107,16 @@ vec3 Filament::biotsavartedge(vec3 p, vec3 R0, vec3 R1, float Gamma, float a)
     vec3 R1_ = R1 - p;
     vec3 RPrime = R1 - R0;
     vec3 cross01 = R0_.cross(R1_);
-    float r1 = R1_.dot(RPrime) / (sqrt(aSqr + R1_.norm()) * (RPrime.norm() * aSqr + cross01.norm()));
-    float r0 = R0_.dot(RPrime) / (sqrt(aSqr + R0_.norm()) * (RPrime.norm() * aSqr + cross01.norm()));
+    float r1 = R1_.dot(RPrime) / (sqrt(aSqr + R1_.norm() * R1_.norm()) 
+    * (RPrime.norm() * RPrime.norm() * aSqr + cross01.norm() * cross01.norm()));
+    float r0 = R0_.dot(RPrime) / (sqrt(aSqr + R0_.norm() * R0_.norm()) * (RPrime.norm() * RPrime.norm() 
+    * aSqr + cross01.norm() * cross01.norm()));
 
+    cout << "cross01: " << cross01 << "\n";
+    cout << "r1: " << r1 << "\n";
+    cout << "r0: " << r0 << "\n";
+    cout << "RPRIME: " << RPrime << "\n";
+    cout << "------------------------- \n";
     return Gamma * (r1 - r0) * cross01 / (4 * M_PI);
 }
 

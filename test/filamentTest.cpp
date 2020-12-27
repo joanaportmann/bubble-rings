@@ -29,17 +29,17 @@ protected:
     // Access private functions of filament.cpp
     vec3 biotsavartedge(vec3 p, vec3 R0, vec3 R1, float gamma, float a)
     {
-        filament.biotsavartedge(p, R0, R1, gamma, a);
+        return filament.biotsavartedge(p, R0, R1, gamma, a);
     }
 
     vec3 localizedInduction(int j, const std::vector<FilamentPoint> &temp_controlPolygon_)
     {
-        filament.localizedInduction(j, temp_controlPolygon_);
+        return  filament.localizedInduction(j, temp_controlPolygon_);
     }
 
     vec3 biotSavartAndLocalizedInduction(int j, const std::vector<FilamentPoint> &temp_controlPolygon_)
     {
-        filament.biotSavartAndLocalizedInduction(j, temp_controlPolygon_);
+        return  filament.biotSavartAndLocalizedInduction(j, temp_controlPolygon_);
     }
 
     Eigen::VectorXd doBurgerStepOnBubbleRing()
@@ -153,4 +153,18 @@ TEST_F(FilamentTest, biotSavartAndLocalizedInduction)
     EXPECT_NEAR(temp_vel_0_filamentPoint(0), 0.0, 0.01);
     EXPECT_NEAR(temp_vel_0_filamentPoint(1), 0.0, 0.01);
     EXPECT_NEAR(temp_vel_0_filamentPoint(2), 0.75, 0.01);
+}
+
+TEST_F(FilamentTest, biotSavartEdge)
+{
+    vec3 result = biotsavartedge(
+        vec3(1.0f, 1.0f, 1.0f),
+        vec3(2.0f, 0.0f, 1.0f),
+        vec3(0.9f, 0.0f, 0.8f),
+        4.0f,
+        0.12f);
+
+    EXPECT_NEAR(result(0), 0.0454265, 0.00001);
+    EXPECT_NEAR(result(1), 0.0454265, 0.00001);
+    EXPECT_NEAR(result(2), -0.249846, 0.00001);
 }
