@@ -141,9 +141,6 @@ vec3 Filament::localizedInduction(int j, const std::vector<FilamentPoint> &temp_
 
     // Log term
     float logTerm = log(l_prev * l_next / (a_prev * a_next * delta * delta));
-    cout << "resuot: " << C / (4 * M_PI) * 0.5 * logTerm * kB << "\n";
-
-    
 
     // Compute
     return C / (4 * M_PI) * 0.5 * logTerm * kB;

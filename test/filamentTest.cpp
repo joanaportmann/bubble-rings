@@ -47,6 +47,11 @@ protected:
         return filament.doBurgerStepOnBubbleRing();
     }
 
+    vec3 boussinesq_on_edge(int i, const std::vector<FilamentPoint> &temp_controlPolygon_)
+    {
+        return filament.boussinesq_on_edge(i, temp_controlPolygon_);
+    }
+
     // SetUp and TearDown
     void SetUp() override {}
     void TearDown() override {}
@@ -117,8 +122,6 @@ TEST_F(FilamentTest, doBurgerStepOnBubbleRingTest)
     for (int i = 0; i < 26; i++)
         EXPECT_NEAR(result_burger(i), expected_results[i], 0.00000001);
 }
-
-using ::testing::ElementsAre;
 
 TEST_F(FilamentTest, biotSavartAndLocalizedInduction)
 {
@@ -193,4 +196,32 @@ TEST_F(FilamentTest, biotSavartEdge)
     EXPECT_NEAR(result(0), 0.0454265, 0.00001);
     EXPECT_NEAR(result(1), 0.0454265, 0.00001);
     EXPECT_NEAR(result(2), -0.249846, 0.00001);
+}
+
+TEST_F(FilamentTest, boussinesqOnEdge)
+{
+    filamentPoints_.push_back({{0.611779, 0.0, 0.0},
+                               0.12,
+                               4});
+    filamentPoints_.push_back({{0.319311, 0.519615, 0.0},
+                               0.12,
+                               4});
+    filamentPoints_.push_back({{-0.280896, 0.519615, 0.0},
+                               0.12,
+                               4});
+    filamentPoints_.push_back({{-0.586356, -5.24537e-08, 0.0},
+                               0.12,
+                               4});
+    filamentPoints_.push_back({{-0.293264, -0.519615, 0.0},
+                               0.12,
+                               4});
+    filamentPoints_.push_back({{0.313135, -0.519615, 0.0},
+                               0.12,
+                               4});
+
+    vec3 result = boussinesq_on_edge(2, filamentPoints_);
+
+    EXPECT_NEAR(result(0), -6.08488e-07, 0.00001);
+    EXPECT_NEAR(result(1), 3.57705e-07, 0.00001);
+    EXPECT_NEAR(result(2), -0.056169, 0.00001);
 }
