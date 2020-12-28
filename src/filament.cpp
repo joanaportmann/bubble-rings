@@ -208,14 +208,14 @@ vec3 Filament::boussinesq_on_edge(int i, const std::vector<FilamentPoint> &temp_
 
 vec3 Filament::oneStepOfRungeKutta(int i, const std::vector<FilamentPoint> &temp_controlPolygon_)
 {
-    vec3 v_temp;
+    vec3 v_temp = vec3(0, 0, 0);
 
     // Calculating u_BS per vertex of filament
 
     v_temp = biotSavartAndLocalizedInduction(i, temp_controlPolygon_);
 
     // Calculating and adding normal flow velocity γ_normal and averaging to vertices
-    vec3 y_normal = (boussinesq_on_edge(i, temp_controlPolygon_) + boussinesq_on_edge((wrap(i + 1)), temp_controlPolygon_)) / 2;
+    vec3 y_normal = (boussinesq_on_edge(wrap(i-1), temp_controlPolygon_) + boussinesq_on_edge(i, temp_controlPolygon_)) / 2;
 
     v_temp += y_normal;
     v_temp *= time_step_;

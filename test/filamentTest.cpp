@@ -52,6 +52,11 @@ protected:
         return filament.boussinesq_on_edge(i, temp_controlPolygon_);
     }
 
+    vec3 oneStepOfRungeKutta(int i, const std::vector<FilamentPoint> &temp_controlPolygon_)
+    {
+        return filament.oneStepOfRungeKutta(i, temp_controlPolygon_);
+    }
+
     // SetUp and TearDown
     void SetUp() override {}
     void TearDown() override {}
@@ -62,6 +67,7 @@ protected:
 
 using ::testing::ElementsAre;
 
+// Test all edges
 TEST_F(FilamentTest, doBurgerStepOnBubbleRingTest)
 {
     // Simulate a control polygon of size 26 (positions don't matter)
@@ -107,22 +113,17 @@ TEST_F(FilamentTest, doBurgerStepOnBubbleRingTest)
     Eigen::VectorXd result_burger;
     result_burger = doBurgerStepOnBubbleRing();
 
-    // // ASSERT_EQ(result, vec3(0, 1, 0));
-    // // ASSERT_EQ(result, ElementsAre(0, 1, 0));
-
-    // // ASSERT_TRUE(result.isApprox(vec3(0, 1, 0)));
-
     double expected_result[] = {0.04800835, 0.05702037, 0.06561341, 0.07314099, 0.0791778, 0.08307021, 0.08512572, 0.08354294, 0.0792586, 0.07309467,
                                 0.06545621, 0.05695891, 0.0480035, 0.03891299, 0.0306024, 0.0234225, 0.01729339, 0.01274469, 0.01072873, 0.01074678, 0.01086909, 0.01306779,
                                 0.01729234, 0.02327722, 0.03053587, 0.03900016};
 
     std::vector<float> expected_results(std::begin(expected_result), std::end(expected_result));
 
-    //EXPECT_NEAR(result_burger(3), expected_results[3], 0.0001);
     for (int i = 0; i < 26; i++)
         EXPECT_NEAR(result_burger(i), expected_results[i], 0.00000001);
 }
 
+// Test (for filament with 6 vertices) fourth edge (i = 3)
 TEST_F(FilamentTest, biotSavartAndLocalizedInduction)
 {
     filamentPoints_.push_back({{0.611779, 0.0, 0.0},
@@ -153,6 +154,7 @@ TEST_F(FilamentTest, biotSavartAndLocalizedInduction)
     EXPECT_NEAR(temp_vel_0_filamentPoint(2), 1.83756, 0.0001);
 }
 
+// Test (for filament with 6 vertices) fourth edge (i = 3)
 TEST_F(FilamentTest, localizedInduction)
 {
     filamentPoints_.push_back({{0.611779, 0.0, 0.0},
@@ -173,7 +175,6 @@ TEST_F(FilamentTest, localizedInduction)
     filamentPoints_.push_back({{0.313135, -0.519615, 0.0},
                                0.12,
                                4});
-    setControlPolygon(filamentPoints_);
 
     vec3 temp_vel_0_filamentPoint;
     temp_vel_0_filamentPoint = localizedInduction(3, filamentPoints_);
@@ -198,6 +199,7 @@ TEST_F(FilamentTest, biotSavartEdge)
     EXPECT_NEAR(result(2), -0.249846, 0.00001);
 }
 
+// Test (for filament with 6 vertices) third edge (i = 2)
 TEST_F(FilamentTest, boussinesqOnEdge)
 {
     filamentPoints_.push_back({{0.611779, 0.0, 0.0},
@@ -224,4 +226,34 @@ TEST_F(FilamentTest, boussinesqOnEdge)
     EXPECT_NEAR(result(0), -6.08488e-07, 0.00001);
     EXPECT_NEAR(result(1), 3.57705e-07, 0.00001);
     EXPECT_NEAR(result(2), -0.056169, 0.00001);
+}
+
+// Test (for filament with 6 vertices) third edge (i = 2)
+TEST_F(FilamentTest, oneStepOfRungeKutta)
+{
+    filamentPoints_.push_back({{0.611779, 0.0, 0.0},
+                               0.12,
+                               4});
+    filamentPoints_.push_back({{0.319311, 0.519615, 0.0},
+                               0.12,
+                               4});
+    filamentPoints_.push_back({{-0.280896, 0.519615, 0.0},
+                               0.12,
+                               4});
+    filamentPoints_.push_back({{-0.586356, -5.24537e-08, 0.0},
+                               0.12,
+                               4});
+    filamentPoints_.push_back({{-0.293264, -0.519615, 0.0},
+                               0.12,
+                               4});
+    filamentPoints_.push_back({{0.313135, -0.519615, 0.0},
+                               0.12,
+                               4});
+    setControlPolygon(filamentPoints_);
+
+    vec3 result = oneStepOfRungeKutta(2, filamentPoints_);
+
+    EXPECT_NEAR(result(0), -3.04244e-09, 0.00001);
+    EXPECT_NEAR(result(1), 8.75252e-09, 0.00001);
+    EXPECT_NEAR(result(2), 0.0174899, 0.00001);
 }
