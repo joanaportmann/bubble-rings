@@ -57,6 +57,11 @@ protected:
         return filament.oneStepOfRungeKutta(i, temp_controlPolygon_);
     }
 
+    void BiotSavartAndLocalizedInduction()
+    {
+        filament.BiotSavartAndLocalizedInduction();
+    }
+
     // SetUp and TearDown
     void SetUp() override {}
     void TearDown() override {}
@@ -149,9 +154,9 @@ TEST_F(FilamentTest, biotSavartAndLocalizedInduction)
     vec3 temp_vel_0_filamentPoint;
     temp_vel_0_filamentPoint = biotSavartAndLocalizedInduction(3, filamentPoints_);
 
-    EXPECT_NEAR(temp_vel_0_filamentPoint(0), 0.0, 0.01);
-    EXPECT_NEAR(temp_vel_0_filamentPoint(1), 0.0, 0.01);
-    EXPECT_NEAR(temp_vel_0_filamentPoint(2), 1.83756, 0.0001);
+    EXPECT_NEAR(temp_vel_0_filamentPoint(0), 0.0,0.00001);
+    EXPECT_NEAR(temp_vel_0_filamentPoint(1), 0.0, 0.00001);
+    EXPECT_NEAR(temp_vel_0_filamentPoint(2), 1.83756,0.00001);
 }
 
 // Test (for filament with 6 vertices) fourth edge (i = 3)
@@ -180,9 +185,9 @@ TEST_F(FilamentTest, localizedInduction)
     temp_vel_0_filamentPoint = localizedInduction(3, filamentPoints_);
 
 
-    EXPECT_NEAR(temp_vel_0_filamentPoint(0), 0.0, 0.01);
-    EXPECT_NEAR(temp_vel_0_filamentPoint(1), 0.0, 0.01);
-    EXPECT_NEAR(temp_vel_0_filamentPoint(2), 1.08717, 0.0001);
+    EXPECT_NEAR(temp_vel_0_filamentPoint(0), 0.0, 0.00001);
+    EXPECT_NEAR(temp_vel_0_filamentPoint(1), 0.0, 0.00001);
+    EXPECT_NEAR(temp_vel_0_filamentPoint(2), 1.08717, 0.00001);
 }
 
 TEST_F(FilamentTest, biotSavartEdge)
@@ -194,9 +199,9 @@ TEST_F(FilamentTest, biotSavartEdge)
         4.0f,
         0.12f);
 
-    EXPECT_NEAR(result(0), 0.0454265, 0.00001);
-    EXPECT_NEAR(result(1), 0.0454265, 0.00001);
-    EXPECT_NEAR(result(2), -0.249846, 0.00001);
+    EXPECT_NEAR(result(0), 0.0454265, 0.000001);
+    EXPECT_NEAR(result(1), 0.0454265, 0.000001);
+    EXPECT_NEAR(result(2), -0.249846, 0.000001);
 }
 
 // Test (for filament with 6 vertices) third edge (i = 2)
@@ -223,9 +228,9 @@ TEST_F(FilamentTest, boussinesqOnEdge)
 
     vec3 result = boussinesq_on_edge(2, filamentPoints_);
 
-    EXPECT_NEAR(result(0), -6.08488e-07, 0.00001);
-    EXPECT_NEAR(result(1), 3.57705e-07, 0.00001);
-    EXPECT_NEAR(result(2), -0.056169, 0.00001);
+    EXPECT_NEAR(result(0), -6.08488e-07, 0.000001);
+    EXPECT_NEAR(result(1), 3.57705e-07, 0.000001);
+    EXPECT_NEAR(result(2), -0.056169, 0.000001);
 }
 
 // Test (for filament with 6 vertices) third edge (i = 2)
@@ -253,7 +258,42 @@ TEST_F(FilamentTest, oneStepOfRungeKutta)
 
     vec3 result = oneStepOfRungeKutta(2, filamentPoints_);
 
-    EXPECT_NEAR(result(0), -3.04244e-09, 0.00001);
-    EXPECT_NEAR(result(1), 8.75252e-09, 0.00001);
-    EXPECT_NEAR(result(2), 0.0174899, 0.00001);
+    BiotSavartAndLocalizedInduction();
+
+    EXPECT_NEAR(result(0), -3.04244e-09, 0.000001);
+    EXPECT_NEAR(result(1), 8.75252e-09, 0.000001);
+    EXPECT_NEAR(result(2), 0.0174899, 0.000001);
+}
+
+// Test Runge Kutta for first vertex
+TEST_F(FilamentTest, BiotSavartAndLocalizedInduction)
+{
+    filamentPoints_.push_back({{0.611779, 0.0, 0.0},
+                               0.12,
+                               4});
+    filamentPoints_.push_back({{0.319311, 0.519615, 0.0},
+                               0.12,
+                               4});
+    filamentPoints_.push_back({{-0.280896, 0.519615, 0.0},
+                               0.12,
+                               4});
+    filamentPoints_.push_back({{-0.586356, -5.24537e-08, 0.0},
+                               0.12,
+                               4});
+    filamentPoints_.push_back({{-0.293264, -0.519615, 0.0},
+                               0.12,
+                               4});
+    filamentPoints_.push_back({{0.313135, -0.519615, 0.0},
+                               0.12,
+                               4});
+    setControlPolygon(filamentPoints_);
+    BiotSavartAndLocalizedInduction();
+    
+    std::vector<FilamentPoint> controlPolygon__ = filament.getFilamentPoints();
+
+    vec3 result = controlPolygon__[3].position;
+
+    EXPECT_NEAR(result(0), -0.586357, 0.00001);
+    EXPECT_NEAR(result(1), 1.53235e-05, 0.00001);
+    EXPECT_NEAR(result(2), 0.018367, 0.00001);
 }

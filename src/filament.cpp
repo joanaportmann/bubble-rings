@@ -222,6 +222,7 @@ vec3 Filament::oneStepOfRungeKutta(int i, const std::vector<FilamentPoint> &temp
     return v_temp;
 };
 
+// Runge Kutta evaluation
 void Filament::BiotSavartAndLocalizedInduction()
 {
     std::vector<FilamentPoint> temp_polygon1, temp_polygon2, temp_polygon3;
@@ -230,7 +231,6 @@ void Filament::BiotSavartAndLocalizedInduction()
 
     for (int i = 0; i < controlPolygon_.size(); i++)
     {
-        vec3 velocity;
         vec3 temp_K;
         temp_K = Filament::oneStepOfRungeKutta(i, controlPolygon_);
         K1.push_back(temp_K);
@@ -240,7 +240,6 @@ void Filament::BiotSavartAndLocalizedInduction()
     temp_polygon2 = controlPolygon_;
     for (int i = 0; i < controlPolygon_.size(); i++)
     {
-        vec3 velocity;
         vec3 temp_K;
         temp_K = Filament::oneStepOfRungeKutta(i, temp_polygon1);
         K2.push_back(temp_K);
@@ -251,7 +250,6 @@ void Filament::BiotSavartAndLocalizedInduction()
 
     for (int i = 0; i < controlPolygon_.size(); i++)
     {
-        vec3 velocity;
         vec3 temp_K;
         temp_K = Filament::oneStepOfRungeKutta(i, temp_polygon2);
         K3.push_back(temp_K);
@@ -260,15 +258,15 @@ void Filament::BiotSavartAndLocalizedInduction()
 
     for (int i = 0; i < controlPolygon_.size(); i++)
     {
-        vec3 velocity;
         vec3 temp_K;
         temp_K = Filament::oneStepOfRungeKutta(i, temp_polygon3);
         K4.push_back(temp_K);
     }
 
-    for (int i = 0; i < controlPolygon_.size(); i++)
+    for (int k = 0; k < controlPolygon_.size(); k++)
     {
-        controlPolygon_[i].position += (K1[i] + 2 * K2[i] + 2 * K3[i] + K4[i]) / 6;
+        vec3 update = (K1[k] + 2 * K2[k] + 2 * K3[k] + K4[k]) / 6;
+        controlPolygon_[k].position += update;
     }
 };
 
