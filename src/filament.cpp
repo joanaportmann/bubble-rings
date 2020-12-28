@@ -112,11 +112,6 @@ vec3 Filament::biotsavartedge(vec3 p, vec3 R0, vec3 R1, float Gamma, float a)
     float r0 = R0_.dot(RPrime) / (sqrt(aSqr + R0_.norm() * R0_.norm()) * (RPrime.norm() * RPrime.norm() 
     * aSqr + cross01.norm() * cross01.norm()));
 
-    cout << "cross01: " << cross01 << "\n";
-    cout << "r1: " << r1 << "\n";
-    cout << "r0: " << r0 << "\n";
-    cout << "RPRIME: " << RPrime << "\n";
-    cout << "------------------------- \n";
     return Gamma * (r1 - r0) * cross01 / (4 * M_PI);
 }
 
@@ -142,10 +137,13 @@ vec3 Filament::localizedInduction(int j, const std::vector<FilamentPoint> &temp_
     vec3 kB = 2.0 * e_prev.normalized().cross(e_next.normalized()) / (e_prev + e_next).norm();
 
     // Circulation
-    float C = 0.5 * (temp_controlPolygon_[j].C, temp_controlPolygon_[wrap(j + 1)].C);
+    float C = 0.5 * (temp_controlPolygon_[j].C + temp_controlPolygon_[wrap(j + 1)].C);
 
     // Log term
     float logTerm = log(l_prev * l_next / (a_prev * a_next * delta * delta));
+    cout << "resuot: " << C / (4 * M_PI) * 0.5 * logTerm * kB << "\n";
+
+    
 
     // Compute
     return C / (4 * M_PI) * 0.5 * logTerm * kB;
@@ -158,16 +156,16 @@ vec3 Filament::biotSavartAndLocalizedInduction(int j, const std::vector<Filament
     vec3 temp_vel = vec3(0, 0, 0);
     vec3 position = temp_controlPolygon_[j].position;
 
-    for (int j = 0; j < controlPolygon_.size(); j++)
+    for (int i = 0; i < controlPolygon_.size(); i++)
     {
-        vec3 R0 = temp_controlPolygon_[wrap(j)].position;
-        vec3 R1 = temp_controlPolygon_[wrap(j + 1)].position;
-        float a = temp_controlPolygon_[j].a;
-        float Gamma = temp_controlPolygon_[j].C;
+        vec3 R0 = temp_controlPolygon_[wrap(i)].position;
+        vec3 R1 = temp_controlPolygon_[wrap(i + 1)].position;
+        float a = temp_controlPolygon_[i].a;
+        float Gamma = temp_controlPolygon_[i].C;
         temp_vel += biotsavartedge(position, R0, R1, Gamma, a);
     }
 
-    //temp_vel += localizedInduction(j, temp_controlPolygon_);
+    temp_vel += localizedInduction(j, temp_controlPolygon_);
     return temp_vel;
 }
 
@@ -229,7 +227,6 @@ vec3 Filament::oneStepOfRungeKutta(int i, const std::vector<FilamentPoint> &temp
 
 void Filament::BiotSavartAndLocalizedInduction()
 {
-    for (int k = 0; k < controlPolygon_.size(); k++) cout << "Positions " << controlPolygon_[k].position << "\n"; 
     std::vector<FilamentPoint> temp_polygon1, temp_polygon2, temp_polygon3;
     temp_polygon1 = controlPolygon_;
     std::vector<vec3> K1, K2, K3, K4;

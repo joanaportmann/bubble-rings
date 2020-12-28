@@ -145,14 +145,40 @@ TEST_F(FilamentTest, biotSavartAndLocalizedInduction)
     vec3 temp_vel_0_filamentPoint;
     temp_vel_0_filamentPoint = biotSavartAndLocalizedInduction(3, filamentPoints_);
 
-    cout << "position: " << filamentPoints_[3].position << "\n";
-    cout << "temp_vel(0): " << temp_vel_0_filamentPoint[0] << "\n";
-    cout << "temp_vel(1): " << temp_vel_0_filamentPoint[1] << "\n";
-    cout << "temp_vel(2): " << temp_vel_0_filamentPoint[2] << "\n";
+    EXPECT_NEAR(temp_vel_0_filamentPoint(0), 0.0, 0.01);
+    EXPECT_NEAR(temp_vel_0_filamentPoint(1), 0.0, 0.01);
+    EXPECT_NEAR(temp_vel_0_filamentPoint(2), 1.83756, 0.0001);
+}
+
+TEST_F(FilamentTest, localizedInduction)
+{
+    filamentPoints_.push_back({{0.611779, 0.0, 0.0},
+                               0.12,
+                               4});
+    filamentPoints_.push_back({{0.319311, 0.519615, 0.0},
+                               0.12,
+                               4});
+    filamentPoints_.push_back({{-0.280896, 0.519615, 0.0},
+                               0.12,
+                               4});
+    filamentPoints_.push_back({{-0.586356, -5.24537e-08, 0.0},
+                               0.12,
+                               4});
+    filamentPoints_.push_back({{-0.293264, -0.519615, 0.0},
+                               0.12,
+                               4});
+    filamentPoints_.push_back({{0.313135, -0.519615, 0.0},
+                               0.12,
+                               4});
+    setControlPolygon(filamentPoints_);
+
+    vec3 temp_vel_0_filamentPoint;
+    temp_vel_0_filamentPoint = localizedInduction(3, filamentPoints_);
+
 
     EXPECT_NEAR(temp_vel_0_filamentPoint(0), 0.0, 0.01);
     EXPECT_NEAR(temp_vel_0_filamentPoint(1), 0.0, 0.01);
-    EXPECT_NEAR(temp_vel_0_filamentPoint(2), 0.75, 0.01);
+    EXPECT_NEAR(temp_vel_0_filamentPoint(2), 1.08717, 0.0001);
 }
 
 TEST_F(FilamentTest, biotSavartEdge)
