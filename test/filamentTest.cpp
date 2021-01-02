@@ -27,6 +27,11 @@ protected:
     void setFlux(std::vector<float> flux_) { filament.flux_v = flux_; }
 
     // Access private functions of filament.cpp
+
+    void preComputations()
+    {
+        filament.preComputations();
+    }
     vec3 biotsavartedge(vec3 p, vec3 R0, vec3 R1, float gamma, float a)
     {
         return filament.biotsavartedge(p, R0, R1, gamma, a);
@@ -34,12 +39,12 @@ protected:
 
     vec3 localizedInduction(int j, const std::vector<FilamentPoint> &temp_controlPolygon_)
     {
-        return  filament.localizedInduction(j, temp_controlPolygon_);
+        return filament.localizedInduction(j, temp_controlPolygon_);
     }
 
     vec3 biotSavartAndLocalizedInduction(int j, const std::vector<FilamentPoint> &temp_controlPolygon_)
     {
-        return  filament.biotSavartAndLocalizedInduction(j, temp_controlPolygon_);
+        return filament.biotSavartAndLocalizedInduction(j, temp_controlPolygon_);
     }
 
     Eigen::VectorXd doBurgerStepOnBubbleRing()
@@ -60,6 +65,11 @@ protected:
     void BiotSavartAndLocalizedInduction()
     {
         filament.BiotSavartAndLocalizedInduction();
+    }
+
+    void updateSkeleton()
+    {
+        filament.updateSkeleton();
     }
 
     // SetUp and TearDown
@@ -154,9 +164,9 @@ TEST_F(FilamentTest, biotSavartAndLocalizedInduction)
     vec3 temp_vel_0_filamentPoint;
     temp_vel_0_filamentPoint = biotSavartAndLocalizedInduction(3, filamentPoints_);
 
-    EXPECT_NEAR(temp_vel_0_filamentPoint(0), 0.0,0.00001);
+    EXPECT_NEAR(temp_vel_0_filamentPoint(0), 0.0, 0.00001);
     EXPECT_NEAR(temp_vel_0_filamentPoint(1), 0.0, 0.00001);
-    EXPECT_NEAR(temp_vel_0_filamentPoint(2), 1.83756,0.00001);
+    EXPECT_NEAR(temp_vel_0_filamentPoint(2), 1.83756, 0.00001);
 }
 
 // Test (for filament with 6 vertices) fourth edge (i = 3)
@@ -183,7 +193,6 @@ TEST_F(FilamentTest, localizedInduction)
 
     vec3 temp_vel_0_filamentPoint;
     temp_vel_0_filamentPoint = localizedInduction(3, filamentPoints_);
-
 
     EXPECT_NEAR(temp_vel_0_filamentPoint(0), 0.0, 0.00001);
     EXPECT_NEAR(temp_vel_0_filamentPoint(1), 0.0, 0.00001);
@@ -288,7 +297,7 @@ TEST_F(FilamentTest, BiotSavartAndLocalizedInduction)
                                4});
     setControlPolygon(filamentPoints_);
     BiotSavartAndLocalizedInduction();
-    
+
     std::vector<FilamentPoint> controlPolygon__ = filament.getFilamentPoints();
 
     vec3 result = controlPolygon__[3].position;
@@ -296,4 +305,67 @@ TEST_F(FilamentTest, BiotSavartAndLocalizedInduction)
     EXPECT_NEAR(result(0), -0.586357, 0.00001);
     EXPECT_NEAR(result(1), 1.53235e-05, 0.00001);
     EXPECT_NEAR(result(2), 0.018367, 0.00001);
+}
+
+TEST_F(FilamentTest, Checking_a_after_RungeKuttaAndBurger)
+{
+    filamentPoints_.push_back({{0.611779, 0.0, 0.0},
+                               0.12,
+                               4});
+    filamentPoints_.push_back({{0.319311, 0.519615, 0.0},
+                               0.12,
+                               4});
+    filamentPoints_.push_back({{-0.280896, 0.519615, 0.0},
+                               0.12,
+                               4});
+    filamentPoints_.push_back({{-0.586356, -5.24537e-08, 0.0},
+                               0.12,
+                               4});
+    filamentPoints_.push_back({{-0.293264, -0.519615, 0.0},
+                               0.12,
+                               4});
+    filamentPoints_.push_back({{0.313135, -0.519615, 0.0},
+                               0.12,
+                               4});
+    setControlPolygon(filamentPoints_);
+
+    BiotSavartAndLocalizedInduction();
+    preComputations(); // for Burger's equation
+    Eigen::VectorXd x = doBurgerStepOnBubbleRing();
+    Eigen::VectorXd a;
+    for (int i = 0; i < filamentPoints_.size(); i++)
+        a(i) = sqrt(sqrt(std::pow(x(i) / (M_PI), 2)));
+
+        cout << "thickness: _ updated: " << a;
+
+    double expected_result[] = {0.133562, 0.168164, 0.133802, 0.0863786, 0.0864597, 0.0864255};
+    std::vector<float> expected_results(std::begin(expected_result), std::end(expected_result));
+
+    for (int i = 0; i < 26; i++)
+        EXPECT_NEAR(a(i), expected_results[i], 0.00000001);
+}
+
+TEST_F(FilamentTest, check_a_afterUpdateFilamentIteration)
+{
+    filamentPoints_.push_back({{0.611779, 0.0, 0.0},
+                               0.12,
+                               4});
+    filamentPoints_.push_back({{0.319311, 0.519615, 0.0},
+                               0.12,
+                               4});
+    filamentPoints_.push_back({{-0.280896, 0.519615, 0.0},
+                               0.12,
+                               4});
+    filamentPoints_.push_back({{-0.586356, -5.24537e-08, 0.0},
+                               0.12,
+                               4});
+    filamentPoints_.push_back({{-0.293264, -0.519615, 0.0},
+                               0.12,
+                               4});
+    filamentPoints_.push_back({{0.313135, -0.519615, 0.0},
+                               0.12,
+                               4});
+    setControlPolygon(filamentPoints_);
+
+    for(int i = 0; i < 10; i++) updateSkeleton();
 }
