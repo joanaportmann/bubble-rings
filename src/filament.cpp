@@ -27,7 +27,6 @@ typedef Eigen::Triplet<double> T;
 
 Filament::Filament(float thickness_, float circulation_)
 {
-
     // Set filament circle
     for (float i = 0; i <= 2 * M_PI; i += 0.17)
     {
@@ -35,6 +34,8 @@ Filament::Filament(float thickness_, float circulation_)
                                    thickness_,
                                    circulation_});
     }
+
+    for (int i = 0; i < controlPolygon_.size(); i++) cout << "Position i: " << controlPolygon_[i].position << "\n";
 }
 
 //---------------------------------------------------------------------------

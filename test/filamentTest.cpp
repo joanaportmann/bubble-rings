@@ -333,19 +333,18 @@ TEST_F(FilamentTest, Checking_a_after_RungeKuttaAndBurger)
     preComputations(); // for Burger's equation
     Eigen::VectorXd x = doBurgerStepOnBubbleRing();
     Eigen::VectorXd a;
+    a.resize(filamentPoints_.size());
     for (int i = 0; i < filamentPoints_.size(); i++)
         a(i) = sqrt(sqrt(std::pow(x(i) / (M_PI), 2)));
-
-        cout << "thickness: _ updated: " << a;
 
     double expected_result[] = {0.133562, 0.168164, 0.133802, 0.0863786, 0.0864597, 0.0864255};
     std::vector<float> expected_results(std::begin(expected_result), std::end(expected_result));
 
-    for (int i = 0; i < 26; i++)
-        EXPECT_NEAR(a(i), expected_results[i], 0.00000001);
+    for (int i = 0; i < filamentPoints_.size(); i++)
+        EXPECT_NEAR(a(i), expected_results[i], 0.000001);
 }
 
-TEST_F(FilamentTest, check_a_afterUpdateFilamentIteration)
+TEST_F(FilamentTest, check_position_afterUpdateFilament)
 {
     filamentPoints_.push_back({{0.611779, 0.0, 0.0},
                                0.12,
@@ -367,5 +366,35 @@ TEST_F(FilamentTest, check_a_afterUpdateFilamentIteration)
                                4});
     setControlPolygon(filamentPoints_);
 
-    for(int i = 0; i < 10; i++) updateSkeleton();
+    BiotSavartAndLocalizedInduction();
+    preComputations(); // for Burger's equation
+    Eigen::VectorXd x = doBurgerStepOnBubbleRing();
+    std::vector<vec3> positions;
+    std::vector<FilamentPoint> controlPolygon__ = filament.getFilamentPoints();
+    vec3 result = vec3(-0.293264, -0.5196, 0.0192374);
+
+    for(int i = 0; i < 3; i++) EXPECT_NEAR(controlPolygon__[4].position(i), result(i), 0.000001);
+}
+
+TEST_F(FilamentTest, IterationsOfRungeKuttaAndBurgers)
+{
+     filamentPoints_.push_back({{0.611779, 0.0, 0.0},
+                               0.12,
+                               4});
+    filamentPoints_.push_back({{0.319311, 0.519615, 0.0},
+                               0.12,
+                               4});
+    filamentPoints_.push_back({{-0.280896, 0.519615, 0.0},
+                               0.12,
+                               4});
+    filamentPoints_.push_back({{-0.586356, -5.24537e-08, 0.0},
+                               0.12,
+                               4});
+    filamentPoints_.push_back({{-0.293264, -0.519615, 0.0},
+                               0.12,
+                               4});
+    filamentPoints_.push_back({{0.313135, -0.519615, 0.0},
+                               0.12,
+                               4});
+    setControlPolygon(filamentPoints_);
 }
