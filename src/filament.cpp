@@ -34,8 +34,6 @@ Filament::Filament(float thickness_, float circulation_)
                                    thickness_,
                                    circulation_});
     }
-
-    for (int i = 0; i < controlPolygon_.size(); i++) cout << "Position i: " << controlPolygon_[i].position << "\n";
 }
 
 //---------------------------------------------------------------------------

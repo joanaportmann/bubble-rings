@@ -369,14 +369,27 @@ TEST_F(FilamentTest, check_position_afterUpdateFilament)
     BiotSavartAndLocalizedInduction();
     preComputations(); // for Burger's equation
     Eigen::VectorXd x = doBurgerStepOnBubbleRing();
-    std::vector<vec3> positions;
     std::vector<FilamentPoint> controlPolygon__ = filament.getFilamentPoints();
     vec3 result = vec3(-0.293264, -0.5196, 0.0192374);
 
     for(int i = 0; i < 3; i++) EXPECT_NEAR(controlPolygon__[4].position(i), result(i), 0.000001);
 }
 
-TEST_F(FilamentTest, IterationsOfRungeKuttaAndBurgers)
+
+// Setup (Houdini and C++)
+// Startpositions: 
+// 0.611779	0.0	0.0
+// 0.319311	0.519615	0.0
+// -0.280896	0.519615	0.0
+// -0.586356	-5.24537e-08	0.0
+// -0.293264	-0.519615	0.0
+// 0.313135	-0.519615	0.0
+//
+// frame 156 in Houdini
+// a = 0.12 (constant)
+// C = 4 (constant)
+// Biot-Savart field and Biot-Savart loc. ind. and normal flow
+TEST_F(FilamentTest, 155_Iterations_OfRungeKutta)
 {
      filamentPoints_.push_back({{0.611779, 0.0, 0.0},
                                0.12,
@@ -397,4 +410,64 @@ TEST_F(FilamentTest, IterationsOfRungeKuttaAndBurgers)
                                0.12,
                                4});
     setControlPolygon(filamentPoints_);
+
+    for( int i = 0 ; i < 155; i++) BiotSavartAndLocalizedInduction();
+    std::vector<FilamentPoint> controlPolygon__ = filament.getFilamentPoints();
+    vec3 result = vec3(0.322385, -0.178072, 2.93021);
+
+ 
+    // All Positions in 156th frame: 
+    // 0.628901	0.341356	2.80164
+    // 0.325663	0.859853	2.67128
+    // -0.292737	0.863521	2.67299
+    // -0.606598	0.343823	2.80012
+    // -0.302304	-0.175722	2.9266
+    // 0.322385	-0.178072	2.93021
+
+    for(int i = 0; i<2; i++) EXPECT_NEAR(controlPolygon__[5].position(i), result(i), 0.000001);
+}
+
+// Setup (Houdini and C++)
+// Startpositions: 
+// 0.611779	0.0	0.0
+// 0.319311	0.519615	0.0
+// -0.280896	0.519615	0.0
+// -0.586356	-5.24537e-08	0.0
+// -0.293264	-0.519615	0.0
+// 0.313135	-0.519615	0.0
+//
+// frame 156 in Houdini
+// a = 0.12 (constant)
+// C = 4 (constant)
+// Biot-Savart field and Biot-Savart loc. ind. and normal flow and thickness flow and modify thickness
+TEST_F(FilamentTest, 1_Iterations_OfRungeKuttaAndBurgers)
+{
+     filamentPoints_.push_back({{0.611779, 0.0, 0.0},
+                               0.12,
+                               4});
+    filamentPoints_.push_back({{0.319311, 0.519615, 0.0},
+                               0.12,
+                               4});
+    filamentPoints_.push_back({{-0.280896, 0.519615, 0.0},
+                               0.12,
+                               4});
+    filamentPoints_.push_back({{-0.586356, -5.24537e-08, 0.0},
+                               0.12,
+                               4});
+    filamentPoints_.push_back({{-0.293264, -0.519615, 0.0},
+                               0.12,
+                               4});
+    filamentPoints_.push_back({{0.313135, -0.519615, 0.0},
+                               0.12,
+                               4});
+    setControlPolygon(filamentPoints_);
+
+    for(int i = 0; i < 86; i++) filament.updateSkeleton();
+    std::vector<FilamentPoint> controlPolygon__ = filament.getFilamentPoints();
+
+    double expected_result[] = {0.114633, 0.170859, 0.114573, 0.101537, 0.101553, 0.10161};
+    std::vector<float> expected_results(std::begin(expected_result), std::end(expected_result));
+    for(int i = 0; i<5; i++) EXPECT_NEAR(controlPolygon__[i].a, expected_result[i], 0.01);
+
+    //for(int i = 0; i < 5; i++) cout << "Thickness: " << controlPolygon__[i].a << "\n";
 }
