@@ -100,8 +100,6 @@ void Tube::compute_normals()
 
         t.normal = ((p1 - p0).cross(p2 - p0)).normalized();
     }
-
-    cout << "triangles.size " << triangles_.size() << "\n";
 }
 
 //--------------------------------------------------------------------------------------
@@ -122,14 +120,15 @@ void Tube::updateBuffers()
 {
     triangles_.clear();
     Tube::createTriangleStruct();
-  
 
-    auto start2 = std::chrono::steady_clock::now();
+    // To measure time (debugging)
+    // auto start = std::chrono::steady_clock::now();
+    // ....
+    // auto end = std::chrono::steady_clock::now();
+    // std::chrono::duration<double> elapsed_seconds = end - start;
+    // std::cout << "elapsed time: " << elapsed_seconds.count() << "s\n";
+   
     Tube::compute_normals();
-    auto end2 = std::chrono::steady_clock::now();
-    std::chrono::duration<double> elapsed_seconds2 = end2 - start2;
-    std::cout << "elapsed time: " << elapsed_seconds2.count() << "s\n";
-
     std::vector<GLfloat> positions(3 * 3 * triangles_.size());
     std::vector<GLfloat> normals(3 * 3 * triangles_.size());
 
