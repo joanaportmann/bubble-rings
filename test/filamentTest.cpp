@@ -473,7 +473,8 @@ TEST_F(FilamentTest, 1_Iterations_OfRungeKuttaAndBurgers)
                                4});
     setControlPolygon(filamentPoints_);
 
-    for (int i = 0; i < 86; i++)
+    //for (int i = 0; i < 86; i++)
+    for (int i = 0; i < 5; i++)
         filament.updateSkeleton();
     std::vector<FilamentPoint> controlPolygon__ = filament.getFilamentPoints();
 
@@ -505,15 +506,16 @@ TEST_F(FilamentTest, resample)
 
     std::vector<FilamentPoint> controlPolygon__ = filament.getFilamentPoints();
 
-    vec3 expected_result_0 = vec3(0, 0.8, 0);
-    vec3 expected_result_1 = vec3(1, 0.6, 0);
-    vec3 expected_result_2 = vec3(0.6, 1, 0);
-    vec3 expected_result_3 = vec3(0.8, 0, 0);
+    vec3 expected_result_0 = vec3(0, 0, 0);
+    vec3 expected_result_1 = vec3(0.8, 0, 0);
+    vec3 expected_result_2 = vec3(1, 0.6, 0);
+    vec3 expected_result_3 = vec3(0.6, 1, 0);
+    vec3 expected_result_4 = vec3(0, 0.8, 0);
 
-    for (int i = 0; i < 5; i++) cout << "resamplet1: " << controlPolygon__[i].position << "\n";
-
-    for (int i = 0; i < 2; i++) EXPECT_NEAR(controlPolygon__[0].position(i), expected_result_1[i], 0.0000001);
+    EXPECT_EQ(controlPolygon__.size(), 5);
+    for (int i = 0; i < 2; i++) EXPECT_NEAR(controlPolygon__[0].position(i), expected_result_0[i], 0.0000001);
     for (int i = 0; i < 2; i++) EXPECT_NEAR(controlPolygon__[1].position(i), expected_result_1[i], 0.0000001);
-    for (int i = 0; i < 2; i++) EXPECT_NEAR(controlPolygon__[2].position(i), expected_result_1[i], 0.0000001);
-    for (int i = 0; i < 2; i++) EXPECT_NEAR(controlPolygon__[3].position(i), expected_result_1[i], 0.0000001);
+    for (int i = 0; i < 2; i++) EXPECT_NEAR(controlPolygon__[2].position(i), expected_result_2[i], 0.0000001);
+    for (int i = 0; i < 2; i++) EXPECT_NEAR(controlPolygon__[3].position(i), expected_result_3[i], 0.0000001);
+    for (int i = 0; i < 2; i++) EXPECT_NEAR(controlPolygon__[4].position(i), expected_result_4[i], 0.0000001);
 }

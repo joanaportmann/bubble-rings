@@ -421,9 +421,9 @@ Eigen::VectorXd Filament::doBurgerStepOnBubbleRing()
     return (cg.solve(RHS * scale)) / scale;
 }
 
-int Filament::totalLengthOfControlpolygon()
+float Filament::totalLengthOfControlpolygon()
 {
-    int length = 0;
+    float length = 0;
     for (int i = 0; i < controlPolygon_.size(); i++)
     {
         length += (controlPolygon_[i].position - controlPolygon_[wrap(i + 1)].position).norm();
@@ -437,7 +437,7 @@ void Filament::resample(float resampleLength)
     float segmentnumber = std::round(totalLengthOfControlpolygon() / resampleLength);
     float actualResampleLength = totalLengthOfControlpolygon() / segmentnumber;
     std::vector<FilamentPoint> newPoints;
-    newPoints.resize(segmentnumber);
+        
 
     newPoints.push_back(controlPolygon_[0]);
     for (int i = 1; i < segmentnumber; i++)
@@ -459,12 +459,10 @@ void Filament::resample(float resampleLength)
         float a = controlPolygon_[baseVertex].a * weight + controlPolygon_[wrap(baseVertex + 1)].a * (1 - weight);
         float C = controlPolygon_[baseVertex].C * weight + controlPolygon_[wrap(baseVertex + 1)].C * (1 - weight);
 
-        newPoints.push_back({position, a, C});
-        cout << "Positions___________________" << position << "\n";
+        newPoints.push_back({{position(0), position(1), position(2)}, a, C});
+        cout << "New Positions___________________" << position << "\n";
     }
 
-    controlPolygon_.clear();
-    controlPolygon_.resize(segmentnumber);
     controlPolygon_.assign(newPoints.begin(), newPoints.end());
 }
 
@@ -477,7 +475,7 @@ void Filament::updateSkeleton()
     {
         controlPolygon_[i].a = sqrt(sqrt(std::pow(x(i) / (M_PI), 2)));
     }
-    //resample();
+    resample(0.353);
     updatedFilament = true;
 };
 

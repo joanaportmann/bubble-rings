@@ -261,8 +261,8 @@ void Tube_viewer::paint()
 
 		filament = Filament(thickness, circulation);
 		Tube tube_(filament);
-		Tube *tube;
-		tube = &tube_;
+		// Tube *tube;
+		// tube = &tube_;
 		timer_active_ = false;
 	}
 	if (ImGui::Button("Start"))

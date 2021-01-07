@@ -54,7 +54,7 @@ private:
     // Methods
 
     int wrap(int i);
-    int totalLengthOfControlpolygon();
+    float totalLengthOfControlpolygon();
     void resample(float resampleLength);
 
     // Biotsavart velocity
