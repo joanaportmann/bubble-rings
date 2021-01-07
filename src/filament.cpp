@@ -417,7 +417,10 @@ Eigen::VectorXd Filament::doBurgerStepOnBubbleRing()
 
     // fill A = LHS and b = RHS
     Eigen::ConjugateGradient<Eigen::SparseMatrix<double>, Eigen::Lower | Eigen::Upper> cg;
+    cg.setTolerance(1e-5);
     cg.compute(LHS);
+    cout << "estimated error: " << cg.error() << "\n";
+    cout << "tolerance: " << cg.tolerance() << "\n";
     return (cg.solve(RHS * scale)) / scale;
 }
 
@@ -457,12 +460,12 @@ void Filament::resample(float resampleLength)
         }
         vec3 v = controlPolygon_[wrap(baseVertex + 1)].position - controlPolygon_[baseVertex].position;
         vec3 position = controlPolygon_[baseVertex].position + v.normalized() * diffFromStart;
-        float weight = diffFromStart / v.norm();
-        float a = controlPolygon_[baseVertex].a * weight + controlPolygon_[wrap(baseVertex + 1)].a * (1 - weight);
+        float weight = 1 - (diffFromStart / v.norm());
+        float a = (sqrt(controlPolygon_[baseVertex].a) * weight + sqrt(controlPolygon_[wrap(baseVertex + 1)].a) * (1 - weight));
+        a *= a;
         float C = controlPolygon_[baseVertex].C * weight + controlPolygon_[wrap(baseVertex + 1)].C * (1 - weight);
 
         newPoints.push_back({{position(0), position(1), position(2)}, a, C});
-        // cout << "New Positions___________________" << position << "\n";
     }
 
     controlPolygon_.assign(newPoints.begin(), newPoints.end());
@@ -471,14 +474,16 @@ void Filament::resample(float resampleLength)
 void Filament::updateSkeleton()
 {
     BiotSavartAndLocalizedInduction();
-    // preComputations(); // for Burger's equation
-    // Eigen::VectorXd x = doBurgerStepOnBubbleRing();
-    // for (int i = 0; i < controlPolygon_.size(); i++)
-    // {
-    //     controlPolygon_[i].a = sqrt(sqrt(std::pow(x(i) / (M_PI), 2)));
-    // }
+    preComputations(); // for Burger's equation
+    Eigen::VectorXd x = doBurgerStepOnBubbleRing();
+    for (int i = 0; i < controlPolygon_.size(); i++)
+    {
+        controlPolygon_[i].a = sqrt(sqrt(std::pow(x(i) / (M_PI), 2)));
+    }
     resample(resampleLength_);
     updatedFilament = true;
 };
+
+
 
 //-----------------------------------------------------------------------------------
