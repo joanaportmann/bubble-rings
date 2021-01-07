@@ -434,7 +434,9 @@ float Filament::totalLengthOfControlpolygon()
 
 void Filament::resample(float resampleLength)
 {
-    float segmentnumber = std::round(totalLengthOfControlpolygon() / resampleLength);
+    float segmentnumber_ = std::round(totalLengthOfControlpolygon() / resampleLength);
+    int segmentnumber = segmentnumber_;
+    cout << segmentnumber;
     float actualResampleLength = totalLengthOfControlpolygon() / segmentnumber;
     std::vector<FilamentPoint> newPoints;
         
@@ -460,7 +462,7 @@ void Filament::resample(float resampleLength)
         float C = controlPolygon_[baseVertex].C * weight + controlPolygon_[wrap(baseVertex + 1)].C * (1 - weight);
 
         newPoints.push_back({{position(0), position(1), position(2)}, a, C});
-        cout << "New Positions___________________" << position << "\n";
+        // cout << "New Positions___________________" << position << "\n";
     }
 
     controlPolygon_.assign(newPoints.begin(), newPoints.end());
@@ -469,13 +471,13 @@ void Filament::resample(float resampleLength)
 void Filament::updateSkeleton()
 {
     BiotSavartAndLocalizedInduction();
-    preComputations(); // for Burger's equation
-    Eigen::VectorXd x = doBurgerStepOnBubbleRing();
-    for (int i = 0; i < controlPolygon_.size(); i++)
-    {
-        controlPolygon_[i].a = sqrt(sqrt(std::pow(x(i) / (M_PI), 2)));
-    }
-    resample(0.353);
+    // preComputations(); // for Burger's equation
+    // Eigen::VectorXd x = doBurgerStepOnBubbleRing();
+    // for (int i = 0; i < controlPolygon_.size(); i++)
+    // {
+    //     controlPolygon_[i].a = sqrt(sqrt(std::pow(x(i) / (M_PI), 2)));
+    // }
+    resample(resampleLength_);
     updatedFilament = true;
 };
 
