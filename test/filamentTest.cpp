@@ -605,4 +605,5 @@ TEST_F(FilamentTest, resampleSquareThicknessConstant)
 
     EXPECT_EQ(controlPolygon__.size(), 5);
     for(int i = 0; i < 5; i++) EXPECT_NEAR(controlPolygon__[i].a, 0.12, 0.0000001);
+    for(int i = 0; i < 5; i++) EXPECT_NEAR(controlPolygon__[i].C, 4, 0.0000001);
 }
