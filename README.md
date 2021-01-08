@@ -1,6 +1,6 @@
 # Bubble rings
 
-[![Bubble rings](images/bubble-rings.gif)
+![Bubble rings](images/bubble-rings.gif)
 
 ## Requirements
 
