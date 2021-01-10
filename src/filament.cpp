@@ -7,6 +7,8 @@
 #include <string>
 #include <stdlib.h>
 #include <Eigen/Sparse>
+#include <cstdlib>
+#include <ctime>
 
 using namespace std;
 
@@ -26,12 +28,16 @@ typedef Eigen::Triplet<double> T;
 
 //=============================================================================
 
+// Create Filament of radius 0.6 and add random float [0, 0.02] to x of vertices. Outcommit random adding for testing.
 Filament::Filament(float thickness_, float circulation_)
 {
+    srand (static_cast <unsigned> (time(0)));
     // Set filament circle
     for (float i = 0; i <= 2 * M_PI; i += 0.17)
     {
-        controlPolygon_.push_back({{0.6 * cos(i), 0.6 * sin(i), 0.12},
+        float r0 = 0, r1 = 0, r2 = 0;
+        // r0 = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/0.02));
+        controlPolygon_.push_back({{0.6 * cos(i) + r0, 0.6 * sin(i), 0.0},
                                    thickness_,
                                    circulation_});
     }
@@ -419,8 +425,8 @@ Eigen::VectorXd Filament::doBurgerStepOnBubbleRing()
     Eigen::ConjugateGradient<Eigen::SparseMatrix<double>, Eigen::Lower | Eigen::Upper> cg;
     cg.setTolerance(1e-5);
     cg.compute(LHS);
-    cout << "estimated error: " << cg.error() << "\n";
-    cout << "tolerance: " << cg.tolerance() << "\n";
+    // cout << "estimated error: " << cg.error() << "\n";
+    // cout << "tolerance: " << cg.tolerance() << "\n";
     return (cg.solve(RHS * scale)) / scale;
 }
 
