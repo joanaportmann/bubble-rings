@@ -1,4 +1,5 @@
 project(TubeSystem)
+cmake_minimum_required(VERSION 3.9)
 
 include(CTest)
 enable_testing()
@@ -16,9 +17,6 @@ fetch_googletest(
     ${PROJECT_SOURCE_DIR}/cmake
     ${PROJECT_BINARY_DIR}/googletest
     )
-
-
-cmake_minimum_required(VERSION 3.9)
 
 # add_compile_options(-fno-omit-frame-pointer) 
 # add_compile_options(-fsanitize=address) 
@@ -73,12 +71,10 @@ endif()
 include_directories(${CMAKE_SOURCE_DIR}/src/)
 include_directories(${CMAKE_SOURCE_DIR}/test/)
 include_directories(${CMAKE_SOURCE_DIR}/lib/lodePNG/)
-#include_directories(${CMAKE_SOURCE_DIR}/lib/eigen-3.3.7)
 
 
 # build source directory
 add_subdirectory(lib/lodePNG)
-#add_subdirectory(lib/eigen-3.3.7)
 add_subdirectory(src)
 add_subdirectory(test)
 
@@ -90,12 +86,6 @@ if(DOXYGEN_FOUND)
 	# add doc as target
 	add_custom_target(doc ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
 endif(DOXYGEN_FOUND)
-
-
-# google test
-
-# include_directories(${CMAKE_SOURCE_DIR}/test/)
-
 
 # Profiler gprof
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pg")

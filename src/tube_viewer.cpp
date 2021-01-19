@@ -1,12 +1,3 @@
-//=============================================================================
-//
-//   Exercise code for the lecture "Introduction to Computer Graphics"
-//     by Prof. Mario Botsch, Bielefeld University
-//
-//   Copyright (C) by Computer Graphics Group, Bielefeld University
-//
-//=============================================================================
-
 #include "tube_viewer.h"
 #include "glmath.h"
 #include <stdlib.h> /* srand, rand */
@@ -20,6 +11,7 @@
 #include "imgui_impl_opengl3.h"
 #include "imgui_impl_glfw.h"
 #include <chrono>
+
 
 #include <Eigen/Dense>
 
