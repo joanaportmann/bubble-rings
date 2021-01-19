@@ -63,6 +63,14 @@ void Tube::createTriangleStruct()
     {
         Triangle triangle1, triangle2;
 
+        // if(v % tubeVert)
+        // for(int u = v + t; u < tubeVertices.size(); i++)
+        // {
+
+        // }
+
+
+
         bool lastVertexInCircle = v % numberOfVerticesPerTubeCircle == numberOfVerticesPerTubeCircle - 1;
 
         unsigned int i0 = v;
