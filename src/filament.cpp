@@ -15,7 +15,7 @@ using namespace std;
 typedef Eigen::Triplet<double> T;
 
 // ATTENTION: Keep in sync with the one in tube.cpp
-#define numberOfVerticesPerTubeCircle 20
+#define numberOfVerticesPerTubeCircle 10
 
 #define _USE_MATH_DEFINES
 #define RM_mu 0.4723665527f

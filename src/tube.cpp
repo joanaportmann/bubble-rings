@@ -19,7 +19,7 @@
 #include <chrono>
 
 // ATTENTION: Keep in sync with the one in filament.cpp
-#define numberOfVerticesPerTubeCircle 20
+#define numberOfVerticesPerTubeCircle 10
 
 using namespace std;
 
@@ -59,16 +59,34 @@ void Tube::createTriangleStruct()
     tubeVertices.clear();
     tubeVertices = filament_.getBubbleRingSkeleton();
 
+    int shift = 0;
     for (unsigned int v = 0; v < tubeVertices.size(); ++v)
     {
         Triangle triangle1, triangle2;
 
+        // Calculate closest vertices of next circle to get better visualization (without twist)
+        if (v % numberOfVerticesPerTubeCircle == 0)
+        {
+            shift = 0;
+            int dist = (tubeVertices[v] - tubeVertices[v + numberOfVerticesPerTubeCircle]).norm();
+            for (int u = v + numberOfVerticesPerTubeCircle + 1; u < v + (2 * numberOfVerticesPerTubeCircle); u++)
+            {
+                int current_dist = (tubeVertices[v] - tubeVertices[u]).norm();
+                if (current_dist < dist)
+                {
+                    dist = current_dist;
+                    shift = u % numberOfVerticesPerTubeCircle;
+                }
+            }
+        }
+
         bool lastVertexInCircle = v % numberOfVerticesPerTubeCircle == numberOfVerticesPerTubeCircle - 1;
+        //bool lastVertexInCircle = v % numberOfVerticesPerTubeCircle == 0;
 
         unsigned int i0 = v;
         unsigned int i1 = (lastVertexInCircle ? v - (numberOfVerticesPerTubeCircle - 1) : v + 1) % tubeVertices.size();
         unsigned int i2 = (v + numberOfVerticesPerTubeCircle) % tubeVertices.size();
-        unsigned int i3 = (lastVertexInCircle ? v + 1 : v + (numberOfVerticesPerTubeCircle + 1)) % tubeVertices.size();
+        unsigned int i3 = (lastVertexInCircle ? v + 1 : v + (numberOfVerticesPerTubeCircle + 1) + shift) % tubeVertices.size();
 
         triangle1.ind0 = i0;
         triangle1.ind1 = i1;
@@ -127,7 +145,7 @@ void Tube::updateBuffers()
     // auto end = std::chrono::steady_clock::now();
     // std::chrono::duration<double> elapsed_seconds = end - start;
     // std::cout << "elapsed time: " << elapsed_seconds.count() << "s\n";
-   
+
     Tube::compute_normals();
     std::vector<GLfloat> positions(3 * 3 * triangles_.size());
     std::vector<GLfloat> normals(3 * 3 * triangles_.size());
