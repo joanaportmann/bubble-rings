@@ -21,10 +21,9 @@ find_package (Eigen3 3.3 REQUIRED NO_MODULE)
 
 # executable
 add_executable(TubeSystem ${HEADERS} ${SOURCES})
-target_link_libraries (TubeSystem Eigen3::Eigen)
 target_include_directories(TubeSystem SYSTEM PUBLIC ${GLEW_INCLUDE_DIRS})
 # Note: target_link_libraries(glfw) should actually bring in the necessary header files.
-target_link_libraries(TubeSystem lodePNG glfw ${GLEW_LIBRARIES} ${OPENGL_LIBRARIES})
+target_link_libraries(TubeSystem lodePNG glfw ${GLEW_LIBRARIES} ${OPENGL_LIBRARIES} Eigen3::Eigen)
 
 
 
@@ -38,4 +37,4 @@ target_sources(
 
 target_include_directories(TubeSystem_lib SYSTEM PUBLIC ${GLEW_INCLUDE_DIRS})
 # Note: target_link_libraries(glfw) should actually bring in the necessary header files.
-target_link_libraries(TubeSystem_lib lodePNG glfw ${GLEW_LIBRARIES} ${OPENGL_LIBRARIES})
+target_link_libraries(TubeSystem_lib lodePNG glfw ${GLEW_LIBRARIES} ${OPENGL_LIBRARIES} Eigen3::Eigen)

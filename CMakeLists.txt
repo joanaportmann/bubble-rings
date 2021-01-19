@@ -20,12 +20,12 @@ fetch_googletest(
 
 cmake_minimum_required(VERSION 3.9)
 
-# add_compile_options(-fno-omit-frame-pointer) 
-# add_compile_options(-fsanitize=address) 
-# add_compile_options(-lasan)
+ add_compile_options(-fno-omit-frame-pointer) 
+ add_compile_options(-fsanitize=address) 
+add_compile_options(-lasan)
 
 # # What we want: LDFLAGS="-fsanitize=address"
-# link_libraries("-fsanitize=address") 
+ link_libraries("-fsanitize=address") 
 
 # set output paths
 set(PROJECT_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR})

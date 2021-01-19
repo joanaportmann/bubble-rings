@@ -68,10 +68,10 @@ void Tube::createTriangleStruct()
         if (v % numberOfVerticesPerTubeCircle == 0)
         {
             shift = 0;
-            int dist = (tubeVertices[v] - tubeVertices[v + numberOfVerticesPerTubeCircle]).norm();
+            double dist = (tubeVertices[v] - tubeVertices[v + numberOfVerticesPerTubeCircle]).norm();
             for (int u = v + numberOfVerticesPerTubeCircle + 1; u < v + (2 * numberOfVerticesPerTubeCircle); u++)
             {
-                int current_dist = (tubeVertices[v] - tubeVertices[u]).norm();
+                double current_dist = (tubeVertices[v] - tubeVertices[u]).norm();
                 if (current_dist < dist)
                 {
                     dist = current_dist;
@@ -85,7 +85,7 @@ void Tube::createTriangleStruct()
 
         unsigned int i0 = v;
         unsigned int i1 = (lastVertexInCircle ? v - (numberOfVerticesPerTubeCircle - 1) : v + 1) % tubeVertices.size();
-        unsigned int i2 = (v + numberOfVerticesPerTubeCircle) % tubeVertices.size();
+        unsigned int i2 = (v + numberOfVerticesPerTubeCircle + shift) % tubeVertices.size();
         unsigned int i3 = (lastVertexInCircle ? v + 1 : v + (numberOfVerticesPerTubeCircle + 1) + shift) % tubeVertices.size();
 
         triangle1.ind0 = i0;
