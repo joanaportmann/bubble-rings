@@ -7,6 +7,7 @@
 #include <Eigen/Dense>
 #include "glmath.h"
 #include <vector>
+#include "CatmullRom.h"
 //=============================================================================
 
 struct FilamentPoint
@@ -50,12 +51,14 @@ private:
     float AreaUsed_v;
     std::vector<FilamentPoint> controlPolygon_;
     std::vector<vec3> circleVertices_t(int n, vec3 normal);
-
+    CatmullRom curve;
+   
     // Methods
 
     int wrap(int i);
     float totalLengthOfControlpolygon();
     void resample(float resampleLength);
+    void resampleCatmulRom();
 
     // Biotsavart velocity
     vec3 biotsavartedge(vec3 p, vec3 R0, vec3 R1, float Gamma, float a);

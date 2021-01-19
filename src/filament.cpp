@@ -3,12 +3,13 @@
 #include <vector>
 #include <math.h>
 #include <Eigen/Dense>
+#include <Eigen/Sparse>
 #include <iostream>
 #include <string>
 #include <stdlib.h>
-#include <Eigen/Sparse>
 #include <cstdlib>
 #include <ctime>
+#include "CatmullRom.h"
 
 using namespace std;
 
@@ -36,7 +37,7 @@ Filament::Filament(float thickness_, float circulation_)
     for (float i = 0; i <= 2 * M_PI; i += 0.17)
     {
         float r0 = 0, r1 = 0, r2 = 0;
-        // r0 = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/0.02));
+        r0 = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/0.02));
         controlPolygon_.push_back({{0.6 * cos(i) + r0, 0.6 * sin(i), 0.0},
                                    thickness_,
                                    circulation_});
@@ -477,6 +478,24 @@ void Filament::resample(float resampleLength)
     controlPolygon_.assign(newPoints.begin(), newPoints.end());
 }
 
+
+void Filament::resampleCatmulRom()
+{
+	curve.set_steps(100); // generate 100 interpolate points between the last 4 way points
+	curve.add_way_point(vec3(1.0, 1.0, 0.0));
+	curve.add_way_point(vec3(2, 3, 0));
+	curve.add_way_point(vec3(3, 2, 0));
+	curve.add_way_point(vec3(4, 6, 0));
+	std::cout << "nodes: " << curve.node_count() << std::endl;
+	std::cout << "total length: " << curve.total_length() << std::endl;
+	for (int i = 0; i < curve.node_count(); ++i) {
+		std::cout << "node #" << i << ": " << curve.node(i) << " (length so far: " << curve.length_from_starting_point(i) << ")" << std::endl;
+	}
+
+
+    // fooBar = FooBar();
+}
+
 void Filament::updateSkeleton()
 {
     BiotSavartAndLocalizedInduction();
@@ -487,6 +506,7 @@ void Filament::updateSkeleton()
         controlPolygon_[i].a = sqrt(sqrt(std::pow(x(i) / (M_PI), 2)));
     }
     resample(resampleLength_);
+    resampleCatmulRom();
     updatedFilament = true;
 };
 

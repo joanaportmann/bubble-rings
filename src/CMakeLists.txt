@@ -31,8 +31,10 @@ target_sources(
     TubeSystem_lib
     PRIVATE
         filament.cpp
+        CatmullRom.cpp
     PUBLIC
         ${CMAKE_CURRENT_LIST_DIR}/filament.h
+        ${CMAKE_CURRENT_LIST_DIR}/CatmullRom.h
 )
 
 target_include_directories(TubeSystem_lib SYSTEM PUBLIC ${GLEW_INCLUDE_DIRS})

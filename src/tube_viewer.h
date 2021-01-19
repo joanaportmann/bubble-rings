@@ -63,6 +63,7 @@ private:
   float thickness = 0.12;
   float circulation = 4;
 
+
   /// default color shader (renders only texture)
   Shader color_shader_;
   /// phong shader (renders texture and basic illumination)

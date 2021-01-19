@@ -25,7 +25,6 @@
 
 #define numberOfVerticesPerTubeCircle 30
 
-//using Eigen::Vector3d;
 using namespace std;
 
 //=============================================================================
@@ -74,8 +73,8 @@ void Tube_viewer::
 		{
 			filament = Filament(thickness, circulation);
 			Tube tube_(filament);
-			Tube *tube;
-			tube = &tube_;
+			// Tube *tube;
+			// tube = &tube_;
 
 			break;
 		}
