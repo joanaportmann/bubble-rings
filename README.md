@@ -16,6 +16,7 @@ Installation on Debian/Ubuntu: `sudo apt install libglew-dev`
 
 ```
 mkdir build
+cd build
 cmake ..
 make
 ./bin/Tubesystem
