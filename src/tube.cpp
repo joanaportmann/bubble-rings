@@ -65,20 +65,20 @@ void Tube::createTriangleStruct()
         Triangle triangle1, triangle2;
 
         // Calculate closest vertices of next circle to get better visualization (without twist)
-        if (v % numberOfVerticesPerTubeCircle == 0)
-        {
-            shift = 0;
-            double dist = (tubeVertices[v] - tubeVertices[v + numberOfVerticesPerTubeCircle]).norm();
-            for (int u = v + numberOfVerticesPerTubeCircle + 1; u < v + (2 * numberOfVerticesPerTubeCircle); u++)
-            {
-                double current_dist = (tubeVertices[v] - tubeVertices[u]).norm();
-                if (current_dist < dist)
-                {
-                    dist = current_dist;
-                    shift = u % numberOfVerticesPerTubeCircle;
-                }
-            }
-        }
+        // if (v % numberOfVerticesPerTubeCircle == 0)
+        // {
+        //     shift = 0;
+        //     double dist = (tubeVertices[v] - tubeVertices[v + numberOfVerticesPerTubeCircle]).norm();
+        //     for (int u = v + numberOfVerticesPerTubeCircle + 1; u < v + (2 * numberOfVerticesPerTubeCircle); u++)
+        //     {
+        //         double current_dist = (tubeVertices[v] - tubeVertices[u]).norm();
+        //         if (current_dist < dist)
+        //         {
+        //             dist = current_dist;
+        //             shift = u % numberOfVerticesPerTubeCircle;
+        //         }
+        //     }
+        // }
 
         bool lastVertexInCircle = v % numberOfVerticesPerTubeCircle == numberOfVerticesPerTubeCircle - 1;
         //bool lastVertexInCircle = v % numberOfVerticesPerTubeCircle == 0;

@@ -58,7 +58,7 @@ private:
     int wrap(int i);
     float totalLengthOfControlpolygon();
     void resample(float resampleLength);
-    void resampleCatmulRom();
+    void resampleCatmullRom(float resampleL);
 
     // Biotsavart velocity
     vec3 biotsavartedge(vec3 p, vec3 R0, vec3 R1, float Gamma, float a);

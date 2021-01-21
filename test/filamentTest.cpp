@@ -82,6 +82,11 @@ protected:
         filament.resample(length);
     }
 
+    void resampleCatmullRom(float length)
+    {
+        filament.resampleCatmullRom(length);
+    }
+
     // SetUp and TearDown
     void SetUp() override {}
     void TearDown() override {}
@@ -744,6 +749,34 @@ TEST_F(FilamentTest, resampleSquareThicknessConstant)
 
     EXPECT_EQ(controlPolygon__.size(), 5);
     EXPECT_NEAR(controlPolygon__[1].C, 0.8 * 4 + 0.2 * 1, 0.0001);
+    for (int i = 0; i < 5; i++)
+        EXPECT_NEAR(controlPolygon__[i].a, 0.12, 0.0000001);
+    for (int i = 2; i < 4; i++)
+        EXPECT_NEAR(controlPolygon__[i].C, 4, 0.00001);
+}
+
+TEST_F(FilamentTest, CatmullRomResampleSquareThicknessConstant)
+{
+    filamentPoints_.push_back({{0, 0.0, 0.0},
+                               0.12,
+                               1});
+    filamentPoints_.push_back({{1, 0, 0},
+                               0.12,
+                               4});
+    filamentPoints_.push_back({{1, 1, 0.0},
+                               0.12,
+                               4});
+    filamentPoints_.push_back({{0, 1, 0.0},
+                               0.12,
+                               4});
+    setControlPolygon(filamentPoints_);
+
+    resampleCatmullRom(0.85);
+
+    std::vector<FilamentPoint> controlPolygon__ = filament.getFilamentPoints();
+
+    EXPECT_EQ(controlPolygon__.size(), 5);
+    
     for (int i = 0; i < 5; i++)
         EXPECT_NEAR(controlPolygon__[i].a, 0.12, 0.0000001);
     for (int i = 2; i < 4; i++)

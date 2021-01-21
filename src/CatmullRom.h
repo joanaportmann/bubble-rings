@@ -25,11 +25,11 @@ public:
 
 	void increment_steps(int steps) { _steps+=steps; }
 	void set_steps(int steps) { _steps = steps; }
-
+void clear();
 private:
 	void _on_way_point_added();
 	void add_node( vec3 node);
-	void clear();
+	
 
 	vec3 interpolate(double u, const vec3& P0, const vec3& P1, const vec3& P2, const vec3& P3);
 	std::vector<vec3> _way_points;

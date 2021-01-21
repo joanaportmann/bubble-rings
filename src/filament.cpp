@@ -10,6 +10,7 @@
 #include <cstdlib>
 #include <ctime>
 #include "CatmullRom.h"
+#include <assert.h>
 
 using namespace std;
 
@@ -32,12 +33,12 @@ typedef Eigen::Triplet<double> T;
 // Create Filament of radius 0.6 and add random float [0, 0.02] to x of vertices. Outcommit random adding for testing.
 Filament::Filament(float thickness_, float circulation_)
 {
-    srand (static_cast <unsigned> (time(0)));
+    srand(static_cast<unsigned>(time(0)));
     // Set filament circle
     for (float i = 0; i <= 2 * M_PI; i += 0.17)
     {
         float r0 = 0, r1 = 0, r2 = 0;
-        r0 = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/0.02));
+        r0 = static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / 0.02));
         controlPolygon_.push_back({{0.6 * cos(i) + r0, 0.6 * sin(i), 0.0},
                                    thickness_,
                                    circulation_});
@@ -449,7 +450,6 @@ void Filament::resample(float resampleLength)
     cout << segmentnumber;
     float actualResampleLength = totalLengthOfControlpolygon() / segmentnumber;
     std::vector<FilamentPoint> newPoints;
-        
 
     newPoints.push_back(controlPolygon_[0]);
     for (int i = 1; i < segmentnumber; i++)
@@ -478,23 +478,47 @@ void Filament::resample(float resampleLength)
     controlPolygon_.assign(newPoints.begin(), newPoints.end());
 }
 
-
-void Filament::resampleCatmulRom()
+void Filament::resampleCatmullRom(float resampleLength)
 {
-	curve.set_steps(100); // generate 100 interpolate points between the last 4 way points
-	curve.add_way_point(vec3(1.0, 1.0, 0.0));
-	curve.add_way_point(vec3(2, 3, 0));
-	curve.add_way_point(vec3(3, 2, 0));
-	curve.add_way_point(vec3(4, 6, 0));
-	std::cout << "nodes: " << curve.node_count() << std::endl;
-	std::cout << "total length: " << curve.total_length() << std::endl;
-	for (int i = 0; i < curve.node_count(); ++i) {
-		std::cout << "node #" << i << ": " << curve.node(i) << " (length so far: " << curve.length_from_starting_point(i) << ")" << std::endl;
-	}
 
+    // for (int i = 0; i < 5; i++) cout << controlPolygon_[i].position << "\n";
+    int size = controlPolygon_.size() - 1;
+    for (int i = 0; i < size; i++)
+    {
 
-    // fooBar = FooBar();
+        if (! ((controlPolygon_[i].position - controlPolygon_[i + 1].position).norm() > resampleLength) )
+        {
+            continue;
+        }
+
+        curve.clear();
+        curve.set_steps(2);
+        curve.add_way_point(controlPolygon_[wrap(i - 1)].position);
+        curve.add_way_point(controlPolygon_[i].position);
+        curve.add_way_point(controlPolygon_[wrap(i + 1)].position);
+        curve.add_way_point(controlPolygon_[wrap(i + 2)].position);
+        auto itPos = controlPolygon_.begin() + i + 1;
+        auto newIt = controlPolygon_.insert(itPos, {{curve.node(1)(0), curve.node(1)(1), curve.node(1)(2)}, controlPolygon_[i].a, controlPolygon_[i].C});
+        // cout << "Anzahl.........." << curve.node_count() << "\n";
+        // cout << "Laenge.........." << curve.node(1) << "\n";
+        size = controlPolygon_.size() - 1;
+    }
+
+    curve.set_steps(4); 
+curve.add_way_point(vec3(0.6, 0, 0.016));
+curve.add_way_point(vec3(0.6, 0.1, 0.016));
+curve.add_way_point(vec3(0.57, 0.2, 0.018));
+curve.add_way_point(vec3(0.54, 0.3, 0.015));
+std::cout << "nodes: " << curve.node_count() << std::endl;
+std::cout << "total length: " << curve.total_length() << std::endl;
+for (int i = 0; i < curve.node_count(); ++i)
+{
+    std::cout << "node #" << i << ": " << curve.node(i) << " (length so far: " << curve.length_from_starting_point(i) << ")" << std::endl;
 }
+}
+
+
+
 
 void Filament::updateSkeleton()
 {
@@ -505,11 +529,9 @@ void Filament::updateSkeleton()
     {
         controlPolygon_[i].a = sqrt(sqrt(std::pow(x(i) / (M_PI), 2)));
     }
-    resample(resampleLength_);
-    resampleCatmulRom();
+    // resample(resampleLength_);
+    resampleCatmulRom(resampleLength_);
     updatedFilament = true;
 };
-
-
 
 //-----------------------------------------------------------------------------------
