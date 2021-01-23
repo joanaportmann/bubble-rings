@@ -498,37 +498,37 @@ TEST_F(FilamentTest, 100_Iterations_OfRungeKutta_bigControlpolygon)
     filamentPoints_.push_back({{-0.164198, 0.577095, 0.0},
                                0.12,
                                4});
-    filamentPoints_.push_back({{-0.361581	,0.47881, 0.0},
+    filamentPoints_.push_back({{-0.361581, 0.47881, 0.0},
                                0.12,
                                4});
-    filamentPoints_.push_back({{-0.51013	,0.315859, 0.0},
+    filamentPoints_.push_back({{-0.51013, 0.315859, 0.0},
                                0.12,
                                4});
-    filamentPoints_.push_back({{-0.589784	,0.11025, 0.0},
+    filamentPoints_.push_back({{-0.589784, 0.11025, 0.0},
                                0.12,
                                4});
-    filamentPoints_.push_back({{-0.589784,	-0.11025, 0.0},
+    filamentPoints_.push_back({{-0.589784, -0.11025, 0.0},
                                0.12,
                                4});
-    filamentPoints_.push_back({{-0.51013,	-0.315859, 0.0},
+    filamentPoints_.push_back({{-0.51013, -0.315859, 0.0},
                                0.12,
                                4});
-    filamentPoints_.push_back({{-0.361581,	-0.47881, 0.0},
+    filamentPoints_.push_back({{-0.361581, -0.47881, 0.0},
                                0.12,
                                4});
-    filamentPoints_.push_back({{-0.164198,	-0.577095, 0.0},
+    filamentPoints_.push_back({{-0.164198, -0.577095, 0.0},
                                0.12,
                                4});
-    filamentPoints_.push_back({{0.0553609,	-0.597441, 0.0},
+    filamentPoints_.push_back({{0.0553609, -0.597441, 0.0},
                                0.12,
                                4});
-    filamentPoints_.push_back({{0.267443,	-0.537098, 0.0},
+    filamentPoints_.push_back({{0.267443, -0.537098, 0.0},
                                0.12,
                                4});
-    filamentPoints_.push_back({{0.443405,	-0.404218, 0.0},
+    filamentPoints_.push_back({{0.443405, -0.404218, 0.0},
                                0.12,
                                4});
-    filamentPoints_.push_back({{0.559483,	-0.216745, 0.0},
+    filamentPoints_.push_back({{0.559483, -0.216745, 0.0},
                                0.12,
                                4});
     setControlPolygon(filamentPoints_);
@@ -536,10 +536,9 @@ TEST_F(FilamentTest, 100_Iterations_OfRungeKutta_bigControlpolygon)
     for (int i = 0; i < 100; i++)
         BiotSavartAndLocalizedInduction();
     std::vector<FilamentPoint> controlPolygon__ = filament.getFilamentPoints();
-    vec3 result = vec3(-0.166883	,0.74118,	1.71075);
+    vec3 result = vec3(-0.166883, 0.74118, 1.71075);
     for (int i = 0; i < 2; i++)
         EXPECT_NEAR(controlPolygon__[5].position(i), result(i), 0.000001);
-        
 }
 
 TEST_F(FilamentTest, 792_Iterations_OfRungeKutta)
@@ -617,11 +616,10 @@ TEST_F(FilamentTest, updateSkeleton)
 
     //for (int i = 0; i < 86; i++)
     //for (int i = 0; i < 1; i++)
-        filament.updateSkeleton();
+    filament.updateSkeleton();
     std::vector<FilamentPoint> controlPolygon__ = filament.getFilamentPoints();
     int size = controlPolygon__.size();
     EXPECT_EQ(size, 48);
-
 }
 
 TEST_F(FilamentTest, resampleSquare)
@@ -759,7 +757,7 @@ TEST_F(FilamentTest, CatmullRomResampleSquareThicknessConstant)
 {
     filamentPoints_.push_back({{0, 0.0, 0.0},
                                0.12,
-                               1});
+                               4});
     filamentPoints_.push_back({{1, 0, 0},
                                0.12,
                                4});
@@ -775,10 +773,9 @@ TEST_F(FilamentTest, CatmullRomResampleSquareThicknessConstant)
 
     std::vector<FilamentPoint> controlPolygon__ = filament.getFilamentPoints();
 
-    EXPECT_EQ(controlPolygon__.size(), 5);
-    
-    for (int i = 0; i < 5; i++)
-        EXPECT_NEAR(controlPolygon__[i].a, 0.12, 0.0000001);
-    for (int i = 2; i < 4; i++)
-        EXPECT_NEAR(controlPolygon__[i].C, 4, 0.00001);
+    EXPECT_EQ(controlPolygon__.size(), 8);
+
+    EXPECT_NEAR(controlPolygon__[3].position(0), 1.0938, 0.0001);
+    EXPECT_NEAR(controlPolygon__[3].position(1), 0.5078, 0.0001);
+    EXPECT_NEAR(controlPolygon__[3].position(2), 0, 0.0001);
 }

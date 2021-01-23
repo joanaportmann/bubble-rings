@@ -447,7 +447,6 @@ void Filament::resample(float resampleLength)
 {
     float segmentnumber_ = std::round(totalLengthOfControlpolygon() / resampleLength);
     int segmentnumber = segmentnumber_;
-    cout << segmentnumber;
     float actualResampleLength = totalLengthOfControlpolygon() / segmentnumber;
     std::vector<FilamentPoint> newPoints;
 
@@ -478,18 +477,72 @@ void Filament::resample(float resampleLength)
     controlPolygon_.assign(newPoints.begin(), newPoints.end());
 }
 
+vec3 Filament::interpolate_filament(float u, vec3 &P0, vec3 &P1, vec3 &P2, vec3 &P3)
+{
+    vec3 point;
+    point = u * u * u * ((-1) * P0 + 3 * P1 - 3 * P2 + P3) / 2;
+    point += u * u * (2 * P0 - 5 * P1 + 4 * P2 - P3) / 2;
+    point += u * ((-1) * P0 + P2) / 2;
+    point += P1;
+
+    return point;
+}
+
+void Filament::resampleCatMullRomWithWeight(float resampleLength)
+{
+    float segmentnumber_ = std::round(totalLengthOfControlpolygon() / resampleLength);
+    int segmentnumber = segmentnumber_;
+    cout << segmentnumber;
+    float actualResampleLength = totalLengthOfControlpolygon() / segmentnumber;
+    std::vector<FilamentPoint> newPoints;
+
+    newPoints.push_back(controlPolygon_[0]);
+    for (int i = 1; i < segmentnumber; i++)
+    {
+        float diffFromStart = i * actualResampleLength;
+
+        float segmentLength = (controlPolygon_[0].position - controlPolygon_[1].position).norm();
+        int baseVertex = 0;
+
+        while (diffFromStart > segmentLength)
+        {
+            diffFromStart -= segmentLength;
+            baseVertex++;
+            segmentLength = (controlPolygon_[baseVertex].position - controlPolygon_[wrap(baseVertex + 1)].position).norm();
+        }
+        vec3 v = controlPolygon_[wrap(baseVertex + 1)].position - controlPolygon_[baseVertex].position;
+        float weight = (diffFromStart / v.norm());
+        //vec3 position = controlPolygon_[baseVertex].position + v.normalized() * diffFromStart;
+
+        vec3 position = interpolate_filament(weight,
+                                             controlPolygon_[wrap(baseVertex - 1)].position,
+                                             controlPolygon_[baseVertex].position,
+                                             controlPolygon_[wrap(baseVertex + 1)].position,
+                                             controlPolygon_[wrap(baseVertex + 2)].position);
+        float a = (sqrt(controlPolygon_[baseVertex].a) * (1 - weight) + sqrt(controlPolygon_[wrap(baseVertex + 1)].a) * weight);
+        a *= a;
+        float C = controlPolygon_[baseVertex].C * (1 - weight) + controlPolygon_[wrap(baseVertex + 1)].C * weight;
+
+        newPoints.push_back({{position(0), position(1), position(2)}, a, C});
+    }
+
+    controlPolygon_.assign(newPoints.begin(), newPoints.end());
+}
+
 void Filament::resampleCatmullRom(float resampleLength)
 {
-
-    // for (int i = 0; i < 5; i++) cout << controlPolygon_[i].position << "\n";
-    int size = controlPolygon_.size() - 1;
+    int size = controlPolygon_.size();
     for (int i = 0; i < size; i++)
     {
+        vec3 v = controlPolygon_[i].position - controlPolygon_[wrap(i + 1)].position;
 
-        if (! ((controlPolygon_[i].position - controlPolygon_[i + 1].position).norm() > resampleLength) )
+        if (!((v.norm() > resampleLength))
         {
             continue;
         }
+
+        float weight = 1 - (diffFromStart / v.norm());
+        vec3 node_to_add = interpolate_filament()
 
         curve.clear();
         curve.set_steps(2);
@@ -497,28 +550,15 @@ void Filament::resampleCatmullRom(float resampleLength)
         curve.add_way_point(controlPolygon_[i].position);
         curve.add_way_point(controlPolygon_[wrap(i + 1)].position);
         curve.add_way_point(controlPolygon_[wrap(i + 2)].position);
+        float a = (sqrt(controlPolygon_[i].a) * 0.5 + sqrt(controlPolygon_[wrap(i + 1)].a) * 0.5);
+        a *= a;
         auto itPos = controlPolygon_.begin() + i + 1;
-        auto newIt = controlPolygon_.insert(itPos, {{curve.node(1)(0), curve.node(1)(1), curve.node(1)(2)}, controlPolygon_[i].a, controlPolygon_[i].C});
-        // cout << "Anzahl.........." << curve.node_count() << "\n";
-        // cout << "Laenge.........." << curve.node(1) << "\n";
-        size = controlPolygon_.size() - 1;
+        auto newIt = controlPolygon_.insert(itPos, {{curve.node(1)(0), curve.node(1)(1), curve.node(1)(2)}, a, controlPolygon_[i].C});
+        cout << "Anzahl.........." << curve.node_count() << "\n";
+        cout << "Eingefügter Punkt.........." << curve.node(1) << "\n";
+        size = controlPolygon_.size();
     }
-
-    curve.set_steps(4); 
-curve.add_way_point(vec3(0.6, 0, 0.016));
-curve.add_way_point(vec3(0.6, 0.1, 0.016));
-curve.add_way_point(vec3(0.57, 0.2, 0.018));
-curve.add_way_point(vec3(0.54, 0.3, 0.015));
-std::cout << "nodes: " << curve.node_count() << std::endl;
-std::cout << "total length: " << curve.total_length() << std::endl;
-for (int i = 0; i < curve.node_count(); ++i)
-{
-    std::cout << "node #" << i << ": " << curve.node(i) << " (length so far: " << curve.length_from_starting_point(i) << ")" << std::endl;
 }
-}
-
-
-
 
 void Filament::updateSkeleton()
 {
@@ -529,8 +569,9 @@ void Filament::updateSkeleton()
     {
         controlPolygon_[i].a = sqrt(sqrt(std::pow(x(i) / (M_PI), 2)));
     }
-    // resample(resampleLength_);
-    resampleCatmulRom(resampleLength_);
+    //resample(resampleLength_);
+    resampleCatMullRomWithWeight(resampleLength_);
+    //resampleCatmullRom(resampleLength_);
     updatedFilament = true;
 };
 
