@@ -492,7 +492,6 @@ void Filament::resampleCatMullRomWithWeight(float resampleLength)
 {
     float segmentnumber_ = std::round(totalLengthOfControlpolygon() / resampleLength);
     int segmentnumber = segmentnumber_;
-    cout << segmentnumber;
     float actualResampleLength = totalLengthOfControlpolygon() / segmentnumber;
     std::vector<FilamentPoint> newPoints;
 
@@ -531,33 +530,33 @@ void Filament::resampleCatMullRomWithWeight(float resampleLength)
 
 void Filament::resampleCatmullRom(float resampleLength)
 {
-    int size = controlPolygon_.size();
-    for (int i = 0; i < size; i++)
-    {
-        vec3 v = controlPolygon_[i].position - controlPolygon_[wrap(i + 1)].position;
+    // int size = controlPolygon_.size();
+    // for (int i = 0; i < size; i++)
+    // {
+    //     vec3 v = controlPolygon_[i].position - controlPolygon_[wrap(i + 1)].position;
 
-        if (!((v.norm() > resampleLength))
-        {
-            continue;
-        }
+    //     if (!((v.norm() > resampleLength))
+    //     {
+    //         continue;
+    //     }
 
-        float weight = 1 - (diffFromStart / v.norm());
-        vec3 node_to_add = interpolate_filament()
+    //     float weight = 1 - (diffFromStart / v.norm());
+    //     vec3 node_to_add = interpolate_filament()
 
-        curve.clear();
-        curve.set_steps(2);
-        curve.add_way_point(controlPolygon_[wrap(i - 1)].position);
-        curve.add_way_point(controlPolygon_[i].position);
-        curve.add_way_point(controlPolygon_[wrap(i + 1)].position);
-        curve.add_way_point(controlPolygon_[wrap(i + 2)].position);
-        float a = (sqrt(controlPolygon_[i].a) * 0.5 + sqrt(controlPolygon_[wrap(i + 1)].a) * 0.5);
-        a *= a;
-        auto itPos = controlPolygon_.begin() + i + 1;
-        auto newIt = controlPolygon_.insert(itPos, {{curve.node(1)(0), curve.node(1)(1), curve.node(1)(2)}, a, controlPolygon_[i].C});
-        cout << "Anzahl.........." << curve.node_count() << "\n";
-        cout << "Eingefügter Punkt.........." << curve.node(1) << "\n";
-        size = controlPolygon_.size();
-    }
+    //     curve.clear();
+    //     curve.set_steps(2);
+    //     curve.add_way_point(controlPolygon_[wrap(i - 1)].position);
+    //     curve.add_way_point(controlPolygon_[i].position);
+    //     curve.add_way_point(controlPolygon_[wrap(i + 1)].position);
+    //     curve.add_way_point(controlPolygon_[wrap(i + 2)].position);
+    //     float a = (sqrt(controlPolygon_[i].a) * 0.5 + sqrt(controlPolygon_[wrap(i + 1)].a) * 0.5);
+    //     a *= a;
+    //     auto itPos = controlPolygon_.begin() + i + 1;
+    //     auto newIt = controlPolygon_.insert(itPos, {{curve.node(1)(0), curve.node(1)(1), curve.node(1)(2)}, a, controlPolygon_[i].C});
+    //     cout << "Anzahl.........." << curve.node_count() << "\n";
+    //     cout << "Eingefügter Punkt.........." << curve.node(1) << "\n";
+    //     size = controlPolygon_.size();
+    // }
 }
 
 void Filament::updateSkeleton()
