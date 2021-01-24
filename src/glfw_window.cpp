@@ -5,7 +5,8 @@
 #include "imgui_impl_opengl3.h"
 #include "imgui_impl_glfw.h"
 #include "filament.h"
-
+#include <chrono>
+#include <thread>
 
 // About Desktop OpenGL function loaders:
 //  Modern desktop OpenGL doesn't have a standard portable header file to load OpenGL function pointers.
@@ -43,6 +44,7 @@ using namespace gl;
 #pragma comment(lib, "legacy_stdio_definitions")
 #endif
 
+#define MAX_FRAMERATE 60
 //=============================================================================
 
 GLFW_window *GLFW_window::instance__ = NULL;
@@ -183,6 +185,7 @@ int GLFW_window::run()
     // now run the event loop
     while (!glfwWindowShouldClose(window_))
     {
+        auto t1 = std::chrono::high_resolution_clock::now();
         // call timer function
         timer();
 
@@ -199,7 +202,11 @@ int GLFW_window::run()
         // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
         // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
         glfwPollEvents();
-
+        auto t2 = std::chrono::high_resolution_clock::now();
+       
+        int timeToWait = 1000000 / MAX_FRAMERATE;
+        if (std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count() < timeToWait)
+            std::this_thread::sleep_for(std::chrono::microseconds(timeToWait - std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count()));
     }
 
     glfwDestroyWindow(window_);

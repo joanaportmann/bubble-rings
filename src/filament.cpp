@@ -492,6 +492,7 @@ void Filament::resampleCatMullRomWithWeight(float resampleLength)
 {
     float segmentnumber_ = std::round(totalLengthOfControlpolygon() / resampleLength);
     int segmentnumber = segmentnumber_;
+    
     float actualResampleLength = totalLengthOfControlpolygon() / segmentnumber;
     std::vector<FilamentPoint> newPoints;
 
