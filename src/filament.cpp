@@ -528,20 +528,17 @@ void Filament::resampleCatMullRomWithWeight(float resampleLength)
     controlPolygon_.assign(newPoints.begin(), newPoints.end());
 }
 
+
+// Not working corectly! -> see test (just 7 instead of 8 points in the end)
 void Filament::resampleCatmullRom(float resampleLength)
 {
     // int size = controlPolygon_.size();
     // for (int i = 0; i < size; i++)
     // {
-    //     vec3 v = controlPolygon_[i].position - controlPolygon_[wrap(i + 1)].position;
-
-    //     if (!((v.norm() > resampleLength))
+    //     if (! ((controlPolygon_[i].position - controlPolygon_[i + 1].position).norm() > resampleLength) )
     //     {
     //         continue;
     //     }
-
-    //     float weight = 1 - (diffFromStart / v.norm());
-    //     vec3 node_to_add = interpolate_filament()
 
     //     curve.clear();
     //     curve.set_steps(2);
@@ -552,7 +549,8 @@ void Filament::resampleCatmullRom(float resampleLength)
     //     float a = (sqrt(controlPolygon_[i].a) * 0.5 + sqrt(controlPolygon_[wrap(i + 1)].a) * 0.5);
     //     a *= a;
     //     auto itPos = controlPolygon_.begin() + i + 1;
-    //     auto newIt = controlPolygon_.insert(itPos, {{curve.node(1)(0), curve.node(1)(1), curve.node(1)(2)}, a, controlPolygon_[i].C});
+    //     auto newIt = controlPolygon_.insert(itPos, {{curve.node(1)(0), curve.node(1)(1), curve.node(1)(2)}, controlPolygon_[i].a, controlPolygon_[i].C});
+
     //     cout << "Anzahl.........." << curve.node_count() << "\n";
     //     cout << "Eingefügter Punkt.........." << curve.node(1) << "\n";
     //     size = controlPolygon_.size();
