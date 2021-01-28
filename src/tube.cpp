@@ -64,8 +64,8 @@ void Tube::createTriangleStruct()
     {
         Triangle triangle1, triangle2;
 
-        // Calculate closest vertices of next circle to get better visualization (without twist)
-        // if (v % numberOfVerticesPerTubeCircle == 0)
+        //Calculate closest vertices of next circle to get better visualization (without twist)
+        // if (v % numberOfVerticesPerTubeCircle == 1)
         // {
         //     shift = 0;
         //     double dist = (tubeVertices[v] - tubeVertices[v + numberOfVerticesPerTubeCircle]).norm();
@@ -80,13 +80,12 @@ void Tube::createTriangleStruct()
         //     }
         // }
 
-        bool lastVertexInCircle = v % numberOfVerticesPerTubeCircle == numberOfVerticesPerTubeCircle - 1;
-        //bool lastVertexInCircle = v % numberOfVerticesPerTubeCircle == 0;
+        bool lastVertexInCircle = (v % numberOfVerticesPerTubeCircle == numberOfVerticesPerTubeCircle - 1);
 
         unsigned int i0 = v;
-        unsigned int i1 = (lastVertexInCircle ? v - (numberOfVerticesPerTubeCircle - 1) : v + 1) % tubeVertices.size();
+        unsigned int i1 = (lastVertexInCircle ? (v - (numberOfVerticesPerTubeCircle - 1)) : (v + 1)) % tubeVertices.size();
         unsigned int i2 = (v + numberOfVerticesPerTubeCircle + shift) % tubeVertices.size();
-        unsigned int i3 = (lastVertexInCircle ? v + 1 : v + (numberOfVerticesPerTubeCircle + 1) + shift) % tubeVertices.size();
+        unsigned int i3 = (lastVertexInCircle ? (v + 1 + shift) : v + (numberOfVerticesPerTubeCircle + 1) + shift) % tubeVertices.size();
 
         triangle1.ind0 = i0;
         triangle1.ind1 = i1;

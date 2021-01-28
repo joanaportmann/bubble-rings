@@ -66,16 +66,59 @@ std::vector<vec3> verticesofOneCircle_(int n, vec3 center, vec3 normal, float ra
     {
         float x = cos(2 * M_PI / n * i) * radius;
         float y = sin(2 * M_PI / n * i) * radius;
+        vec3 vertex;
+        Eigen::Matrix3d rotation;
+        double angle;
 
-        auto rotation = Eigen::Quaterniond::FromTwoVectors(vec3(0, 0, 1), normal);
-
-        vec3 vertex = (rotation.matrix() * vec3(x, y, 0)) + center;
-
+        if (normal(0) == 0 && normal(1) == 0)
+        {
+            vec3 normalized_normal = normal.normalized();
+            if (normalized_normal(2) == -1)
+            {
+                vec3 axis = (normal.cross(vec3(0, 0, 1))).normalized();
+                rotation = Eigen::AngleAxisd(M_PI, axis);
+                vertex = rotation * vec3(x, y, 0) + center;
+            }
+            else
+            {
+                vertex = vec3(x, y, 0) + center;
+            }
+        }
+        else
+        {
+            angle = acos(normal(2) / normal.norm());
+            vec3 axis = vec3(-normal(1), normal(0), 0);
+            rotation = Eigen::AngleAxisd(angle, axis.normalized());
+            vertex = rotation * vec3(x, y, 0) + center;
+        }
+        
         vertices.push_back(vertex);
     }
 
     return vertices;
 }
+
+//----------------------------------------------------------------------------------
+
+// std::vector<vec3> verticesofOneCircle_(int n, vec3 center, vec3 normal, float radius)
+// {
+//     std::vector<vec3> vertices;
+
+//     for (int i = 0; i < n; i++)
+//     {
+//         float x = cos(2 * M_PI / n * i) * radius;
+//         float y = sin(2 * M_PI / n * i) * radius;
+
+//         auto rotation = Eigen::Quaterniond::FromTwoVectors(vec3(0, 0, 1), normal);
+
+//         vec3 vertex = (rotation.matrix() * vec3(x, y, 0)) + center;
+
+//         vertices.push_back(vertex);
+//     }
+
+//     return vertices;
+// }
+
 
 //----------------------------------------------------------------------------------
 
@@ -492,7 +535,7 @@ void Filament::resampleCatMullRomWithWeight(float resampleLength)
 {
     float segmentnumber_ = std::round(totalLengthOfControlpolygon() / resampleLength);
     int segmentnumber = segmentnumber_;
-    
+
     float actualResampleLength = totalLengthOfControlpolygon() / segmentnumber;
     std::vector<FilamentPoint> newPoints;
 
@@ -528,7 +571,6 @@ void Filament::resampleCatMullRomWithWeight(float resampleLength)
 
     controlPolygon_.assign(newPoints.begin(), newPoints.end());
 }
-
 
 // Not working corectly! -> see test (just 7 instead of 8 points in the end)
 void Filament::resampleCatmullRom(float resampleLength)

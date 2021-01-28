@@ -15,6 +15,8 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <math.h>
+#include "glmath.h"
+#include <vector>
 #include "glfw_window.h"
 #include <iostream>
 #include "imgui_impl_opengl3.h"
@@ -147,10 +149,35 @@ std::vector<vec3> circleVertices(int n, vec3 center, vec3 normal, float radius)
 	{
 		float x = cos(2 * M_PI / n * i) * radius;
 		float y = sin(2 * M_PI / n * i) * radius;
+		vec3 vertex;
+		Eigen::Matrix3d rotation;
+		double angle;
 
-		auto rotation = Eigen::Quaterniond::FromTwoVectors(vec3(0, 0, 1), normal);
+		if (normal(0) == 0 && normal(1) == 0)
+		{
+			//vec3 normalized_normal;
+			vec3 normalized_normal = normal.normalized();
+			if (normalized_normal(2) == -1) 
+			{
+			vec3 axis = (normal.cross(vec3(0, 0, 1))).normalized();
+			rotation = Eigen::AngleAxisd(M_PI, axis);
+			vertex = rotation * vec3(x, y, 0) + center;
+			}
+			else
+			{
+				vertex = vec3(x, y, 0) + center;
+			}
+		}
+		else
+		{
+			angle = acos(normal(3) / normal.norm());
+			vec3 axis = vec3(normal(1), -normal(1), 0);
+			rotation = Eigen::AngleAxisd(angle, axis.normalized());
+			vertex = rotation * vec3(x, y, 0) + center;
+		}
 
-		vec3 vertex = (rotation.matrix() * vec3(x, y, 0)) + center;
+		//auto rotation = Eigen::Quaterniond::FromTwoVectors(vec3(0, 0, 1), normal);
+
 		vertices.push_back(vertex);
 	}
 
