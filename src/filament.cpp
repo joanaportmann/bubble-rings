@@ -37,8 +37,8 @@ Filament::Filament(float thickness_, float circulation_)
     // Set filament circle
     for (float i = 0; i <= 2 * M_PI; i += 0.17)
     {
-        float r0 = 0, r1 = 0, r2 = 0;
-        r0 = static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / 0.02));
+        float r0 = 0;
+        //r0 = static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / 0.02));
         controlPolygon_.push_back({{0.6 * cos(i) + r0, 0.6 * sin(i), 0.0},
                                    thickness_,
                                    circulation_});
@@ -58,40 +58,43 @@ std::vector<FilamentPoint> Filament::getFilamentPoints()
 
 //-----------------------------------------------------------------------------
 
-std::vector<vec3> verticesofOneCircle_(int n, vec3 center, vec3 normal, float radius)
+std::vector<vec3> verticesofOneCircle_(int n, vec3 center, vec3 normal, vec3 up, float radius)
 {
-    std::vector<vec3> vertices;
+    Eigen::Matrix3d rotation;
+    double angle;
+    if (normal(0) == 0 && normal(1) == 0)
+    {
+        vec3 normalized_normal = normal.normalized();
+        if (normalized_normal(2) == -1)
+        {
+            vec3 axis = vec3(0, 0, 1);
+            rotation = Eigen::AngleAxisd(M_PI, axis);
+        }
+        else
+        {
+            rotation = Eigen::Matrix3d::Identity();
+        }
+    }
+    else
+    {
+        angle = acos(normal(2) / normal.norm());
+        vec3 axis = vec3(-normal(1), normal(0), 0);
+        rotation = Eigen::AngleAxisd(angle, axis.normalized());
+    }
 
+    vec3 vertexNotOriented = rotation * vec3(radius, 0, 0);
+    double angleToUp = acos(vertexNotOriented.dot(up) / (vertexNotOriented.norm() * up.norm()));
+    Eigen::Matrix3d rotationToOrientRing;
+    rotationToOrientRing = Eigen::AngleAxisd(angleToUp, normal.normalized());
+
+    std::vector<vec3> vertices;
     for (int i = 0; i < n; i++)
     {
         float x = cos(2 * M_PI / n * i) * radius;
         float y = sin(2 * M_PI / n * i) * radius;
-        vec3 vertex;
-        Eigen::Matrix3d rotation;
-        double angle;
+        vec3 vertex = rotationToOrientRing * rotation * vec3(x, y, 0);
 
-        if (normal(0) == 0 && normal(1) == 0)
-        {
-            vec3 normalized_normal = normal.normalized();
-            if (normalized_normal(2) == -1)
-            {
-                vec3 axis = (normal.cross(vec3(0, 0, 1))).normalized();
-                rotation = Eigen::AngleAxisd(M_PI, axis);
-                vertex = rotation * vec3(x, y, 0) + center;
-            }
-            else
-            {
-                vertex = vec3(x, y, 0) + center;
-            }
-        }
-        else
-        {
-            angle = acos(normal(2) / normal.norm());
-            vec3 axis = vec3(-normal(1), normal(0), 0);
-            rotation = Eigen::AngleAxisd(angle, axis.normalized());
-            vertex = rotation * vec3(x, y, 0) + center;
-        }
-        
+        vertex += center;
         vertices.push_back(vertex);
     }
 
@@ -119,7 +122,6 @@ std::vector<vec3> verticesofOneCircle_(int n, vec3 center, vec3 normal, float ra
 //     return vertices;
 // }
 
-
 //----------------------------------------------------------------------------------
 
 std::vector<vec3> Filament::getBubbleRingSkeleton()
@@ -130,10 +132,14 @@ std::vector<vec3> Filament::getBubbleRingSkeleton()
     {
         vec3 edgeAfter = controlPolygon_[(i + 1) % controlPolygon_.size()].position - controlPolygon_[i].position;
         vec3 edgeBefore = controlPolygon_[i].position - controlPolygon_[(i - 1 + controlPolygon_.size()) % controlPolygon_.size()].position;
+        vec3 v1 = controlPolygon_[0].position - controlPolygon_[controlPolygon_.size() * 2 / 3].position;
+        vec3 v2 = controlPolygon_[0].position - controlPolygon_[controlPolygon_.size() * 1 / 3].position;
+        vec3 up = v1.cross(v2);
         std::vector<vec3> verticesOfOneCircle = verticesofOneCircle_(
             numberOfVerticesPerTubeCircle,
             controlPolygon_[i].position,
             (edgeBefore + edgeAfter).normalized(),
+            up,
             controlPolygon_[i].a);
         for (int j = 0; j < verticesOfOneCircle.size(); j++)
         {
