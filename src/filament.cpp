@@ -17,7 +17,7 @@ using namespace std;
 typedef Eigen::Triplet<double> T;
 
 // ATTENTION: Keep in sync with the one in tube.cpp
-#define numberOfVerticesPerTubeCircle 10
+#define numberOfVerticesPerTubeCircle 20
 
 #define _USE_MATH_DEFINES
 #define RM_mu 0.4723665527f
@@ -82,10 +82,15 @@ std::vector<vec3> verticesofOneCircle_(int n, vec3 center, vec3 normal, vec3 up,
         rotation = Eigen::AngleAxisd(angle, axis.normalized());
     }
 
+    // Rotation of first vertex of ring in space
     vec3 vertexNotOriented = rotation * vec3(radius, 0, 0);
+
+    // Determine direction of rotation (since acos is always positive)
+    int signUpCrossVertex = up.cross(vertexNotOriented).dot(normal) < 0 ? 1 : -1;
+
     double angleToUp = acos(vertexNotOriented.dot(up) / (vertexNotOriented.norm() * up.norm()));
     Eigen::Matrix3d rotationToOrientRing;
-    rotationToOrientRing = Eigen::AngleAxisd(angleToUp, normal.normalized());
+    rotationToOrientRing = Eigen::AngleAxisd(signUpCrossVertex * angleToUp, normal.normalized());
 
     std::vector<vec3> vertices;
     for (int i = 0; i < n; i++)
@@ -100,27 +105,6 @@ std::vector<vec3> verticesofOneCircle_(int n, vec3 center, vec3 normal, vec3 up,
 
     return vertices;
 }
-
-//----------------------------------------------------------------------------------
-
-// std::vector<vec3> verticesofOneCircle_(int n, vec3 center, vec3 normal, float radius)
-// {
-//     std::vector<vec3> vertices;
-
-//     for (int i = 0; i < n; i++)
-//     {
-//         float x = cos(2 * M_PI / n * i) * radius;
-//         float y = sin(2 * M_PI / n * i) * radius;
-
-//         auto rotation = Eigen::Quaterniond::FromTwoVectors(vec3(0, 0, 1), normal);
-
-//         vec3 vertex = (rotation.matrix() * vec3(x, y, 0)) + center;
-
-//         vertices.push_back(vertex);
-//     }
-
-//     return vertices;
-// }
 
 //----------------------------------------------------------------------------------
 
