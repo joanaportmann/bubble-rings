@@ -17,6 +17,16 @@ struct FilamentPoint
     float C;
 };
 
+// p(t) = at^3 + bt^2 + ct + d
+struct Segment
+{
+    vec3 a;
+    vec3 b;
+    vec3 c;
+    vec3 d;
+};
+
+
 class Filament
 {
 
@@ -37,6 +47,9 @@ public:
     // Methods
     void updateSkeleton();
 
+    void setTension(float t) { tension = t; }
+    void setAlpha(float alpha_) { alpha = alpha_; }
+
     friend class FilamentTest;
 
 private:
@@ -52,13 +65,16 @@ private:
     std::vector<FilamentPoint> controlPolygon_;
     std::vector<vec3> circleVertices_t(int n, vec3 normal);
     CatmullRom curve;
+    float tension;
+    float alpha;
    
     // Methods
 
     int wrap(int i);
     float totalLengthOfControlpolygon();
     void resample(float resampleLength);
-    vec3 interpolate_filament(float u,  vec3 &P0,  vec3 &P1,  vec3 &P2,  vec3 &P3);
+    vec3 uniformCatmullRom(float u,  vec3 &P0,  vec3 &P1,  vec3 &P2,  vec3 &P3);
+    vec3 generalCatmullRom(float tension, float alpha, float u, vec3 &P0, vec3 &P1, vec3 &P2, vec3 &P3);
     void resampleCatMullRomWithWeight(float resampleLength);
     void resampleCatmullRom(float resampleL);
 

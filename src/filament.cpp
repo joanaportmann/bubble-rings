@@ -33,12 +33,19 @@ typedef Eigen::Triplet<double> T;
 // Create Filament of radius 0.6 and add random float [0, 0.02] to x of vertices. Outcommit random adding for testing.
 Filament::Filament(float thickness_, float circulation_)
 {
-    srand(static_cast<unsigned>(time(0)));
+    // int unsigned time_seed;
+    // time_seed = static_cast<unsigned>(time(0));
+    // srand(time_seed);
+    // cout << "Time seed " << time_seed << "\n";
+    //srand(static_cast<unsigned>(time(0)));
+    // unsigned int seed = 1612214691;
+    unsigned int seed = 31337;
+    srand(seed);
     // Set filament circle
     for (float i = 0; i <= 2 * M_PI; i += 0.17)
     {
         float r0 = 0;
-        //r0 = static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / 0.02));
+        r0 = static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / 0.02));
         controlPolygon_.push_back({{0.6 * cos(i) + r0, 0.6 * sin(i), 0.0},
                                    thickness_,
                                    circulation_});
@@ -510,7 +517,8 @@ void Filament::resample(float resampleLength)
     controlPolygon_.assign(newPoints.begin(), newPoints.end());
 }
 
-vec3 Filament::interpolate_filament(float u, vec3 &P0, vec3 &P1, vec3 &P2, vec3 &P3)
+// uniform Catmull-Rom Splines
+vec3 Filament::uniformCatmullRom(float u, vec3 &P0, vec3 &P1, vec3 &P2, vec3 &P3)
 {
     vec3 point;
     point = u * u * u * ((-1) * P0 + 3 * P1 - 3 * P2 + P3) / 2;
@@ -520,6 +528,36 @@ vec3 Filament::interpolate_filament(float u, vec3 &P0, vec3 &P1, vec3 &P2, vec3 
 
     return point;
 }
+
+// Catmull-Rom Splines (alpha = 0 for uniform; alpha = 0.5 for centripetal; alpha = 1 for chordal)
+//
+// Centripetal will not form loop or self-intersection within a curve segment,
+// and cusp will never occur within a curve segment
+// and it follows the control points more tightly than other Catmull-Rom Splines
+//
+// For tension value 0 is a good choice. These values can range from 0 to 1, where 1 means linear interpolation.
+vec3 Filament::generalCatmullRom(float tension_, float alpha__, float t, vec3 &P0, vec3 &P1, vec3 &P2, vec3 &P3)
+{
+    float t01 = pow(vec3(P0 - P1).norm(), alpha__);
+    float t12 = pow(vec3(P1 - P2).norm(), alpha__);
+    float t23 = pow(vec3(P2 - P3).norm(), alpha__);
+
+    vec3 m1 = (1.0f - tension_) *
+              (P2 - P1 + t12 * ((P1 - P0) / t01 - (P2 - P0) / (t01 + t12)));
+    vec3 m2 = (1.0f - tension_) *
+              (P2 - P1 + t12 * ((P3 - P2) / t23 - (P3 - P1) / (t12 + t23)));
+
+    Segment segment;
+    segment.a = 2.0f * (P1 - P2) + m1 + m2;
+    segment.b = -3.0f * (P1 - P2) - m1 - m1 - m2;
+    segment.c = m1;
+    segment.d = P1;
+
+    return segment.a * t * t * t +
+           segment.b * t * t +
+           segment.c * t +
+           segment.d;
+};
 
 void Filament::resampleCatMullRomWithWeight(float resampleLength)
 {
@@ -547,11 +585,22 @@ void Filament::resampleCatMullRomWithWeight(float resampleLength)
         float weight = (diffFromStart / v.norm());
         //vec3 position = controlPolygon_[baseVertex].position + v.normalized() * diffFromStart;
 
-        vec3 position = interpolate_filament(weight,
-                                             controlPolygon_[wrap(baseVertex - 1)].position,
-                                             controlPolygon_[baseVertex].position,
-                                             controlPolygon_[wrap(baseVertex + 1)].position,
-                                             controlPolygon_[wrap(baseVertex + 2)].position);
+        // uniform Catmull-Rom Splines
+        // vec3 position = uniformCatmullRom(weight,
+        //                                   controlPolygon_[wrap(baseVertex - 1)].position,
+        //                                   controlPolygon_[baseVertex].position,
+        //                                   controlPolygon_[wrap(baseVertex + 1)].position,
+        //                                   controlPolygon_[wrap(baseVertex + 2)].position);
+
+        // Centripedal Catmull-Rom Spline (alpha = 0.5)
+        vec3 position = generalCatmullRom(tension,
+                                          alpha,
+                                          weight,
+                                          controlPolygon_[wrap(baseVertex - 1)].position,
+                                          controlPolygon_[baseVertex].position,
+                                          controlPolygon_[wrap(baseVertex + 1)].position,
+                                          controlPolygon_[wrap(baseVertex + 2)].position);
+
         float a = (sqrt(controlPolygon_[baseVertex].a) * (1 - weight) + sqrt(controlPolygon_[wrap(baseVertex + 1)].a) * weight);
         a *= a;
         float C = controlPolygon_[baseVertex].C * (1 - weight) + controlPolygon_[wrap(baseVertex + 1)].C * weight;

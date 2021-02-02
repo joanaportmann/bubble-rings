@@ -157,11 +157,11 @@ std::vector<vec3> circleVertices(int n, vec3 center, vec3 normal, float radius)
 		{
 			//vec3 normalized_normal;
 			vec3 normalized_normal = normal.normalized();
-			if (normalized_normal(2) == -1) 
+			if (normalized_normal(2) == -1)
 			{
-			vec3 axis = (normal.cross(vec3(0, 0, 1))).normalized();
-			rotation = Eigen::AngleAxisd(M_PI, axis);
-			vertex = rotation * vec3(x, y, 0) + center;
+				vec3 axis = (normal.cross(vec3(0, 0, 1))).normalized();
+				rotation = Eigen::AngleAxisd(M_PI, axis);
+				vertex = rotation * vec3(x, y, 0) + center;
 			}
 			else
 			{
@@ -282,6 +282,10 @@ void Tube_viewer::paint()
 	ImGui::Text("Set start configuration of bubble ring.");
 	ImGui::SliderFloat("Thickness", &thickness, 0.0f, 0.5f);
 	ImGui::SliderFloat("Circulation", &circulation, 0.0f, 10.0f);
+	ImGui::Text("Set tension and alpha for Catmull-Rom Spline calculation.");
+	ImGui::SliderFloat("Tension", &tension, 0.0f, 1.0f);
+	ImGui::SliderFloat("Alpha", &alpha, 0.0f, 1.0f);
+
 	if (ImGui::Button("Reset"))
 	{
 
@@ -289,6 +293,9 @@ void Tube_viewer::paint()
 		Tube tube_(filament);
 		// Tube *tube;
 		// tube = &tube_;
+		filament.setTension(tension);
+		filament.setAlpha(alpha);
+
 		timer_active_ = false;
 	}
 	if (ImGui::Button("Start"))

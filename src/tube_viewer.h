@@ -62,7 +62,8 @@ private:
 
   float thickness = 0.12;
   float circulation = 4;
-
+  float tension = 0;
+  float alpha = 0.5;
 
   /// default color shader (renders only texture)
   Shader color_shader_;
