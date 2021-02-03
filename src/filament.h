@@ -30,8 +30,8 @@ public:
     // Variables
     std::vector<FilamentPoint> getFilamentPoints();
     std::vector<vec3> getBubbleRingSkeleton();
-    float time_step_;
-    float resampleLength_;
+    float time_step_ = 0.01;
+    float resampleLength_ = 0.1;
     bool updatedFilament = true;
 
     // Methods
