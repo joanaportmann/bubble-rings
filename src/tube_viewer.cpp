@@ -281,10 +281,11 @@ void Tube_viewer::paint()
 	ImGui::Begin("Settings");
 	ImGui::Text("Set start configuration of bubble ring.");
 	ImGui::SliderFloat("Thickness", &thickness, 0.0f, 0.5f);
-	ImGui::SliderFloat("Circulation", &circulation, 0.0f, 10.0f);
+	ImGui::SliderFloat("Circulation", &circulation, 0.0f, 50.0f);
 	ImGui::Text("Set tension and alpha for Catmull-Rom Spline calculation.");
 	ImGui::SliderFloat("Tension", &tension, 0.0f, 1.0f);
 	ImGui::SliderFloat("Alpha", &alpha, 0.0f, 1.0f);
+	ImGui::SliderFloat("Resample length", &length, 0.0f, 1.0f);
 
 	if (ImGui::Button("Reset"))
 	{
@@ -295,6 +296,7 @@ void Tube_viewer::paint()
 		// tube = &tube_;
 		filament.setTension(tension);
 		filament.setAlpha(alpha);
+		filament.setResampleLength(length);
 
 		timer_active_ = false;
 	}

@@ -64,6 +64,7 @@ private:
   float circulation = 4;
   float tension = 0;
   float alpha = 0.5;
+  float length = 0.1;
 
   /// default color shader (renders only texture)
   Shader color_shader_;

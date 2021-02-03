@@ -40,15 +40,17 @@ public:
     // Variables
     std::vector<FilamentPoint> getFilamentPoints();
     std::vector<vec3> getBubbleRingSkeleton();
-    float time_step_ = 0.01f;
-    float resampleLength_ = 0.066;
+    float time_step_;
+    float resampleLength_;
     bool updatedFilament = true;
 
     // Methods
     void updateSkeleton();
 
+    // Setters
     void setTension(float t) { tension = t; }
     void setAlpha(float alpha_) { alpha = alpha_; }
+    void setResampleLength(float length) { resampleLength_ = length; }
 
     friend class FilamentTest;
 

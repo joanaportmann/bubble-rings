@@ -32,6 +32,8 @@ typedef Eigen::Triplet<double> T;
 
 // Create Filament of radius 0.6 and add random float [0, 0.02] to x of vertices. Outcommit random adding for testing.
 Filament::Filament(float thickness_, float circulation_)
+    : resampleLength_(0.1),
+      time_step_(0.01)
 {
     // int unsigned time_seed;
     // time_seed = static_cast<unsigned>(time(0));
@@ -39,14 +41,19 @@ Filament::Filament(float thickness_, float circulation_)
     // cout << "Time seed " << time_seed << "\n";
     //srand(static_cast<unsigned>(time(0)));
     // unsigned int seed = 1612214691;
-    unsigned int seed = 31337;
+    unsigned int seed = 128;
     srand(seed);
     // Set filament circle
     for (float i = 0; i <= 2 * M_PI; i += 0.17)
     {
         float r0 = 0;
+        float r1 = 0;
+        float r2 = 0;
         r0 = static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / 0.02));
-        controlPolygon_.push_back({{0.6 * cos(i) + r0, 0.6 * sin(i), 0.0},
+        r1 = static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / 0.02));
+        r2 = static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / 0.02));
+
+        controlPolygon_.push_back({{0.6 * cos(i) + r0, 0.6 * sin(i) + r1, 0.0 + r2},
                                    thickness_,
                                    circulation_});
     }
