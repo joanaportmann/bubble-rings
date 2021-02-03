@@ -278,10 +278,12 @@ void Tube_viewer::paint()
 
 	static const ImVec4 pressColor{0.5f, 0, 0, 1.0f};
 	static const ImVec4 releaseColor{0, 0.5f, 0, 1.0f};
+	static bool checkBox = false;
 	ImGui::Begin("Settings");
 	ImGui::Text("Set start configuration of bubble ring.");
 	ImGui::SliderFloat("Thickness", &thickness, 0.0f, 0.5f);
 	ImGui::SliderFloat("Circulation", &circulation, 0.0f, 50.0f);
+	ImGui::Checkbox("Recenter", &checkBox);
 	ImGui::Text("Set tension and alpha for Catmull-Rom Spline calculation.");
 	ImGui::SliderFloat("Tension", &tension, 0.0f, 1.0f);
 	ImGui::SliderFloat("Alpha", &alpha, 0.0f, 1.0f);
@@ -297,6 +299,7 @@ void Tube_viewer::paint()
 		filament.setTension(tension);
 		filament.setAlpha(alpha);
 		filament.setResampleLength(length);
+		filament.setRecenter(checkBox);
 
 		timer_active_ = false;
 	}

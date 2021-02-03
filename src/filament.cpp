@@ -41,6 +41,8 @@ Filament::Filament(float thickness_, float circulation_)
     // cout << "Time seed " << time_seed << "\n";
     //srand(static_cast<unsigned>(time(0)));
     // unsigned int seed = 1612214691;
+
+    // Seed from Houdini
     unsigned int seed = 128;
     srand(seed);
     // Set filament circle
@@ -57,6 +59,7 @@ Filament::Filament(float thickness_, float circulation_)
                                    thickness_,
                                    circulation_});
     }
+    originalControlPolygon_ = controlPolygon_;
 }
 
 //---------------------------------------------------------------------------
@@ -72,7 +75,7 @@ std::vector<FilamentPoint> Filament::getFilamentPoints()
 
 //-----------------------------------------------------------------------------
 
-std::vector<vec3> verticesofOneCircle_(int n, vec3 center, vec3 normal, vec3 up, float radius)
+std::vector<vec3> Filament::verticesofOneCircle_(int n, vec3 center, vec3 normal, vec3 up, float radius, bool reCenter)
 {
     Eigen::Matrix3d rotation;
     double angle;
@@ -114,6 +117,11 @@ std::vector<vec3> verticesofOneCircle_(int n, vec3 center, vec3 normal, vec3 up,
         vec3 vertex = rotationToOrientRing * rotation * vec3(x, y, 0);
 
         vertex += center;
+        if (recenter) 
+        {
+            vec3 shift = originalControlPolygon_[n].position - controlPolygon_[n].position;
+            vertex += shift;
+        }
         vertices.push_back(vertex);
     }
 
@@ -138,9 +146,10 @@ std::vector<vec3> Filament::getBubbleRingSkeleton()
             controlPolygon_[i].position,
             (edgeBefore + edgeAfter).normalized(),
             up,
-            controlPolygon_[i].a);
+            controlPolygon_[i].a,
+            recenter);
         for (int j = 0; j < verticesOfOneCircle.size(); j++)
-        {
+        { 
             verticesOfTube.push_back(verticesOfOneCircle[j]);
         }
     };
@@ -627,8 +636,8 @@ void Filament::updateSkeleton()
     {
         controlPolygon_[i].a = sqrt(sqrt(std::pow(x(i) / (M_PI), 2)));
     }
-    //resample(resampleLength_);
-    resampleCatMullRomWithWeight(resampleLength_);
+    resample(resampleLength_);
+    //resampleCatMullRomWithWeight(resampleLength_);
     updatedFilament = true;
 };
 
