@@ -17,16 +17,6 @@ struct FilamentPoint
     float C;
 };
 
-// p(t) = at^3 + bt^2 + ct + d
-struct Segment
-{
-    vec3 a;
-    vec3 b;
-    vec3 c;
-    vec3 d;
-};
-
-
 class Filament
 {
 
