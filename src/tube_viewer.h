@@ -65,6 +65,7 @@ private:
   float tension = 0;
   float alpha = 0.5;
   float length = 0.1;
+  bool renderOnlyPolygon = false;
 
   /// default color shader (renders only texture)
   Shader color_shader_;
@@ -93,9 +94,7 @@ private:
 
   std::vector<vec3> verticesOfTube;
 
-  Path ship_path_renderer_, ship_path_cp_renderer_, circle2, circle1;
   Frame ship_path_frame_;
-  vec3 center_of_coordinatesystem;
 
   /// the field of view for the camera
   float fovy_;

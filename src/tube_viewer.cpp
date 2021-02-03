@@ -22,6 +22,7 @@
 #include "imgui_impl_opengl3.h"
 #include "imgui_impl_glfw.h"
 #include <chrono>
+#include "filament.h"
 
 #include <Eigen/Dense>
 
@@ -197,37 +198,17 @@ void Tube_viewer::initialize()
 
 	// setup shader
 	color_shader_.load(SHADER_PATH "/color.vert", SHADER_PATH "/color.frag");
-	phong_shader_.load(SHADER_PATH "/phong.vert", SHADER_PATH "/phong.frag");
-
-	solid_color_shader_.load(SHADER_PATH "/solid_color.vert", SHADER_PATH "/solid_color.frag");
 	test_tube_shader_.load(SHADER_PATH "/test_tube.vert", SHADER_PATH "/test_tube.frag");
-
-	ship_path_renderer_.initialize();
-	ship_path_cp_renderer_.initialize();
-	ship_path_frame_.initialize();
-
-	//ship_path_cp_renderer_.setPoints(control_polygon_);
 }
 //-----------------------------------------------------------------------------
 
 // void Tube_viewer::drawCircle(std::vector<vec3> control_polygon_, float radius)
 // {
-// 	//std::vector<Path> circles;
-// 	for (int i = 0; i < control_polygon_.size(); i++)
-// 	{
-// 		Path circle;
-// 		circle.initialize();
-// 		vec3 edgeAfter = control_polygon_[(i + 1) % control_polygon_.size()] - control_polygon_[i];
-// 		vec3 edgeBefore = control_polygon_[i] - control_polygon_[(i - 1 + control_polygon_.size()) % control_polygon_.size()];
-// 		std::vector<vec3> verticesOfOneCircle = circleVertices(
-// 			numberOfVerticesPerTubeCircle,
-// 			control_polygon_[i],
-// 			(edgeAfter + edgeBefore).normalized(),
-// 			radius
-// 		);
-// 		circle.setPoints(verticesOfOneCircle);
-// 		//circle.draw();
-// 	};
+// 	Path circle;
+// 	circle.initialize();
+// 	circle.setPoints(control_polygon_);
+// 	color_shader_.use();
+// 	circle.draw();
 // };
 
 void Tube_viewer::paint()
@@ -278,12 +259,14 @@ void Tube_viewer::paint()
 
 	static const ImVec4 pressColor{0.5f, 0, 0, 1.0f};
 	static const ImVec4 releaseColor{0, 0.5f, 0, 1.0f};
-	static bool checkBox = false;
+	static bool recenter = false;
+	
 	ImGui::Begin("Settings");
 	ImGui::Text("Set start configuration of bubble ring.");
 	ImGui::SliderFloat("Thickness", &thickness, 0.0f, 0.5f);
 	ImGui::SliderFloat("Circulation", &circulation, 0.0f, 50.0f);
-	ImGui::Checkbox("Recenter", &checkBox);
+	ImGui::Checkbox("Recenter", &recenter);
+	ImGui::Checkbox("Render only Polygon", &renderOnlyPolygon);
 	ImGui::Text("Set tension and alpha for Catmull-Rom Spline calculation.");
 	ImGui::SliderFloat("Tension", &tension, 0.0f, 1.0f);
 	ImGui::SliderFloat("Alpha", &alpha, 0.0f, 1.0f);
@@ -299,7 +282,7 @@ void Tube_viewer::paint()
 		filament.setTension(tension);
 		filament.setAlpha(alpha);
 		filament.setResampleLength(length);
-		filament.setRecenter(checkBox);
+		filament.setRecenter(recenter);
 
 		timer_active_ = false;
 	}
@@ -370,13 +353,22 @@ void Tube_viewer::draw_scene(mat4 &_projection, mat4 &_view)
 	test_tube_shader_.set_uniform("normal_matrix", normal_matrix);
 	//test_tube_shader_.set_uniform("light_position", _view * vec4(0, 0, 0, 1));
 	// test_tube_shader_.set_uniform("color", vec4(0.8, 0.8, 0.2, 0.6));
-	tube.draw();
-	center_of_coordinatesystem = vec3(0, 0, 0);
+	if(!renderOnlyPolygon) tube.draw();
+	std::vector<FilamentPoint> FilamentPoints = filament.getFilamentPoints();
+	vector<vec3> controlPolygonForDebugging;
+	for(int i = 0; i < FilamentPoints.size(); i++)
+	{
+		controlPolygonForDebugging.push_back(FilamentPoints[i].position);
+	}
+	Path circle;
+	circle.initialize();
+	circle.setPoints(controlPolygonForDebugging);
+	color_shader_.use();
+	color_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
+	circle.draw();
 
-	ship_path_frame_.draw(solid_color_shader_, _projection * _view, center_of_coordinatesystem);
 
 	// render circles around polygonpath
-	//drawCircle(control_polygon_, 0.3);
 	// check for OpenGL errors
 	glCheckError();
 }
