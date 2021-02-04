@@ -59,8 +59,8 @@ private:
     std::vector<FilamentPoint> originalControlPolygon_;
     std::vector<vec3> verticesofOneCircle_(int n, vec3 center, vec3 normal, vec3 up, float radius, bool recenter);
     CatmullRom curve;
-    float tension;
-    float alpha;
+    float tension = 0;
+    float alpha = 0.5;
     bool recenter = false;
    
     // Methods
