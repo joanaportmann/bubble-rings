@@ -13,6 +13,12 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: install dependencies
+      run: |
+        sudo apt-get install xorg-dev
+        sudo apt install -y mesa-common-dev mesa-utils freeglut3-dev
+        sudo apt install -y nvidia-340
+
     - name: Create Build Environment
       shell: bash
       working-directory: ${{github.workspace}}
