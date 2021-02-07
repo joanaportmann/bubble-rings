@@ -10,6 +10,7 @@
 #define TUBE_VIEWER_H
 //=============================================================================
 
+#include "sphere.h"
 #include "gl.h"
 #include "glfw_window.h"
 #include "shader.h"
@@ -17,6 +18,7 @@
 #include "frame.h"
 #include "tube.h"
 #include "filament.h"
+#include "planet.h"
 
 /// OpenGL viewer that handles all the rendering for us
 class Tube_viewer : public GLFW_window
@@ -52,6 +54,11 @@ protected:
   void drawCircle(const std::vector<vec3> pts, float radius);
 
 private:
+
+  // Draw sphere and map underwater image
+  Planet background;
+  Sphere unit_sphere_;
+
   // filament object
   Filament filament;
 
@@ -59,6 +66,7 @@ private:
 
   // tube object
   Tube tube;
+
 
   float thickness = 0.12;
   float circulation = 4;
@@ -70,14 +78,9 @@ private:
 
   /// default color shader (renders only texture)
   Shader color_shader_;
-  /// phong shader (renders texture and basic illumination)
-  Shader phong_shader_;
-
-  // sun shader (renders the sun: texture plus an optional shimmer effect)
-  Shader tube_shader_;
 
   /// simple shader for visualizing curves (just using solid color).
-  Shader solid_color_shader_;
+  Shader background_shader_;
 
   /// Shader
   Shader test_tube_shader_;

@@ -34,8 +34,10 @@ using namespace std;
 
 Tube_viewer::Tube_viewer(const char *_title, int _width, int _height)
 	: GLFW_window(_title, _width, _height),
+	  unit_sphere_(50), //level of tesselation
 	  filament(0.12, 4),
-	  tube(filament)
+	  tube(filament),
+	  background(0.0f, 0.0f, 21.0f, 0.0f)
 {
 	// rendering parameters
 	greyscale_ = false;
@@ -196,10 +198,18 @@ void Tube_viewer::initialize()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+	// Allocate textures
+	background.tex_.init(GL_TEXTURE0, GL_TEXTURE_2D, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, GL_REPEAT);
+
+	// Load/generate textures
+	background.tex_.loadPNG(TEXTURE_PATH "/stars2.png");
+
 	// setup shader
 	color_shader_.load(SHADER_PATH "/color.vert", SHADER_PATH "/color.frag");
 	test_tube_shader_.load(SHADER_PATH "/test_tube.vert", SHADER_PATH "/test_tube.frag");
+	background_shader_.load(SHADER_PATH "/background.vert", SHADER_PATH "/background.frag");
 }
+
 //-----------------------------------------------------------------------------
 
 // void Tube_viewer::drawCircle(std::vector<vec3> control_polygon_, float radius)
@@ -259,7 +269,8 @@ void Tube_viewer::paint()
 
 	static const ImVec4 pressColor{0.5f, 0, 0, 1.0f};
 	static const ImVec4 releaseColor{0, 0.5f, 0, 1.0f};
-
+	static bool recenter = false;
+	
 	ImGui::Begin("Settings");
 	ImGui::Text("Set start configuration of bubble ring.");
 	ImGui::SliderFloat("Thickness", &thickness, 0.0f, 0.5f);
@@ -369,6 +380,19 @@ void Tube_viewer::draw_scene(mat4 &_projection, mat4 &_view)
 	color_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
 	if (!recenter)
 		circle.draw();
+
+	// render background
+	Eigen::Affine3f scaling;
+	scaling = Eigen::Scaling(background.radius_);
+	m_matrix = scaling.matrix().cast<double>();
+	mv_matrix = _view * m_matrix;
+	mvp_matrix = _projection * mv_matrix;
+	background_shader_.use();
+	background_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
+	background_shader_.set_uniform("tex", 0);
+	background_shader_.set_uniform("greyscale", static_cast<int>(greyscale_));
+	background.tex_.bind();
+	unit_sphere_.draw();
 
 	// check for OpenGL errors
 	glCheckError();

@@ -6,53 +6,42 @@
 //   Copyright (C) by Computer Graphics Group, Bielefeld University
 //
 //=============================================================================
-#ifndef TUBE_H
-#define TUBE_H
+#ifndef SPHERE_H
+#define SPHERE_H
 //=============================================================================
 
 #include "gl.h"
-#include <Eigen/Dense>
-#include "glmath.h"
-#include <vector>
-#include "filament.h"
+
 //=============================================================================
 
-
-class Tube
+/// class that creates a sphere with a desired tessellation degree and renders it
+class Sphere
 {
-
 public:
 
-    Tube(Filament &filament);
+    /// default constructor
+    /// \param resolution the degree of the tessellation of the sphere
+    Sphere(unsigned int resolution=10);
 
     /// destructor
-    ~Tube();
+    ~Sphere();
 
     /// render mesh of the sphere
     void draw(GLenum mode=GL_TRIANGLES);
 
+
+private:
+
+    /// generate sphere vertices/triangles and OpenGL buffers
     void initialize();
-    
-
-
 
 
 private:
 
-    void updateBuffers();
-
-    /// Compute normal vectors for triangles and vertices
-    void compute_normals();
-
-    std::vector<vec3> circleVertices_t(int n, vec3 normal);
-
-    // generate triangle structs
-    void createTriangleStruct();
-
+    /// tessellation resolution
+    unsigned int resolution_;
     /// indices of the triangle vertices
-    unsigned int n_positions = 0;
-
-    
+    unsigned int n_indices_ = 0;
 
     // vertex array object
     GLuint vao_ = 0;
@@ -68,30 +57,6 @@ private:
     GLuint tbo_ = 0;
     /// index buffer object
     GLuint ibo_ = 0;
-
-    GLuint lineVAO, lineVBO;
-
-    /// a triangle is specified by three indices and a normal
-    struct Triangle
-    {
-        /// index of first vertex 
-        int ind0;
-        /// index of second vertex 
-        int ind1;
-        /// index of third vertex 
-        int ind2;
-        /// triangle normal
-        vec3 normal;
-    };
-
-    /// Array of triangles
-    std::vector<Triangle> triangles_;
-
-    std::vector<vec3> tubeVertices;
-    Filament &filament_;
-    
-    
-
 };
 
 
