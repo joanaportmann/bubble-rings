@@ -66,6 +66,7 @@ private:
   float alpha = 0.5;
   float length = 0.1;
   bool renderOnlyPolygon = false;
+  bool recenter = false;
 
   /// default color shader (renders only texture)
   Shader color_shader_;

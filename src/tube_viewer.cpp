@@ -259,8 +259,7 @@ void Tube_viewer::paint()
 
 	static const ImVec4 pressColor{0.5f, 0, 0, 1.0f};
 	static const ImVec4 releaseColor{0, 0.5f, 0, 1.0f};
-	static bool recenter = false;
-	
+
 	ImGui::Begin("Settings");
 	ImGui::Text("Set start configuration of bubble ring.");
 	ImGui::SliderFloat("Thickness", &thickness, 0.0f, 0.5f);
@@ -348,15 +347,18 @@ void Tube_viewer::draw_scene(mat4 &_projection, mat4 &_view)
 	mat3 normal_matrix;
 	normal_matrix = mat3::Identity();
 
-	test_tube_shader_.use();
-	test_tube_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
-	test_tube_shader_.set_uniform("normal_matrix", normal_matrix);
-	//test_tube_shader_.set_uniform("light_position", _view * vec4(0, 0, 0, 1));
-	// test_tube_shader_.set_uniform("color", vec4(0.8, 0.8, 0.2, 0.6));
-	if(!renderOnlyPolygon) tube.draw();
+	if (!renderOnlyPolygon)
+	{
+		test_tube_shader_.use();
+		test_tube_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
+		test_tube_shader_.set_uniform("normal_matrix", normal_matrix);
+		//test_tube_shader_.set_uniform("light_position", _view * vec4(0, 0, 0, 1));
+		// test_tube_shader_.set_uniform("color", vec4(0.8, 0.8, 0.2, 0.6));
+		tube.draw();
+	}
 	std::vector<FilamentPoint> FilamentPoints = filament.getFilamentPoints();
 	vector<vec3> controlPolygonForDebugging;
-	for(int i = 0; i < FilamentPoints.size(); i++)
+	for (int i = 0; i < FilamentPoints.size(); i++)
 	{
 		controlPolygonForDebugging.push_back(FilamentPoints[i].position);
 	}
@@ -365,10 +367,9 @@ void Tube_viewer::draw_scene(mat4 &_projection, mat4 &_view)
 	circle.setPoints(controlPolygonForDebugging);
 	color_shader_.use();
 	color_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
-	circle.draw();
+	if (!recenter)
+		circle.draw();
 
-
-	// render circles around polygonpath
 	// check for OpenGL errors
 	glCheckError();
 }
