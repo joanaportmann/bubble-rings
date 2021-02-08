@@ -202,7 +202,7 @@ void Tube_viewer::initialize()
 	background.tex_.init(GL_TEXTURE0, GL_TEXTURE_2D, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, GL_REPEAT);
 
 	// Load/generate textures
-	background.tex_.loadPNG(TEXTURE_PATH "/stars2.png");
+	background.tex_.loadPNG(TEXTURE_PATH "/underwater.png");
 
 	// setup shader
 	color_shader_.load(SHADER_PATH "/color.vert", SHADER_PATH "/color.frag");

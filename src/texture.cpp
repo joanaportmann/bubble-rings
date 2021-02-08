@@ -126,6 +126,7 @@ void Texture::init(GLenum unit, GLenum type, GLint minfilter, GLint magfilter, G
     // create texture object
     glGenTextures(1, &id_);
     glBindTexture(type_, id_);
+    
 
     // set texture parameters
     glTexParameteri(type_, GL_TEXTURE_MAG_FILTER, magfilter);
