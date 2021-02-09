@@ -49,9 +49,9 @@ Filament::Filament(float thickness_, float circulation_)
         float r0 = 0;
         float r1 = 0;
         float r2 = 0;
-        r0 = static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / 0.02));
-        r1 = static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / 0.02));
-        r2 = static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / 0.02));
+        // r0 = static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / 0.02));
+        // r1 = static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / 0.02));
+        // r2 = static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / 0.02));
 
         controlPolygon_.push_back({{0.6 * cos(i) + r0, 0.6 * sin(i) + r1, 0.0 + r2},
                                    thickness_,
@@ -637,6 +637,8 @@ void Filament::updateSkeleton()
     //resample(resampleLength_);
     resampleCatMullRomWithWeight(resampleLength_);
     updatedFilament = true;
+
+    cout << "thickness: " << controlPolygon_[0].C << "\n";
 };
 
 //-----------------------------------------------------------------------------------

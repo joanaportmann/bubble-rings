@@ -37,11 +37,11 @@ Tube_viewer::Tube_viewer(const char *_title, int _width, int _height)
 	  unit_sphere_(50), //level of tesselation
 	  filament(0.12, 4),
 	  tube(filament),
-	  background(0.0f, 0.0f, 21.0f, 0.0f)
+	  background(0.0f, 0.0f, 50.0f, 0.0f)
 {
 	// rendering parameters
 	greyscale_ = false;
-	fovy_ = 70;
+	fovy_ = 50;
 	near_ = 0.01f;
 	far_ = 20;
 
@@ -198,16 +198,18 @@ void Tube_viewer::initialize()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	// Allocate textures
-	background.tex_.init(GL_TEXTURE0, GL_TEXTURE_2D, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, GL_REPEAT);
 
-	// Load/generate textures
-	background.tex_.loadPNG(TEXTURE_PATH "/underwater.png");
+		// Allocate textures
+		background.tex_.init(GL_TEXTURE0, GL_TEXTURE_2D, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, GL_REPEAT);
+
+		// Load/generate textures
+		background.tex_.loadPNG(TEXTURE_PATH "/underwater2.png");
+		background_shader_.load(SHADER_PATH "/background.vert", SHADER_PATH "/background.frag");
+	
 
 	// setup shader
 	color_shader_.load(SHADER_PATH "/color.vert", SHADER_PATH "/color.frag");
 	test_tube_shader_.load(SHADER_PATH "/test_tube.vert", SHADER_PATH "/test_tube.frag");
-	background_shader_.load(SHADER_PATH "/background.vert", SHADER_PATH "/background.frag");
 }
 
 //-----------------------------------------------------------------------------
@@ -270,13 +272,14 @@ void Tube_viewer::paint()
 	static const ImVec4 pressColor{0.5f, 0, 0, 1.0f};
 	static const ImVec4 releaseColor{0, 0.5f, 0, 1.0f};
 	static bool recenter = false;
-	
+
 	ImGui::Begin("Settings");
 	ImGui::Text("Set start configuration of bubble ring.");
 	ImGui::SliderFloat("Thickness", &thickness, 0.0f, 0.5f);
 	ImGui::SliderFloat("Circulation", &circulation, 0.0f, 50.0f);
 	ImGui::Checkbox("Recenter", &recenter);
 	ImGui::Checkbox("Render only Polygon", &renderOnlyPolygon);
+	ImGui::Checkbox("Underwater background", &backgroundOn);
 	ImGui::Text("Set tension and alpha for Catmull-Rom Spline calculation.");
 	ImGui::SliderFloat("Tension", &tension, 0.0f, 1.0f);
 	ImGui::SliderFloat("Alpha", &alpha, 0.0f, 1.0f);
@@ -381,18 +384,21 @@ void Tube_viewer::draw_scene(mat4 &_projection, mat4 &_view)
 	if (!recenter)
 		circle.draw();
 
-	// render background
-	Eigen::Affine3f scaling;
-	scaling = Eigen::Scaling(background.radius_);
-	m_matrix = scaling.matrix().cast<double>();
-	mv_matrix = _view * m_matrix;
-	mvp_matrix = _projection * mv_matrix;
-	background_shader_.use();
-	background_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
-	background_shader_.set_uniform("tex", 0);
-	background_shader_.set_uniform("greyscale", static_cast<int>(greyscale_));
-	background.tex_.bind();
-	unit_sphere_.draw();
+	if (backgroundOn)
+	{
+		// render background
+		Eigen::Affine3f scaling;
+		scaling = Eigen::Scaling(background.radius_);
+		m_matrix = scaling.matrix().cast<double>();
+		mv_matrix = _view * m_matrix;
+		mvp_matrix = _projection * mv_matrix;
+		background_shader_.use();
+		background_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
+		background_shader_.set_uniform("tex", 0);
+		background_shader_.set_uniform("greyscale", static_cast<int>(greyscale_));
+		background.tex_.bind();
+		unit_sphere_.draw();
+	}
 
 	// check for OpenGL errors
 	glCheckError();
