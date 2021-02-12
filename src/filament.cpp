@@ -17,7 +17,7 @@ using namespace std;
 typedef Eigen::Triplet<double> T;
 
 // ATTENTION: Keep in sync with the one in tube.cpp
-#define numberOfVerticesPerTubeCircle 20
+#define numberOfVerticesPerTubeCircle 30
 
 #define _USE_MATH_DEFINES
 #define RM_mu 0.4723665527f
@@ -117,6 +117,8 @@ std::vector<vec3> Filament::verticesofOneCircle_(int n, vec3 center, vec3 normal
         vertex += center;
         if (recenter) 
         {
+
+            // TODO!!!!!!!!!!!!!!!
             vec3 shift = originalControlPolygon_[n].position - controlPolygon_[n].position;
             vertex += shift;
         }
@@ -638,7 +640,7 @@ void Filament::updateSkeleton()
     resampleCatMullRomWithWeight(resampleLength_);
     updatedFilament = true;
 
-    cout << "thickness: " << controlPolygon_[0].C << "\n";
+    //cout << "thickness: " << controlPolygon_[0].C << "\n";
 };
 
 //-----------------------------------------------------------------------------------

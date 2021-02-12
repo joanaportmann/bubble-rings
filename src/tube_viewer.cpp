@@ -46,7 +46,7 @@ Tube_viewer::Tube_viewer(const char *_title, int _width, int _height)
 	far_ = 20;
 
 	x_angle_ = 0.0f;
-	y_angle_ = 0.0f;
+	y_angle_ = -M_PI / 4.0f;
 	dist_factor_ = 9.0f;
 
 	srand((unsigned int)time(NULL));
@@ -92,12 +92,14 @@ void Tube_viewer::
 
 		case GLFW_KEY_DOWN:
 		{
+			if (x_angle_ < M_PI / 2 - 0.05 * M_PI) 
 			x_angle_ += 0.05 * M_PI;
 			break;
 		}
 
 		case GLFW_KEY_UP:
 		{
+			if (x_angle_ > -M_PI / 2 + 0.05 * M_PI) 
 			x_angle_ -= 0.05 * M_PI;
 			break;
 		}
@@ -246,8 +248,8 @@ void Tube_viewer::paint()
 	mat4 rotation_y_matrix = rotation_y.matrix().cast<double>();
 
 	rotation = rotation_y_matrix * rotation_x_matrix;
-	eye = center + rotation * vec4((dist_factor_), (dist_factor_), (dist_factor_), 0);
-	up = rotation * vec4(0, 1, 0, 0);
+	eye = center + rotation * vec4(0, 0, dist_factor_, 0);
+	up = vec4(0, 1, 0, 0);
 
 	mat4 view;
 	view = MatUtils::look_at(

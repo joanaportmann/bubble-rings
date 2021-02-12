@@ -19,7 +19,7 @@
 #include <chrono>
 
 // ATTENTION: Keep in sync with the one in filament.cpp
-#define numberOfVerticesPerTubeCircle 20
+#define numberOfVerticesPerTubeCircle 30
 
 using namespace std;
 
