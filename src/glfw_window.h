@@ -45,7 +45,6 @@ public: //------------------------------------------------------ public methods
     int run();
 
 
-
 private: //----------------------------- static wrapper functions for callbacks
 
     static void error__(int error, const char *description);

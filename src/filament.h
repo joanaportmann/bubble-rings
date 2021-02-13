@@ -33,6 +33,7 @@ public:
     float time_step_ = 0.01;
     float resampleLength_ = 0.1;
     bool updatedFilament = true;
+    int framecouter = 0;
 
     // Methods
     void updateSkeleton();

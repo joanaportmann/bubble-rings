@@ -639,8 +639,9 @@ void Filament::updateSkeleton()
     //resample(resampleLength_);
     resampleCatMullRomWithWeight(resampleLength_);
     updatedFilament = true;
+    framecouter ++;
 
-    //cout << "thickness: " << controlPolygon_[0].C << "\n";
+    //cout << "thickness: " << frame << "\n";
 };
 
 //-----------------------------------------------------------------------------------

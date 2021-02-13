@@ -92,15 +92,15 @@ void Tube_viewer::
 
 		case GLFW_KEY_DOWN:
 		{
-			if (x_angle_ < M_PI / 2 - 0.05 * M_PI) 
-			x_angle_ += 0.05 * M_PI;
+			if (x_angle_ < M_PI / 2 - 0.05 * M_PI)
+				x_angle_ += 0.05 * M_PI;
 			break;
 		}
 
 		case GLFW_KEY_UP:
 		{
-			if (x_angle_ > -M_PI / 2 + 0.05 * M_PI) 
-			x_angle_ -= 0.05 * M_PI;
+			if (x_angle_ > -M_PI / 2 + 0.05 * M_PI)
+				x_angle_ -= 0.05 * M_PI;
 			break;
 		}
 
@@ -200,14 +200,12 @@ void Tube_viewer::initialize()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+	// Allocate textures
+	background.tex_.init(GL_TEXTURE0, GL_TEXTURE_2D, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, GL_REPEAT);
 
-		// Allocate textures
-		background.tex_.init(GL_TEXTURE0, GL_TEXTURE_2D, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, GL_REPEAT);
-
-		// Load/generate textures
-		background.tex_.loadPNG(TEXTURE_PATH "/underwater2.png");
-		background_shader_.load(SHADER_PATH "/background.vert", SHADER_PATH "/background.frag");
-	
+	// Load/generate textures
+	background.tex_.loadPNG(TEXTURE_PATH "/underwater2.png");
+	background_shader_.load(SHADER_PATH "/background.vert", SHADER_PATH "/background.frag");
 
 	// setup shader
 	color_shader_.load(SHADER_PATH "/color.vert", SHADER_PATH "/color.frag");
@@ -274,8 +272,12 @@ void Tube_viewer::paint()
 	static const ImVec4 pressColor{0.5f, 0, 0, 1.0f};
 	static const ImVec4 releaseColor{0, 0.5f, 0, 1.0f};
 	static bool recenter = false;
+	ImGui::StyleColorsClassic();
 
-	ImGui::Begin("Settings");
+	ImGuiWindowFlags window_flags = 0;
+	window_flags |= ImGuiWindowFlags_NoBackground;
+	bool open_ptr = true;
+	ImGui::Begin("Settings", &open_ptr, window_flags);
 	ImGui::Text("Set start configuration of bubble ring.");
 	ImGui::SliderFloat("Thickness", &thickness, 0.0f, 0.5f);
 	ImGui::SliderFloat("Circulation", &circulation, 0.0f, 50.0f);
@@ -315,9 +317,15 @@ void Tube_viewer::paint()
 	{
 		filament.updateSkeleton();
 	}
+
+	ImGui::SameLine();
+	std::string text = "Frame: %d";
+	text += std::to_string(filament.framecouter);
+	ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::GetColumnWidth() - ImGui::CalcTextSize(text.c_str()).x - ImGui::GetScrollX() - 2 * ImGui::GetStyle().ItemSpacing.x);
+	ImGui::Text("Frame: %d", filament.framecouter);
 	ImGui::End();
 
-	if (show_demo_window)
+	if (false)
 		ImGui::ShowDemoWindow(&show_demo_window);
 
 	// Render dear imgui into screen
