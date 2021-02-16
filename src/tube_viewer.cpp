@@ -280,7 +280,7 @@ void Tube_viewer::paint()
 	ImGui::Begin("Settings", &open_ptr, window_flags);
 	ImGui::Checkbox("Modify thickness", &modifyThickness);
 	ImGui::Text("Set start configuration of bubble ring.");
-	ImGui::SliderFloat("Thickness", &thickness, 0.0f, 0.5f);
+	ImGui::SliderFloat("Thickness", &thickness, 0.0f, 0.8f);
 	ImGui::SliderFloat("Circulation", &circulation, 0.0f, 50.0f);
 	ImGui::Checkbox("Recenter", &recenter);
 	ImGui::Checkbox("Render only Polygon", &renderOnlyPolygon);

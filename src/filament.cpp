@@ -332,8 +332,8 @@ void Filament::BiotSavartAndLocalizedInduction()
     for (int k = 0; k < controlPolygon_.size(); k++)
     {
         vec3 update = (K1[k] + 2 * K2[k] + 2 * K3[k] + K4[k]) / 6;
-        cout << "update BiotSavart " << update << "\n"
-             << "\n";
+        // cout << "update BiotSavart " << update << "\n"
+        //      << "\n";
         controlPolygon_[k].position += update;
     }
 };
@@ -482,6 +482,8 @@ Eigen::VectorXd Filament::doBurgerStepOnBubbleRing()
     Eigen::SparseMatrix<double> LHS = nuIdt * M - (0.5 * coef * L);
     Eigen::MatrixXd RHS = nuIdt * M * A + d.transpose() * F;
 
+    cout << "LHS " << LHS << "\n" << "\n";
+    cout << "RHS " << RHS << "\n" << "\n";
     // SCALE DUE TO PRECISION
     double scale = 1.0 / RHS.norm();
 
