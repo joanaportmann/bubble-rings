@@ -74,6 +74,7 @@ private:
   float alpha = 0.5;
   float length = 0.1;
   bool renderOnlyPolygon = false;
+  bool modifyThickness = true;
   bool recenter = false;
   bool backgroundOn = false;
 

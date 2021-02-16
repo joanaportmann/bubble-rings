@@ -115,7 +115,7 @@ std::vector<vec3> Filament::verticesofOneCircle_(int n, vec3 center, vec3 normal
         vec3 vertex = rotationToOrientRing * rotation * vec3(x, y, 0);
 
         vertex += center;
-        if (recenter) 
+        if (recenter)
         {
 
             // TODO!!!!!!!!!!!!!!!
@@ -149,7 +149,7 @@ std::vector<vec3> Filament::getBubbleRingSkeleton()
             controlPolygon_[i].a,
             recenter);
         for (int j = 0; j < verticesOfOneCircle.size(); j++)
-        { 
+        {
             verticesOfTube.push_back(verticesOfOneCircle[j]);
         }
     };
@@ -198,13 +198,17 @@ vec3 Filament::localizedInduction(int j, const std::vector<FilamentPoint> &temp_
     // Curvature
     vec3 kB = 2.0 * e_prev.normalized().cross(e_next.normalized()) / (e_prev + e_next).norm();
 
+    // cout << "kB: " << kB << "\n";
     // Circulation
     float C = 0.5 * (temp_controlPolygon_[j].C + temp_controlPolygon_[wrap(j + 1)].C);
 
     // Log term
     float logTerm = log(l_prev * l_next / (a_prev * a_next * delta * delta));
 
+    //cout << "logTerm: " << logTerm << "\n";
+
     // Compute
+    //cout << "localizedInduction: " << C / (4 * M_PI) * 0.5 * logTerm * kB << "\n";
     return C / (4 * M_PI) * 0.5 * logTerm * kB;
 }
 
@@ -328,6 +332,8 @@ void Filament::BiotSavartAndLocalizedInduction()
     for (int k = 0; k < controlPolygon_.size(); k++)
     {
         vec3 update = (K1[k] + 2 * K2[k] + 2 * K3[k] + K4[k]) / 6;
+        cout << "update BiotSavart " << update << "\n"
+             << "\n";
         controlPolygon_[k].position += update;
     }
 };
@@ -379,19 +385,19 @@ void Filament::preComputations()
         {
             // positive case
             flux_v.push_back(1.0 / (8 * M_PI) * minus * areas_e[wrap(i - 1)]);
-            AreaUsed_v = areas_e[wrap(i - 1)];
+            // AreaUsed_v = areas_e[wrap(i - 1)];
         }
         else if (plus < std::min(0.0f, (-minus)))
         {
             // negative case
             flux_v.push_back(1.0 / (8 * M_PI) * plus * areas_e[i]);
-            AreaUsed_v = areas_e[i];
+            //AreaUsed_v = areas_e[i];
         }
         else
         {
             // neutral
             flux_v.push_back(0.0f);
-            AreaUsed_v = 0;
+            //AreaUsed_v = 0;
         }
     };
 };
@@ -563,7 +569,6 @@ vec3 Filament::generalCatmullRom(float tension_, float alpha__, float t, vec3 &P
     vec3 m2 = (1.0f - tension_) *
               (P2 - P1 + t12 * ((P3 - P2) / t23 - (P3 - P1) / (t12 + t23)));
 
-    
     vec3 a = 2.0f * (P1 - P2) + m1 + m2;
     vec3 b = -3.0f * (P1 - P2) - m1 - m1 - m2;
     vec3 c = m1;
@@ -630,16 +635,19 @@ void Filament::resampleCatMullRomWithWeight(float resampleLength)
 void Filament::updateSkeleton()
 {
     BiotSavartAndLocalizedInduction();
-    preComputations(); // for Burger's equation
-    Eigen::VectorXd x = doBurgerStepOnBubbleRing();
-    for (int i = 0; i < controlPolygon_.size(); i++)
+    if (modifyThickness)
     {
-        controlPolygon_[i].a = sqrt(sqrt(std::pow(x(i) / (M_PI), 2)));
+        preComputations(); // for Burger's equation
+        Eigen::VectorXd x = doBurgerStepOnBubbleRing();
+        for (int i = 0; i < controlPolygon_.size(); i++)
+        {
+            controlPolygon_[i].a = sqrt(sqrt(std::pow(x(i) / (M_PI), 2)));
+        }
     }
     //resample(resampleLength_);
     resampleCatMullRomWithWeight(resampleLength_);
     updatedFilament = true;
-    framecouter ++;
+    framecouter++;
 
     //cout << "thickness: " << frame << "\n";
 };

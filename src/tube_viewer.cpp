@@ -271,13 +271,14 @@ void Tube_viewer::paint()
 
 	static const ImVec4 pressColor{0.5f, 0, 0, 1.0f};
 	static const ImVec4 releaseColor{0, 0.5f, 0, 1.0f};
-	static bool recenter = false;
+	//static bool recenter = false;
 	ImGui::StyleColorsClassic();
 
 	ImGuiWindowFlags window_flags = 0;
 	window_flags |= ImGuiWindowFlags_NoBackground;
 	bool open_ptr = true;
 	ImGui::Begin("Settings", &open_ptr, window_flags);
+	ImGui::Checkbox("Modify thickness", &modifyThickness);
 	ImGui::Text("Set start configuration of bubble ring.");
 	ImGui::SliderFloat("Thickness", &thickness, 0.0f, 0.5f);
 	ImGui::SliderFloat("Circulation", &circulation, 0.0f, 50.0f);
@@ -300,6 +301,7 @@ void Tube_viewer::paint()
 		filament.setAlpha(alpha);
 		filament.setResampleLength(length);
 		filament.setRecenter(recenter);
+		filament.setModifyThickness(modifyThickness);
 
 		timer_active_ = false;
 	}

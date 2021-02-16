@@ -43,6 +43,7 @@ public:
     void setAlpha(float alpha_) { alpha = alpha_; }
     void setResampleLength(float length) { resampleLength_ = length; }
     void setRecenter(bool recenter_) {recenter = recenter_; }
+    void setModifyThickness(bool modifyThickness_) { modifyThickness = modifyThickness_;}
 
     friend class FilamentTest;
 
@@ -55,7 +56,7 @@ private:
     std::vector<float> areas_e;
     std::vector<float> effectiveGravities_e;
     std::vector<float> flux_v;
-    float AreaUsed_v;
+    //float AreaUsed_v;
     std::vector<FilamentPoint> controlPolygon_;
     std::vector<FilamentPoint> originalControlPolygon_;
     std::vector<vec3> verticesofOneCircle_(int n, vec3 center, vec3 normal, vec3 up, float radius, bool recenter);
@@ -63,6 +64,7 @@ private:
     float tension = 0;
     float alpha = 0.5;
     bool recenter = false;
+    bool modifyThickness = true;
    
     // Methods
 
