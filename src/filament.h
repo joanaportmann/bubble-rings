@@ -22,7 +22,7 @@ class Filament
 
 public:
     // Constructor
-    Filament(float thickness, float circulation);
+    Filament(float thickness, float circulation, int numEdges_);
 
     // Deconstructor
     ~Filament();
@@ -56,7 +56,7 @@ private:
     std::vector<float> areas_e;
     std::vector<float> effectiveGravities_e;
     std::vector<float> flux_v;
-    //float AreaUsed_v;
+    float AreaUsed_v;
     std::vector<FilamentPoint> controlPolygon_;
     std::vector<FilamentPoint> originalControlPolygon_;
     std::vector<vec3> verticesofOneCircle_(int n, vec3 center, vec3 normal, vec3 up, float radius, bool recenter);
@@ -75,6 +75,7 @@ private:
     vec3 generalCatmullRom(float tension, float alpha, float u, vec3 &P0, vec3 &P1, vec3 &P2, vec3 &P3);
     void resampleCatMullRomWithWeight(float resampleLength);
     void resampleCatmullRom(float resampleL);
+    float totalVolume();
 
     // Biotsavart velocity
     vec3 biotsavartedge(vec3 p, vec3 R0, vec3 R1, float Gamma, float a);

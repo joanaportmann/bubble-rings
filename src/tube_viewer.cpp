@@ -27,6 +27,7 @@
 #include <Eigen/Dense>
 
 #define numberOfVerticesPerTubeCircle 30
+#define numEdges 30
 
 using namespace std;
 
@@ -35,7 +36,7 @@ using namespace std;
 Tube_viewer::Tube_viewer(const char *_title, int _width, int _height)
 	: GLFW_window(_title, _width, _height),
 	  unit_sphere_(50), //level of tesselation
-	  filament(0.12, 4),
+	  filament(0.12, 4, numEdges),
 	  tube(filament),
 	  background(0.0f, 0.0f, 50.0f, 0.0f)
 {
@@ -76,7 +77,7 @@ void Tube_viewer::
 
 		case GLFW_KEY_R:
 		{
-			filament = Filament(thickness, circulation);
+			filament = Filament(thickness, circulation, numEdges);
 			Tube tube_(filament);
 			// Tube *tube;
 			// tube = &tube_;
@@ -293,7 +294,7 @@ void Tube_viewer::paint()
 	if (ImGui::Button("Reset"))
 	{
 
-		filament = Filament(thickness, circulation);
+		filament = Filament(thickness, circulation, numEdges);
 		Tube tube_(filament);
 		// Tube *tube;
 		// tube = &tube_;

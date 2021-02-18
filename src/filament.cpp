@@ -28,10 +28,11 @@ typedef Eigen::Triplet<double> T;
 #define At -1
 #define nu 1e-06
 
+
 //=============================================================================
 
 // Create Filament of radius 0.6 and add random float [0, 0.02] to x of vertices. Outcommit random adding for testing.
-Filament::Filament(float thickness_, float circulation_)
+Filament::Filament(float thickness_, float circulation_, int numEdges)
 {
     // int unsigned time_seed;
     // time_seed = static_cast<unsigned>(time(0));
@@ -44,7 +45,8 @@ Filament::Filament(float thickness_, float circulation_)
     //unsigned int seed = 1612215069;
     srand(seed);
     // Set filament circle
-    for (float i = 0; i <= 2 * M_PI; i += 0.17)
+    float angle = 2 * M_PI / numEdges;
+    for (int i = 0; i < numEdges; i ++)
     {
         float r0 = 0;
         float r1 = 0;
@@ -53,9 +55,12 @@ Filament::Filament(float thickness_, float circulation_)
         // r1 = static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / 0.02));
         // r2 = static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / 0.02));
 
-        controlPolygon_.push_back({{0.6 * cos(i) + r0, 0.6 * sin(i) + r1, 0.0 + r2},
+        controlPolygon_.push_back({{0.6 * cos(i * angle) + r0, 0.6 * sin(i * angle) + r1, 0.0 + r2},
                                    thickness_,
                                    circulation_});
+
+        vec3 position = {0.6 * cos(i * angle) + r0, 0.6 * sin(i * angle) + r1, 0.0 + r2};
+        cout << "startposition: " << position << "\n" << "\n";
     }
     originalControlPolygon_ = controlPolygon_;
 }
@@ -119,7 +124,7 @@ std::vector<vec3> Filament::verticesofOneCircle_(int n, vec3 center, vec3 normal
         {
 
             // TODO!!!!!!!!!!!!!!!
-            vec3 shift = originalControlPolygon_[n].position - controlPolygon_[n].position;
+            vec3 shift = originalControlPolygon_[0].position - controlPolygon_[0].position;
             vertex += shift;
         }
         vertices.push_back(vertex);
@@ -385,19 +390,19 @@ void Filament::preComputations()
         {
             // positive case
             flux_v.push_back(1.0 / (8 * M_PI) * minus * areas_e[wrap(i - 1)]);
-            // AreaUsed_v = areas_e[wrap(i - 1)];
+             AreaUsed_v = areas_e[wrap(i - 1)];
         }
         else if (plus < std::min(0.0f, (-minus)))
         {
             // negative case
             flux_v.push_back(1.0 / (8 * M_PI) * plus * areas_e[i]);
-            //AreaUsed_v = areas_e[i];
+            AreaUsed_v = areas_e[i];
         }
         else
         {
             // neutral
             flux_v.push_back(0.0f);
-            //AreaUsed_v = 0;
+            AreaUsed_v = 0;
         }
     };
 };
@@ -482,8 +487,8 @@ Eigen::VectorXd Filament::doBurgerStepOnBubbleRing()
     Eigen::SparseMatrix<double> LHS = nuIdt * M - (0.5 * coef * L);
     Eigen::MatrixXd RHS = nuIdt * M * A + d.transpose() * F;
 
-    cout << "LHS " << LHS << "\n" << "\n";
-    cout << "RHS " << RHS << "\n" << "\n";
+    // cout << "LHS " << LHS << "\n" << "\n";
+    // cout << "RHS " << RHS << "\n" << "\n";
     // SCALE DUE TO PRECISION
     double scale = 1.0 / RHS.norm();
 
@@ -634,6 +639,16 @@ void Filament::resampleCatMullRomWithWeight(float resampleLength)
     controlPolygon_.assign(newPoints.begin(), newPoints.end());
 }
 
+float Filament::totalVolume()
+{
+    float volume = 0;
+    for(int i = 0; i < controlPolygon_.size(); i++) 
+    {
+        volume += (controlPolygon_[i].position - controlPolygon_[wrap(i+1)].position).norm() * controlPolygon_[i].a * controlPolygon_[i].a * M_PI;
+    }
+    return volume; 
+}
+
 void Filament::updateSkeleton()
 {
     BiotSavartAndLocalizedInduction();
@@ -643,6 +658,7 @@ void Filament::updateSkeleton()
         Eigen::VectorXd x = doBurgerStepOnBubbleRing();
         for (int i = 0; i < controlPolygon_.size(); i++)
         {
+            cout << x.minCoeff() << "\n" "\n"; 
             controlPolygon_[i].a = sqrt(sqrt(std::pow(x(i) / (M_PI), 2)));
         }
     }
@@ -651,7 +667,7 @@ void Filament::updateSkeleton()
     updatedFilament = true;
     framecouter++;
 
-    //cout << "thickness: " << frame << "\n";
+    cout << "Volume: " << totalVolume() << "\n";
 };
 
 //-----------------------------------------------------------------------------------

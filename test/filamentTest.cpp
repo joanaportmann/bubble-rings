@@ -91,7 +91,7 @@ protected:
     void SetUp() override {}
     void TearDown() override {}
 
-    Filament filament = Filament(0.12, 4);
+    Filament filament = Filament(0.12, 4, 6);
     std::vector<FilamentPoint> filamentPoints_;
 };
 
