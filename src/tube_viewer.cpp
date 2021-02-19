@@ -210,19 +210,15 @@ void Tube_viewer::initialize()
 
 	// setup shader
 	color_shader_.load(SHADER_PATH "/color.vert", SHADER_PATH "/color.frag");
+
+	solid_color_shader_.load(SHADER_PATH "/solid_color.vert", SHADER_PATH "/solid_color.frag");
+
 	test_tube_shader_.load(SHADER_PATH "/test_tube.vert", SHADER_PATH "/test_tube.frag");
+
+	coordinateAxis.initialize();
 }
 
 //-----------------------------------------------------------------------------
-
-// void Tube_viewer::drawCircle(std::vector<vec3> control_polygon_, float radius)
-// {
-// 	Path circle;
-// 	circle.initialize();
-// 	circle.setPoints(control_polygon_);
-// 	color_shader_.use();
-// 	circle.draw();
-// };
 
 void Tube_viewer::paint()
 {
@@ -286,6 +282,7 @@ void Tube_viewer::paint()
 	ImGui::Checkbox("Recenter", &recenter);
 	ImGui::Checkbox("Render only Polygon", &renderOnlyPolygon);
 	ImGui::Checkbox("Underwater background", &backgroundOn);
+	ImGui::Checkbox("Show coordinate axis", &showCoordinateAxis);
 	ImGui::Text("Set tension and alpha for Catmull-Rom Spline calculation.");
 	ImGui::SliderFloat("Tension", &tension, 0.0f, 1.0f);
 	ImGui::SliderFloat("Alpha", &alpha, 0.0f, 1.0f);
@@ -411,6 +408,12 @@ void Tube_viewer::draw_scene(mat4 &_projection, mat4 &_view)
 		background_shader_.set_uniform("greyscale", static_cast<int>(greyscale_));
 		background.tex_.bind();
 		unit_sphere_.draw();
+	}
+
+	if(showCoordinateAxis)
+	{
+	center_of_coordinatesystem = vec3(0, 0, 0);
+	coordinateAxis.draw(solid_color_shader_, _projection * _view, center_of_coordinatesystem);
 	}
 
 	// check for OpenGL errors

@@ -77,6 +77,7 @@ private:
   bool modifyThickness = true;
   bool recenter = false;
   bool backgroundOn = false;
+  bool showCoordinateAxis = false;
 
   /// default color shader (renders only texture)
   Shader color_shader_;
@@ -86,6 +87,8 @@ private:
 
   /// Shader
   Shader test_tube_shader_;
+
+  Shader solid_color_shader_;
 
   /// state whether the rendering should be in color or not
   bool greyscale_;
@@ -100,7 +103,9 @@ private:
 
   std::vector<vec3> verticesOfTube;
 
-  Frame ship_path_frame_;
+  Frame coordinateAxis;
+  vec3 center_of_coordinatesystem;
+
 
   /// the field of view for the camera
   float fovy_;

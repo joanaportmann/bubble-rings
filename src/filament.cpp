@@ -60,7 +60,7 @@ Filament::Filament(float thickness_, float circulation_, int numEdges)
                                    circulation_});
 
         vec3 position = {0.6 * cos(i * angle) + r0, 0.6 * sin(i * angle) + r1, 0.0 + r2};
-        cout << "startposition: " << position << "\n" << "\n";
+        //cout << "startposition: " << position << "\n" << "\n";
     }
     originalControlPolygon_ = controlPolygon_;
 }
@@ -658,12 +658,12 @@ void Filament::updateSkeleton()
         Eigen::VectorXd x = doBurgerStepOnBubbleRing();
         for (int i = 0; i < controlPolygon_.size(); i++)
         {
-            cout << x.minCoeff() << "\n" "\n"; 
+            //cout << x.minCoeff() << "\n" "\n"; 
             controlPolygon_[i].a = sqrt(sqrt(std::pow(x(i) / (M_PI), 2)));
         }
     }
-    //resample(resampleLength_);
-    resampleCatMullRomWithWeight(resampleLength_);
+    resample(resampleLength_);
+    //resampleCatMullRomWithWeight(resampleLength_);
     updatedFilament = true;
     framecouter++;
 
