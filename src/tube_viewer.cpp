@@ -71,6 +71,11 @@ void Tube_viewer::
 
 		case GLFW_KEY_LEFT:
 		{
+			y_angle_ += 0.05 * M_PI;
+			break;
+		}
+		case GLFW_KEY_RIGHT:
+		{
 			y_angle_ -= 0.05 * M_PI;
 			break;
 		}
@@ -79,15 +84,14 @@ void Tube_viewer::
 		{
 			filament = Filament(thickness, circulation, numEdges);
 			Tube tube_(filament);
-			// Tube *tube;
-			// tube = &tube_;
+			filament.setTension(tension);
+			filament.setAlpha(alpha);
+			filament.setResampleLength(length);
+			filament.setRecenter(recenter);
+			filament.setModifyThickness(modifyThickness);
 
-			break;
-		}
+			timer_active_ = false;
 
-		case GLFW_KEY_RIGHT:
-		{
-			y_angle_ += 0.05 * M_PI;
 			break;
 		}
 
@@ -293,8 +297,6 @@ void Tube_viewer::paint()
 
 		filament = Filament(thickness, circulation, numEdges);
 		Tube tube_(filament);
-		// Tube *tube;
-		// tube = &tube_;
 		filament.setTension(tension);
 		filament.setAlpha(alpha);
 		filament.setResampleLength(length);
@@ -410,10 +412,10 @@ void Tube_viewer::draw_scene(mat4 &_projection, mat4 &_view)
 		unit_sphere_.draw();
 	}
 
-	if(showCoordinateAxis)
+	if (showCoordinateAxis)
 	{
-	center_of_coordinatesystem = vec3(0, 0, 0);
-	coordinateAxis.draw(solid_color_shader_, _projection * _view, center_of_coordinatesystem);
+		center_of_coordinatesystem = vec3(0, 0, 0);
+		coordinateAxis.draw(solid_color_shader_, _projection * _view, center_of_coordinatesystem);
 	}
 
 	// check for OpenGL errors
