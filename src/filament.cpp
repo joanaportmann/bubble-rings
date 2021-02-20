@@ -63,6 +63,8 @@ Filament::Filament(float thickness_, float circulation_, int numEdges)
         //cout << "startposition: " << position << "\n" << "\n";
     }
     originalControlPolygon_ = controlPolygon_;
+    //resampleCatMullRomWithWeight(resampleLength_);
+
 }
 
 //---------------------------------------------------------------------------
@@ -652,6 +654,8 @@ float Filament::totalVolume()
 void Filament::updateSkeleton()
 {
     BiotSavartAndLocalizedInduction();
+    //resampleCatMullRomWithWeight(resampleLength_);
+
     if (modifyThickness)
     {
         preComputations(); // for Burger's equation
@@ -662,12 +666,13 @@ void Filament::updateSkeleton()
             controlPolygon_[i].a = sqrt(sqrt(std::pow(x(i) / (M_PI), 2)));
         }
     }
-    resample(resampleLength_);
+    
     //resampleCatMullRomWithWeight(resampleLength_);
     updatedFilament = true;
     framecouter++;
 
     cout << "Volume: " << totalVolume() << "\n";
+    cout << "Length: " << totalLengthOfControlpolygon() << "\n";
 };
 
 //-----------------------------------------------------------------------------------
