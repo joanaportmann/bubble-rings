@@ -207,16 +207,17 @@ void Tube_viewer::initialize()
 
 	// Allocate textures
 	background.tex_.init(GL_TEXTURE0, GL_TEXTURE_2D, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, GL_REPEAT);
+	tube.tex_.init(GL_TEXTURE0, GL_TEXTURE_2D, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, GL_REPEAT);
 
 	// Load/generate textures
 	background.tex_.loadPNG(TEXTURE_PATH "/underwaterSphere.png");
-	background_shader_.load(SHADER_PATH "/background.vert", SHADER_PATH "/background.frag");
-
+	tube.tex_.loadPNG(TEXTURE_PATH "/underwaterSphere.png");
+	
 	// setup shader
+	background_shader_.load(SHADER_PATH "/background.vert", SHADER_PATH "/background.frag");
+	reflection_shader_.load(SHADER_PATH "/reflection.vert", SHADER_PATH "/reflection.frag");
 	color_shader_.load(SHADER_PATH "/color.vert", SHADER_PATH "/color.frag");
-
 	solid_color_shader_.load(SHADER_PATH "/solid_color.vert", SHADER_PATH "/solid_color.frag");
-
 	test_tube_shader_.load(SHADER_PATH "/test_tube.vert", SHADER_PATH "/test_tube.frag");
 
 	coordinateAxis.initialize();
@@ -257,7 +258,8 @@ void Tube_viewer::paint()
 		up);
 	mat4 projection;
 	projection = MatUtils::perspective(fovy_, (float)width_ / (float)height_, near_, far_);
-	draw_scene(projection, view);
+	vec3 eye_3d = vec3(eye(0), eye(1), eye(2));
+	draw_scene(projection, view, eye_3d);
 
 	// Our state
 	bool show_demo_window = false;
@@ -349,7 +351,7 @@ void Tube_viewer::timer()
 
 //-----------------------------------------------------------------------------
 
-void Tube_viewer::draw_scene(mat4 &_projection, mat4 &_view)
+void Tube_viewer::draw_scene(mat4 &_projection, mat4 &_view, vec3 &eye)
 {
 	// the matrices we need: model, modelview, modelview-projection, normal
 	mat4 m_matrix;
@@ -375,11 +377,18 @@ void Tube_viewer::draw_scene(mat4 &_projection, mat4 &_view)
 
 	if (!renderOnlyPolygon)
 	{
-		test_tube_shader_.use();
-		test_tube_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
-		test_tube_shader_.set_uniform("normal_matrix", normal_matrix);
+		// test_tube_shader_.use();
+		// test_tube_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
+		// test_tube_shader_.set_uniform("normal_matrix", normal_matrix);
+		
 		//test_tube_shader_.set_uniform("light_position", _view * vec4(0, 0, 0, 1));
 		// test_tube_shader_.set_uniform("color", vec4(0.8, 0.8, 0.2, 0.6));
+		reflection_shader_.use();
+		reflection_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
+		reflection_shader_.set_uniform("normal_matrix", normal_matrix);
+		// reflection_shader_.set_uniform("eyePositionW", eye);
+		// reflection_shader_.set_uniform("tex", 0);
+
 		tube.draw();
 	}
 	std::vector<FilamentPoint> FilamentPoints = filament.getFilamentPoints();

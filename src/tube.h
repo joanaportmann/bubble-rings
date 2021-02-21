@@ -15,6 +15,7 @@
 #include "glmath.h"
 #include <vector>
 #include "filament.h"
+#include "texture.h"
 //=============================================================================
 
 
@@ -32,6 +33,7 @@ public:
     void draw(GLenum mode=GL_TRIANGLES);
 
     void initialize();
+    Texture tex_;
     
 
 

@@ -49,7 +49,7 @@ protected:
   /// function that draws the bubble ring
   /// \param _projection the projection matrix for the scene
   /// \param _view the view matrix for the scene
-  void draw_scene(mat4 &_projection, mat4 &_view);
+  void draw_scene(mat4 &_projection, mat4 &_view, vec3 &eye);
 
   void drawCircle(const std::vector<vec3> pts, float radius);
 
@@ -89,6 +89,8 @@ private:
   Shader test_tube_shader_;
 
   Shader solid_color_shader_;
+
+  Shader reflection_shader_;
 
   /// state whether the rendering should be in color or not
   bool greyscale_;
