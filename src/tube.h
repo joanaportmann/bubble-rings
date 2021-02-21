@@ -50,6 +50,7 @@ private:
 
     // generate triangle structs
     void createTriangleStruct();
+    int wrap2(int i);
 
     /// indices of the triangle vertices
     unsigned int n_positions = 0;

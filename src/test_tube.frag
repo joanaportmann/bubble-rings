@@ -1,6 +1,6 @@
 #version 460
 
-flat in vec3 v2f_normal;
+in vec3 v2f_normal;
 
 out vec4 f_color;
 

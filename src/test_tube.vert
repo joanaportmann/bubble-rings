@@ -7,7 +7,7 @@ layout (location = 1) in vec3 v_normal;
 layout (location = 2) in vec2 v_texcoord;
 
 //out vec2 v2f_texcoord;
-flat out vec3 v2f_normal;
+out vec3 v2f_normal;
 //out vec3 v2f_light;
 //out vec3 v2f_view;
 

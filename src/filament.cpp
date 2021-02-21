@@ -667,12 +667,12 @@ void Filament::updateSkeleton()
         }
     }
     
-    //resampleCatMullRomWithWeight(resampleLength_);
+    resampleCatMullRomWithWeight(resampleLength_);
     updatedFilament = true;
     framecouter++;
 
-    cout << "Volume: " << totalVolume() << "\n";
-    cout << "Length: " << totalLengthOfControlpolygon() << "\n";
+    // cout << "Volume: " << totalVolume() << "\n";
+    // cout << "Length: " << totalLengthOfControlpolygon() << "\n";
 };
 
 //-----------------------------------------------------------------------------------

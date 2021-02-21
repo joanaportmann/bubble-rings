@@ -205,6 +205,9 @@ void Tube_viewer::initialize()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+	// FIXME: Has no effect?
+	glShadeModel(GL_SMOOTH);
+
 	// Allocate textures
 	background.tex_.init(GL_TEXTURE0, GL_TEXTURE_2D, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, GL_REPEAT);
 	tube.tex_.init(GL_TEXTURE0, GL_TEXTURE_2D, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, GL_REPEAT);
@@ -377,15 +380,16 @@ void Tube_viewer::draw_scene(mat4 &_projection, mat4 &_view, vec3 &eye)
 
 	if (!renderOnlyPolygon)
 	{
-		// test_tube_shader_.use();
-		// test_tube_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
-		// test_tube_shader_.set_uniform("normal_matrix", normal_matrix);
+		test_tube_shader_.use();
+		test_tube_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
+		test_tube_shader_.set_uniform("normal_matrix", normal_matrix);
 		
 		//test_tube_shader_.set_uniform("light_position", _view * vec4(0, 0, 0, 1));
 		// test_tube_shader_.set_uniform("color", vec4(0.8, 0.8, 0.2, 0.6));
-		reflection_shader_.use();
-		reflection_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
-		reflection_shader_.set_uniform("normal_matrix", normal_matrix);
+		// reflection_shader_.use();
+		// reflection_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
+		// reflection_shader_.set_uniform("normal_matrix", normal_matrix);
+		// reflection_shader_.set_uniform("tex", 0);
 		// reflection_shader_.set_uniform("eyePositionW", eye);
 		// reflection_shader_.set_uniform("tex", 0);
 

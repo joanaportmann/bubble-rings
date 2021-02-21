@@ -1,8 +1,8 @@
 #version 460
 
-flat in vec3 v2f_normal;
+in vec3 v2f_normal;
 in vec2 v2f_texcoord;
-in vec3 eye;
+//in vec3 eye;
 
 
 out vec4 f_color;
@@ -11,8 +11,10 @@ uniform sampler2D tex;
 
 void main() {
 
-    vec3 color = vec3(0.0,0.0,0.0);
+    vec3 normal_normalized = normalize(v2f_normal);
+    vec3 color = 0.05*vec3(normal_normalized.x, 0.0, 0.0);
+    color += texture(tex, v2f_texcoord.st).rgb;
 
-	color += texture(tex, v2f_texcoord.st).rgb;
+	//color += texture(tex, v2f_texcoord.st).rgb;
     f_color = vec4(color, 1);
 }

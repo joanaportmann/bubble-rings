@@ -59,7 +59,6 @@ void Tube::createTriangleStruct()
     tubeVertices.clear();
     tubeVertices = filament_.getBubbleRingSkeleton();
 
-    int shift = 0;
     for (unsigned int v = 0; v < tubeVertices.size(); ++v)
     {
         Triangle triangle1, triangle2;
@@ -84,17 +83,17 @@ void Tube::createTriangleStruct()
 
         unsigned int i0 = v;
         unsigned int i1 = (lastVertexInCircle ? (v - (numberOfVerticesPerTubeCircle - 1)) : (v + 1)) % tubeVertices.size();
-        unsigned int i2 = (v + numberOfVerticesPerTubeCircle + shift) % tubeVertices.size();
-        unsigned int i3 = (lastVertexInCircle ? (v + 1 + shift) : v + (numberOfVerticesPerTubeCircle + 1) + shift) % tubeVertices.size();
+        unsigned int i2 = (v + numberOfVerticesPerTubeCircle) % tubeVertices.size();
+        unsigned int i3 = (lastVertexInCircle ? (v + 1) : v + (numberOfVerticesPerTubeCircle + 1)) % tubeVertices.size();
 
         triangle1.ind0 = i0;
-        triangle1.ind1 = i1;
+        triangle1.ind1 = i2;
         triangle1.ind2 = i3;
         Tube::triangles_.push_back(triangle1);
 
         triangle2.ind0 = i0;
         triangle2.ind1 = i3;
-        triangle2.ind2 = i2;
+        triangle2.ind2 = i1;
         Tube::triangles_.push_back(triangle2);
     }
 }
@@ -133,6 +132,13 @@ void Tube::initialize()
 
 //------------------------------------------------------------------------------------
 
+int Tube::wrap2(int i)
+{
+    return (i + 2 * tubeVertices.size()) % (2 * tubeVertices.size());
+}
+
+//---------------------------------------------------------------------------------
+
 void Tube::updateBuffers()
 {
     triangles_.clear();
@@ -147,9 +153,10 @@ void Tube::updateBuffers()
 
     Tube::compute_normals();
     std::vector<GLfloat> positions(3 * 3 * triangles_.size());
+    std::vector<GLfloat> faceNormals(3 * triangles_.size());
     std::vector<GLfloat> normals(3 * 3 * triangles_.size());
 
-    unsigned int p(0), i(0), n(0), t(0);
+    unsigned int p(0), i(0), t(0);
 
     // generate triangles
     int count = 0;
@@ -166,13 +173,43 @@ void Tube::updateBuffers()
         positions[p++] = tubeVertices[t.ind2](0);
         positions[p++] = tubeVertices[t.ind2](1);
         positions[p++] = tubeVertices[t.ind2](2);
+    }
 
-        for (int i = 0; i < 3; i++)
-        {
-            normals[n++] = t.normal(0);
-            normals[n++] = t.normal(1);
-            normals[n++] = t.normal(2);
-        }
+    for (int i = 0; i < tubeVertices.size(); i++)
+    {
+        vec3 normal0 = triangles_[wrap2(2 * i)].normal;
+        vec3 normal1 = triangles_[wrap2(2 * i + 1)].normal;
+        vec3 normal2 = triangles_[wrap2(2 * i - numberOfVerticesPerTubeCircle)].normal;
+        vec3 normal3 = triangles_[wrap2(2 * i - numberOfVerticesPerTubeCircle - 1)].normal;
+        vec3 normal4 = triangles_[wrap2(2 * i - numberOfVerticesPerTubeCircle - 2)].normal;
+        vec3 normal5 = triangles_[wrap2(2 * i - 1)].normal;
+
+        vec3 normal = 0.25 * (normal2 - normal5) + 0.125 * (normal0 - normal1 - normal3 + normal4);
+        normal.normalize();
+
+        normals[3 * 3 * wrap2(2 * i)] = normal(0);
+        normals[3 * 3 * wrap2(2 * i) + 1] = normal(1);
+        normals[3 * 3 * wrap2(2 * i) + 2] = normal(2);
+
+        normals[3 * 3 * wrap2(2 * i + 1)] = normal(0);
+        normals[3 * 3 * wrap2(2 * i + 1) + 1] = normal(1);
+        normals[3 * 3 * wrap2(2 * i + 1) + 2] = normal(2);
+
+        normals[3 * 3 * wrap2(2 * i - 2 * numberOfVerticesPerTubeCircle) + 3] = normal(0);
+        normals[3 * 3 * wrap2(2 * i - 2 * numberOfVerticesPerTubeCircle) + 3 + 1] = normal(1);
+        normals[3 * 3 * wrap2(2 * i - 2 * numberOfVerticesPerTubeCircle) + 3 + 2] = normal(2);
+
+        normals[3 * 3 * wrap2(2 * i - 2 * numberOfVerticesPerTubeCircle - 1) + 3] = normal(0);
+        normals[3 * 3 * wrap2(2 * i - 2 * numberOfVerticesPerTubeCircle - 1) + 3 + 1] = normal(1);
+        normals[3 * 3 * wrap2(2 * i - 2 * numberOfVerticesPerTubeCircle - 1) + 3 + 2] = normal(2);
+
+        normals[3 * 3 * wrap2(2 * i - 2 * numberOfVerticesPerTubeCircle - 2) + 6] = normal(0);
+        normals[3 * 3 * wrap2(2 * i - 2 * numberOfVerticesPerTubeCircle - 2) + 6 + 1] = normal(1);
+        normals[3 * 3 * wrap2(2 * i - 2 * numberOfVerticesPerTubeCircle - 2) + 6 + 2] = normal(2);
+
+        normals[3 * 3 * wrap2(2 * i - 1) + 6] = normal(0);
+        normals[3 * 3 * wrap2(2 * i - 1) + 6 + 1] = normal(1);
+        normals[3 * 3 * wrap2(2 * i - 1) + 6 + 2] = normal(2);
     }
 
     n_positions = positions.size();
