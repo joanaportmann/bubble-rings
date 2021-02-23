@@ -215,7 +215,7 @@ void Tube_viewer::initialize()
 	// Load/generate textures
 	background.tex_.loadPNG(TEXTURE_PATH "/underwaterSphere.png");
 	tube.tex_.loadPNG(TEXTURE_PATH "/underwaterSphere.png");
-	
+
 	// setup shader
 	background_shader_.load(SHADER_PATH "/background.vert", SHADER_PATH "/background.frag");
 	reflection_shader_.load(SHADER_PATH "/reflection.vert", SHADER_PATH "/reflection.frag");
@@ -356,12 +356,6 @@ void Tube_viewer::timer()
 
 void Tube_viewer::draw_scene(mat4 &_projection, mat4 &_view, vec3 &eye)
 {
-	// the matrices we need: model, modelview, modelview-projection, normal
-	mat4 m_matrix;
-	mat4 mv_matrix;
-	mat4 mvp_matrix;
-	mat3 n_matrix;
-
 	// the sun is centered at the origin and -- for lighting -- considered to be a point, so that is the light position in world coordinates
 	vec4 light = vec4(0.0, 0.0, 0.0, 1.0); //in world coordinates
 	// convert light into camera coordinates
@@ -370,6 +364,28 @@ void Tube_viewer::draw_scene(mat4 &_projection, mat4 &_view, vec3 &eye)
 	Eigen::Affine3f rotation_y;
 	rotation_y = Eigen::AngleAxisf(0.0f, vec3::UnitY().cast<float>());
 	mat4 rotation_y_mat = rotation_y.matrix().cast<double>();
+
+	if (backgroundOn)
+	{
+		// render background
+		Eigen::Affine3f scaling;
+		scaling = Eigen::Scaling(background.radius_);
+		mat4 m_matrix_bg = scaling.matrix().cast<double>();
+		mat4 mv_matrix_bg = _view * m_matrix_bg;
+		mat4 mvp_matrix_background = _projection * mv_matrix_bg;
+		background_shader_.use();
+		background_shader_.set_uniform("modelview_projection_matrix", mvp_matrix_background);
+		background_shader_.set_uniform("tex", 0);
+		background_shader_.set_uniform("greyscale", static_cast<int>(greyscale_));
+		background.tex_.bind();
+		unit_sphere_.draw();
+	}
+
+	// the matrices we need: model, modelview, modelview-projection, normal
+	mat4 m_matrix;
+	mat4 mv_matrix;
+	mat4 mvp_matrix;
+	mat3 n_matrix;
 
 	// render tube
 	m_matrix = mat4::Identity();
@@ -383,7 +399,7 @@ void Tube_viewer::draw_scene(mat4 &_projection, mat4 &_view, vec3 &eye)
 		// test_tube_shader_.use();
 		// test_tube_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
 		// test_tube_shader_.set_uniform("normal_matrix", normal_matrix);
-		
+
 		//test_tube_shader_.set_uniform("light_position", _view * vec4(0, 0, 0, 1));
 		// test_tube_shader_.set_uniform("color", vec4(0.8, 0.8, 0.2, 0.6));
 		reflection_shader_.use();
@@ -407,22 +423,6 @@ void Tube_viewer::draw_scene(mat4 &_projection, mat4 &_view, vec3 &eye)
 	color_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
 	if (!recenter)
 		circle.draw();
-
-	if (backgroundOn)
-	{
-		// render background
-		Eigen::Affine3f scaling;
-		scaling = Eigen::Scaling(background.radius_);
-		m_matrix = scaling.matrix().cast<double>();
-		mv_matrix = _view * m_matrix;
-		mvp_matrix = _projection * mv_matrix;
-		background_shader_.use();
-		background_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
-		background_shader_.set_uniform("tex", 0);
-		background_shader_.set_uniform("greyscale", static_cast<int>(greyscale_));
-		background.tex_.bind();
-		unit_sphere_.draw();
-	}
 
 	if (showCoordinateAxis)
 	{
