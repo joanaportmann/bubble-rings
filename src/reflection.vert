@@ -26,6 +26,6 @@ void main() {
 
     vec3 reflected_normal = normalize(reflect(eyePositionW - vec3(v_position), v2f_normal));
     vec2 reflected_normal_xz = normalize(vec2(reflected_normal.x, reflected_normal.z));
-    float angle = reflected_normal.z >= 0.0 ? acos(reflected_normal_xz.x) : 2 * M_PI - acos(reflected_normal_xz.x);
+    float angle = reflected_normal.z <= 0.0 ? acos(-reflected_normal_xz.x) : 2 * M_PI - acos(-reflected_normal_xz.x);
     v2f_texcoord = vec2(angle / M_PI / 2, -asin(reflected_normal.y) / M_PI + 0.5);
 }

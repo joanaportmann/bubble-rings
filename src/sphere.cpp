@@ -76,7 +76,7 @@ void Sphere::initialize()
             normals[n++] = y;
             normals[n++] = z;
 
-            texcoords[t++] = 1.0-u;
+            texcoords[t++] = u;
             texcoords[t++] = 1.0-v;
         }
     }

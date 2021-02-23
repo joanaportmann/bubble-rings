@@ -97,15 +97,15 @@ void Tube_viewer::
 
 		case GLFW_KEY_DOWN:
 		{
-			if (x_angle_ < M_PI / 2 - 0.05 * M_PI)
-				x_angle_ += 0.05 * M_PI;
+			if (x_angle_ > -M_PI / 2 + 0.05 * M_PI)
+				x_angle_ -= 0.05 * M_PI;
 			break;
 		}
 
 		case GLFW_KEY_UP:
 		{
-			if (x_angle_ > -M_PI / 2 + 0.05 * M_PI)
-				x_angle_ -= 0.05 * M_PI;
+			if (x_angle_ < M_PI / 2 - 0.05 * M_PI)
+				x_angle_ += 0.05 * M_PI;
 			break;
 		}
 
@@ -213,8 +213,8 @@ void Tube_viewer::initialize()
 	tube.tex_.init(GL_TEXTURE0, GL_TEXTURE_2D, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, GL_REPEAT);
 
 	// Load/generate textures
-	background.tex_.loadPNG(TEXTURE_PATH "/debug.png");
-	tube.tex_.loadPNG(TEXTURE_PATH "/debug.png");
+	background.tex_.loadPNG(TEXTURE_PATH "/underwaterSphere.png");
+	tube.tex_.loadPNG(TEXTURE_PATH "/underwaterSphere.png");
 	
 	// setup shader
 	background_shader_.load(SHADER_PATH "/background.vert", SHADER_PATH "/background.frag");
