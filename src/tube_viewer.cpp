@@ -205,8 +205,6 @@ void Tube_viewer::initialize()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	// FIXME: Has no effect?
-	glShadeModel(GL_SMOOTH);
 
 	// Allocate textures
 	background.tex_.init(GL_TEXTURE0, GL_TEXTURE_2D, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, GL_REPEAT);
