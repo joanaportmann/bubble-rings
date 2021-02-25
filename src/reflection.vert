@@ -32,12 +32,13 @@ void main() {
     float angle = reflected_normal.z <= 0.0 ? acos(-reflected_normal_xz.x) : 2 * M_PI - acos(-reflected_normal_xz.x);
     v2f_texcoord_reflect = vec2(angle / M_PI / 2, -asin(reflected_normal.y) / M_PI + 0.5);
 
-    //refraction
-    vec3 refracted_normal = normalize(refract(- eyePositionW + vec3(v_position), v2f_normal, 1.3));
+    // refraction
+    vec3 refracted_normal = normalize(refract(normalize(eyePositionW - vec3(v_position)), -v2f_normal, 1.0 / 1.3));
     vec2 refracted_normal_xz = normalize(vec2(refracted_normal.x, refracted_normal.z));
-    v2f_texcoord_refract = vec2(angle / M_PI / 2, -asin(refracted_normal.y) / M_PI + 0.5);
+    float angleRefract = refracted_normal.z <= 0.0 ? acos(-refracted_normal_xz.x) : 2 * M_PI - acos(-refracted_normal_xz.x);
+    v2f_texcoord_refract = vec2(angleRefract / M_PI / 2, -asin(refracted_normal.y) / M_PI + 0.5);
 
-    // Phong shader
+    // Phong 
     // v2f_texcoord = v_texcoord;
 	// v2f_light = normalize(vec3(light_position - (modelview_matrix * v_position)));
 	// v2f_view = normalize(vec3(modelview_matrix * v_position));

@@ -17,8 +17,8 @@ void main() {
 
     vec3 normal_normalized = normalize(v2f_normal);
     vec3 color = 0.01 * vec3(normal_normalized.x, 0.0, 0.0);   
-    color = 1 * texture(tex, v2f_texcoord_reflect.st).rgb;
-    color += 0 * texture(tex, v2f_texcoord_refract.st).rgb;
+    color = 0.5 * texture(tex, v2f_texcoord_reflect.st).rgb;
+    color += 0.5 * texture(tex, v2f_texcoord_refract.st).rgb;
 //     color = 0.01*texture(tex, v2f_texcoord.st).rgb;
 //    color += normal_normalized;
 

@@ -656,7 +656,7 @@ float Filament::totalVolume()
 void Filament::updateSkeleton()
 {
     BiotSavartAndLocalizedInduction();
-    //resampleCatMullRomWithWeight(resampleLength_);
+    resampleCatMullRomWithWeight(resampleLength_);
 
     if (modifyThickness)
     {
@@ -669,7 +669,7 @@ void Filament::updateSkeleton()
         }
     }
     
-    //resampleCatMullRomWithWeight(resampleLength_);
+    resampleCatMullRomWithWeight(resampleLength_);
     updatedFilament = true;
     framecouter++;
 
