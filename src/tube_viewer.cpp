@@ -42,13 +42,13 @@ Tube_viewer::Tube_viewer(const char *_title, int _width, int _height)
 {
 	// rendering parameters
 	greyscale_ = false;
-	fovy_ = 50;
+	fovy_ = 70;
 	near_ = 0.01f;
 	far_ = 20;
 
 	x_angle_ = 0.0f;
 	y_angle_ = -M_PI / 4.0f;
-	dist_factor_ = 9.0f;
+	dist_factor_ = 8.0f;
 
 	srand((unsigned int)time(NULL));
 }
@@ -204,6 +204,8 @@ void Tube_viewer::initialize()
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_FRONT);
 
 
 	// Allocate textures
@@ -211,8 +213,8 @@ void Tube_viewer::initialize()
 	tube.tex_.init(GL_TEXTURE0, GL_TEXTURE_2D, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, GL_REPEAT);
 
 	// Load/generate textures
-	background.tex_.loadPNG(TEXTURE_PATH "/underwaterSphere.png");
-	tube.tex_.loadPNG(TEXTURE_PATH "/underwaterSphere.png");
+	background.tex_.loadPNG(TEXTURE_PATH "/debug.png");
+	tube.tex_.loadPNG(TEXTURE_PATH "/debug.png");
 
 	// setup shader
 	background_shader_.load(SHADER_PATH "/background.vert", SHADER_PATH "/background.frag");

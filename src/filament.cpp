@@ -424,6 +424,7 @@ Eigen::VectorXd Filament::doBurgerStepOnBubbleRing()
     {
         F(j) = flux_v[j];
     }
+    //cout << "flux: -.-.-.-.-.-." << "\n" << F << "\n" << endl;
 
     //-----------------------------------------------------------------------
 
@@ -443,7 +444,6 @@ Eigen::VectorXd Filament::doBurgerStepOnBubbleRing()
     // d.coeffRef(controlPolygon_.size()-1, 0) = 0;
     // d.coeffRef(0, controlPolygon_.size()-1) = -1;
 
-    //cout << "d: -.-.-.-.-.-." << d << "\n" << endl;
 
     Eigen::SparseMatrix<double> d_transpose = d.transpose();
 
@@ -459,10 +459,8 @@ Eigen::VectorXd Filament::doBurgerStepOnBubbleRing()
     Eigen::SparseMatrix<double> star1(controlPolygon_.size(), controlPolygon_.size()); // default is column major
     star1.setFromTriplets(trp_C_square_div_pointLength.begin(), trp_C_square_div_pointLength.end());
 
-    //cout << "star1: -.-.-.-.-.-." << star1 << "\n" << endl;
-
     // Build Laplacian L
-    Eigen::SparseMatrix<double> L = -d.transpose() * star1 * d;
+    Eigen::SparseMatrix<double> L = -d.transpose() * (star1 * d);
 
     //cout << "L: -.-.-.-.-.-." << L << "\n" << endl;
 
@@ -477,6 +475,7 @@ Eigen::VectorXd Filament::doBurgerStepOnBubbleRing()
     Eigen::SparseMatrix<double> M(controlPolygon_.size(), controlPolygon_.size()); // default is column major
     M.setFromTriplets(trp_lengths.begin(), trp_lengths.end());
 
+//cout << "M: " << M << "\n";
     //-------------------------------------------------------------------------
 
     // Constants
@@ -500,6 +499,9 @@ Eigen::VectorXd Filament::doBurgerStepOnBubbleRing()
     cg.compute(LHS);
     // cout << "estimated error: " << cg.error() << "\n";
     // cout << "tolerance: " << cg.tolerance() << "\n";
+
+//     cout << "sol: " << cg.solve(RHS * scale) << "\n";
+//  cout << "sol scaled___________________________: " << cg.solve(RHS * scale) / scale << "\n";
     return (cg.solve(RHS * scale)) / scale;
 }
 
@@ -667,7 +669,7 @@ void Filament::updateSkeleton()
         }
     }
     
-    resampleCatMullRomWithWeight(resampleLength_);
+    //resampleCatMullRomWithWeight(resampleLength_);
     updatedFilament = true;
     framecouter++;
 
