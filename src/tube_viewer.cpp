@@ -405,8 +405,11 @@ void Tube_viewer::draw_scene(mat4 &_projection, mat4 &_view, vec3 &eye)
 		reflection_shader_.use();
 		reflection_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
 		reflection_shader_.set_uniform("normal_matrix", normal_matrix);
+		//reflection_shader_.set_uniform("modelview_matrix", mv_matrix);
 		reflection_shader_.set_uniform("tex", 0);
 		reflection_shader_.set_uniform("eyePositionW", eye);
+		vec4 view = _view * vec4(0, 1, 0, 1);
+		//reflection_shader_.set_uniform("light_position", view);
 
 		tube.draw();
 	}
