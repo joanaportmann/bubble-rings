@@ -28,7 +28,6 @@ typedef Eigen::Triplet<double> T;
 #define At -1
 #define nu 1e-06
 
-
 //=============================================================================
 
 // Create Filament of radius 0.6 and add random float [0, 0.02] to x of vertices. Outcommit random adding for testing.
@@ -46,7 +45,7 @@ Filament::Filament(float thickness_, float circulation_, int numEdges)
     srand(seed);
     // Set filament circle
     float angle = 2 * M_PI / numEdges;
-    for (int i = 0; i < numEdges; i ++)
+    for (int i = 0; i < numEdges; i++)
     {
         float r0 = 0;
         float r1 = 0;
@@ -64,7 +63,6 @@ Filament::Filament(float thickness_, float circulation_, int numEdges)
     }
     originalControlPolygon_ = controlPolygon_;
     //resampleCatMullRomWithWeight(resampleLength_);
-
 }
 
 //---------------------------------------------------------------------------
@@ -296,10 +294,14 @@ vec3 Filament::oneStepOfRungeKutta(int i, const std::vector<FilamentPoint> &temp
 };
 
 // Runge Kutta evaluation
+
+//TODO: add thickness flow!!!
 void Filament::BiotSavartAndLocalizedInduction()
 {
-    std::vector<FilamentPoint> temp_polygon1, temp_polygon2, temp_polygon3;
+    std::vector<FilamentPoint> temp_polygon1, temp_polygon2, temp_polygon3, tempPolygonOld;
     temp_polygon1 = controlPolygon_;
+    tempPolygonOld = controlPolygon_;
+
     std::vector<vec3> K1, K2, K3, K4;
 
     for (int i = 0; i < controlPolygon_.size(); i++)
@@ -308,6 +310,12 @@ void Filament::BiotSavartAndLocalizedInduction()
         temp_K = Filament::oneStepOfRungeKutta(i, controlPolygon_);
         K1.push_back(temp_K);
         temp_polygon1[i].position += temp_K * 0.5;
+    }
+
+    for (int i = 0; i < controlPolygon_.size(); i++)
+    {
+        temp_polygon1[i].a *= sqrt((tempPolygonOld[i].position - tempPolygonOld[wrap(i + 1)].position).norm() 
+        / (temp_polygon1[i].position - temp_polygon1[wrap(i + 1)].position).norm());
     }
 
     temp_polygon2 = controlPolygon_;
@@ -319,10 +327,17 @@ void Filament::BiotSavartAndLocalizedInduction()
         temp_polygon2[i].position += temp_K * 0.5;
     }
 
+    for (int i = 0; i < controlPolygon_.size(); i++)
+    {
+        temp_polygon2[i].a *=  sqrt((tempPolygonOld[i].position - tempPolygonOld[wrap(i + 1)].position).norm() 
+        / (temp_polygon2[i].position - temp_polygon2[wrap(i + 1)].position).norm());
+    }
+
     temp_polygon3 = controlPolygon_;
 
     for (int i = 0; i < controlPolygon_.size(); i++)
     {
+
         vec3 temp_K;
         temp_K = Filament::oneStepOfRungeKutta(i, temp_polygon2);
         K3.push_back(temp_K);
@@ -331,6 +346,13 @@ void Filament::BiotSavartAndLocalizedInduction()
 
     for (int i = 0; i < controlPolygon_.size(); i++)
     {
+        temp_polygon3[i].a *= sqrt((tempPolygonOld[i].position - tempPolygonOld[wrap(i + 1)].position).norm() 
+        / (temp_polygon3[i].position - temp_polygon3[wrap(i + 1)].position).norm());
+    }
+
+    for (int i = 0; i < controlPolygon_.size(); i++)
+    {
+
         vec3 temp_K;
         temp_K = Filament::oneStepOfRungeKutta(i, temp_polygon3);
         K4.push_back(temp_K);
@@ -342,6 +364,11 @@ void Filament::BiotSavartAndLocalizedInduction()
         // cout << "update BiotSavart " << update << "\n"
         //      << "\n";
         controlPolygon_[k].position += update;
+    }
+    for (int i = 0; i < controlPolygon_.size(); i++)
+    {
+        controlPolygon_[i].a *= sqrt((tempPolygonOld[i].position - tempPolygonOld[wrap(i + 1)].position).norm() 
+        / (controlPolygon_[i].position - controlPolygon_[wrap(i + 1)].position).norm());
     }
 };
 
@@ -361,17 +388,13 @@ void Filament::preComputations()
     flux_v.clear();
 
     for (int i = 0; i < controlPolygon_.size(); i++)
+    {
         edges_e.push_back(controlPolygon_[wrap(i + 1)].position - controlPolygon_[i].position);
-    for (int i = 0; i < edges_e.size(); i++)
         tangents_e.push_back(edges_e[i].normalized());
-    for (int i = 0; i < edges_e.size(); i++)
         lengths_e.push_back(edges_e[i].norm());
-    for (int i = 0; i < controlPolygon_.size(); i++)
         areas_e.push_back(std::pow(controlPolygon_[i].a, 2) * M_PI);
-    for (int i = 0; i < controlPolygon_.size(); i++)
         effectiveGravities_e.push_back((vec3(0, gravity, 0) * At).dot(tangents_e[i]));
-
-    //TODO: Average a  and C (just for stats in Houdini?)
+    }
 
     for (int i = 0; i < controlPolygon_.size(); i++)
         point_lengths_v.push_back((lengths_e[i] + lengths_e[wrap(i - 1)]) / 2);
@@ -392,7 +415,7 @@ void Filament::preComputations()
         {
             // positive case
             flux_v.push_back(1.0 / (8 * M_PI) * minus * areas_e[wrap(i - 1)]);
-             AreaUsed_v = areas_e[wrap(i - 1)];
+            AreaUsed_v = areas_e[wrap(i - 1)];
         }
         else if (plus < std::min(0.0f, (-minus)))
         {
@@ -444,8 +467,7 @@ Eigen::VectorXd Filament::doBurgerStepOnBubbleRing()
     // d.coeffRef(controlPolygon_.size()-1, 0) = 0;
     // d.coeffRef(0, controlPolygon_.size()-1) = -1;
 
-
-    Eigen::SparseMatrix<double> d_transpose = d.transpose();
+    //Eigen::SparseMatrix<double> d_transpose = d.transpose();
 
     //d.makeCompressed(); // optional
 
@@ -475,7 +497,6 @@ Eigen::VectorXd Filament::doBurgerStepOnBubbleRing()
     Eigen::SparseMatrix<double> M(controlPolygon_.size(), controlPolygon_.size()); // default is column major
     M.setFromTriplets(trp_lengths.begin(), trp_lengths.end());
 
-//cout << "M: " << M << "\n";
     //-------------------------------------------------------------------------
 
     // Constants
@@ -497,11 +518,11 @@ Eigen::VectorXd Filament::doBurgerStepOnBubbleRing()
     Eigen::ConjugateGradient<Eigen::SparseMatrix<double>, Eigen::Lower | Eigen::Upper> cg;
     cg.setTolerance(1e-5);
     cg.compute(LHS);
-    // cout << "estimated error: " << cg.error() << "\n";
-    // cout << "tolerance: " << cg.tolerance() << "\n";
+    cout << "estimated error: " << cg.error() << "\n";
+    cout << "tolerance: " << cg.tolerance() << "\n";
 
-//     cout << "sol: " << cg.solve(RHS * scale) << "\n";
-//  cout << "sol scaled___________________________: " << cg.solve(RHS * scale) / scale << "\n";
+    cout << "sol: " << cg.solve(RHS * scale) << "\n";
+    cout << "sol scaled___________________________: " << cg.solve(RHS * scale) / scale << "\n";
     return (cg.solve(RHS * scale)) / scale;
 }
 
@@ -646,17 +667,17 @@ void Filament::resampleCatMullRomWithWeight(float resampleLength)
 float Filament::totalVolume()
 {
     float volume = 0;
-    for(int i = 0; i < controlPolygon_.size(); i++) 
+    for (int i = 0; i < controlPolygon_.size(); i++)
     {
-        volume += (controlPolygon_[i].position - controlPolygon_[wrap(i+1)].position).norm() * controlPolygon_[i].a * controlPolygon_[i].a * M_PI;
+        volume += (controlPolygon_[i].position - controlPolygon_[wrap(i + 1)].position).norm() * controlPolygon_[i].a * controlPolygon_[i].a * M_PI;
     }
-    return volume; 
+    return volume;
 }
 
 void Filament::updateSkeleton()
 {
     BiotSavartAndLocalizedInduction();
-    resampleCatMullRomWithWeight(resampleLength_);
+    //resampleCatMullRomWithWeight(resampleLength_);
 
     if (modifyThickness)
     {
@@ -664,16 +685,16 @@ void Filament::updateSkeleton()
         Eigen::VectorXd x = doBurgerStepOnBubbleRing();
         for (int i = 0; i < controlPolygon_.size(); i++)
         {
-            //cout << x.minCoeff() << "\n" "\n"; 
-            controlPolygon_[i].a = sqrt(sqrt(std::pow(x(i) / (M_PI), 2)));
+            //cout << x.minCoeff() << "\n" "\n";
+            controlPolygon_[i].a = sqrt(abs(x(i) / (M_PI)));
         }
     }
-    
-    resampleCatMullRomWithWeight(resampleLength_);
+
+    //resampleCatMullRomWithWeight(resampleLength_);
     updatedFilament = true;
     framecouter++;
 
-    // cout << "Volume: " << totalVolume() << "\n";
+    cout << "Volume: " << totalVolume() << "\n";
     // cout << "Length: " << totalLengthOfControlpolygon() << "\n";
 };
 
