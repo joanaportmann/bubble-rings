@@ -1,4 +1,5 @@
-![example workflow](https://github.com/github/docs/actions/workflows/main.yml/badge.svg)
+![example workflow](https://github.com/joanaportmann/bubble-rings/actions/workflows/cmake.yml/badge.svg
+)
 
 # Bubble rings
 
