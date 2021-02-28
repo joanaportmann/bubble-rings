@@ -78,7 +78,7 @@ std::vector<FilamentPoint> Filament::getFilamentPoints()
 
 //-----------------------------------------------------------------------------
 
-std::vector<vec3> Filament::verticesofOneCircle_(int n, vec3 center, vec3 normal, vec3 up, float radius, bool reCenter)
+std::vector<vec3> Filament::verticesofOneCircle_(int n, vec3 center, vec3 normal, vec3 up, float radius)
 {
     Eigen::Matrix3d rotation;
     double angle;
@@ -122,8 +122,6 @@ std::vector<vec3> Filament::verticesofOneCircle_(int n, vec3 center, vec3 normal
         vertex += center;
         if (recenter)
         {
-
-            // TODO!!!!!!!!!!!!!!!
             vec3 shift = originalControlPolygon_[0].position - controlPolygon_[0].position;
             vertex += shift;
         }
@@ -151,8 +149,7 @@ std::vector<vec3> Filament::getBubbleRingSkeleton()
             controlPolygon_[i].position,
             (edgeBefore + edgeAfter).normalized(),
             up,
-            controlPolygon_[i].a,
-            recenter);
+            controlPolygon_[i].a);
         for (int j = 0; j < verticesOfOneCircle.size(); j++)
         {
             verticesOfTube.push_back(verticesOfOneCircle[j]);
@@ -684,7 +681,7 @@ float Filament::totalVolume()
 void Filament::updateSkeleton()
 {
     BiotSavartAndLocalizedInduction();
-    //resampleCatMullRomWithWeight(resampleLength_);
+    resampleCatMullRomWithWeight(resampleLength_);
 
     if (modifyThickness)
     {
@@ -697,11 +694,11 @@ void Filament::updateSkeleton()
         }
     }
 
-    //resampleCatMullRomWithWeight(resampleLength_);
+    resampleCatMullRomWithWeight(resampleLength_);
     updatedFilament = true;
     framecouter++;
 
-    cout << "Volume: " << totalVolume() << "\n";
+    //cout << "Volume: " << totalVolume() << "\n";
     // cout << "Length: " << totalLengthOfControlpolygon() << "\n";
 };
 

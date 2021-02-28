@@ -30,7 +30,6 @@ public:
   /// \_height the window's height
   Tube_viewer(const char *_title, int _width, int _height);
 
-
 protected:
   /// function that is called on the, creation of the widget for the initialisation of OpenGL
   virtual void initialize();
@@ -58,6 +57,7 @@ private:
   // Draw sphere and map underwater image
   Planet background;
   Sphere unit_sphere_;
+  vec3 originalFirstVertex;
 
   // filament object
   Filament filament;
@@ -75,7 +75,6 @@ private:
   float length = 0.1;
   bool renderOnlyPolygon = false;
   bool modifyThickness = true;
-  bool recenter = false;
   bool backgroundOn = true;
   bool showCoordinateAxis = false;
 

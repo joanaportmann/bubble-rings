@@ -27,13 +27,13 @@ public:
         glBindVertexArray(0);
     }
 
-    void setPoints(const std::vector<vec3> &pts) {
+    void setPoints(const std::vector<vec3> &pts, vec3 offset) {
         m_num_pts = pts.size();
         std::vector<GLfloat> positions(3 * m_num_pts);
         for (size_t i = 0; i < m_num_pts; ++i) {
-            positions[3 * i    ] = pts[i][0];
-            positions[3 * i + 1] = pts[i][1];
-            positions[3 * i + 2] = pts[i][2];
+            positions[3 * i    ] = pts[i][0] + offset(0);
+            positions[3 * i + 1] = pts[i][1] + offset(1);
+            positions[3 * i + 2] = pts[i][2] + offset(2);
         }
         glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
         glBufferData(GL_ARRAY_BUFFER, positions.size() * sizeof(GLfloat), positions.data(), GL_STATIC_DRAW);
@@ -45,15 +45,6 @@ public:
         glBindVertexArray(m_vao);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), indices.data(), GL_STATIC_DRAW);
         glBindVertexArray(0);
-    }
-
-    // Uniformly parametrized curve 'f' on the interval [0, 1]
-    template<typename F>
-    void sample(const F &f) {
-        std::vector<vec3> pts;
-        for (size_t i = 0; i < m_resolution; ++i)
-            pts.push_back(f(i / float(m_resolution - 1)));
-        setPoints(pts);
     }
 
     /// render the path as line segments

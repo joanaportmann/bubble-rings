@@ -239,7 +239,6 @@ void Tube::draw(GLenum mode)
     //if (n_indices_ == 0)
     if (filament_.updatedFilament)
     {
-
         updateBuffers();
         filament_.updatedFilament = false;
     }

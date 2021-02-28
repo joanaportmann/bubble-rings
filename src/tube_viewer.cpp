@@ -50,6 +50,8 @@ Tube_viewer::Tube_viewer(const char *_title, int _width, int _height)
 	y_angle_ = -M_PI / 4.0f;
 	dist_factor_ = 8.0f;
 
+	originalFirstVertex = filament.getFilamentPoints()[0].position;
+
 	srand((unsigned int)time(NULL));
 }
 
@@ -87,7 +89,6 @@ void Tube_viewer::
 			filament.setTension(tension);
 			filament.setAlpha(alpha);
 			filament.setResampleLength(length);
-			filament.setRecenter(recenter);
 			filament.setModifyThickness(modifyThickness);
 
 			timer_active_ = false;
@@ -207,7 +208,6 @@ void Tube_viewer::initialize()
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_FRONT);
 
-
 	// Allocate textures
 	background.tex_.init(GL_TEXTURE0, GL_TEXTURE_2D, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, GL_REPEAT);
 	tube.tex_.init(GL_TEXTURE0, GL_TEXTURE_2D, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, GL_REPEAT);
@@ -288,26 +288,25 @@ void Tube_viewer::paint()
 	if (ImGui::CollapsingHeader("Bubble ring parameters"))
 	{
 
-	ImGui::Text("Set start configuration of bubble ring and klick reset to apply changes.");
-	ImGui::SliderFloat("Thickness", &thickness, 0.0f, 0.8f);
-	ImGui::SliderFloat("Circulation", &circulation, 0.0f, 50.0f);
-
+		ImGui::Text("Set start configuration of bubble ring and klick reset to apply changes.");
+		ImGui::SliderFloat("Thickness", &thickness, 0.0f, 0.8f);
+		ImGui::SliderFloat("Circulation", &circulation, 0.0f, 50.0f);
 	}
 	if (ImGui::CollapsingHeader("Operations"))
 	{
-	ImGui::Checkbox("Modify thickness", &modifyThickness);
-	ImGui::Text("Set resample parameters and klick reset to apply changes.");
-	ImGui::SliderFloat("Resample length", &length, 0.0f, 1.0f);
-	ImGui::Text("Set tension and alpha for Catmull-Rom Spline calculation.");
-	ImGui::SliderFloat("Tension", &tension, 0.0f, 1.0f);
-	ImGui::SliderFloat("Alpha", &alpha, 0.0f, 1.0f);
+		ImGui::Checkbox("Modify thickness", &modifyThickness);
+		ImGui::Text("Set resample parameters and klick reset to apply changes.");
+		ImGui::SliderFloat("Resample length", &length, 0.0f, 1.0f);
+		ImGui::Text("Set tension and alpha for Catmull-Rom Spline calculation.");
+		ImGui::SliderFloat("Tension", &tension, 0.0f, 1.0f);
+		ImGui::SliderFloat("Alpha", &alpha, 0.0f, 1.0f);
 	}
 	if (ImGui::CollapsingHeader("Visualization"))
 	{
-	ImGui::Checkbox("Recenter", &filament.recenter);
-	ImGui::Checkbox("Render only Polygon", &renderOnlyPolygon);
-	ImGui::Checkbox("Underwater background", &backgroundOn);
-	ImGui::Checkbox("Show coordinate axis", &showCoordinateAxis);
+		ImGui::Checkbox("Recenter", &filament.recenter);
+		ImGui::Checkbox("Render only Polygon", &renderOnlyPolygon);
+		ImGui::Checkbox("Underwater background", &backgroundOn);
+		ImGui::Checkbox("Show coordinate axis", &showCoordinateAxis);
 	}
 
 	if (ImGui::Button("Reset"))
@@ -318,7 +317,6 @@ void Tube_viewer::paint()
 		filament.setTension(tension);
 		filament.setAlpha(alpha);
 		filament.setResampleLength(length);
-		filament.setRecenter(recenter);
 		filament.setModifyThickness(modifyThickness);
 
 		timer_active_ = false;
@@ -338,7 +336,6 @@ void Tube_viewer::paint()
 		filament.updateSkeleton();
 	}
 
-	
 	std::string text = "Frame: %d";
 	text += std::to_string(filament.framecouter);
 	ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::GetColumnWidth() - ImGui::CalcTextSize(text.c_str()).x - ImGui::GetScrollX() - 2 * ImGui::GetStyle().ItemSpacing.x);
@@ -434,11 +431,14 @@ void Tube_viewer::draw_scene(mat4 &_projection, mat4 &_view, vec3 &eye)
 	}
 	Path circle;
 	circle.initialize();
-	circle.setPoints(controlPolygonForDebugging);
+
+	vec3 offset_ = vec3(0, 0, 0);
+	if(filament.recenter) offset_ = originalFirstVertex - controlPolygonForDebugging[0];
+	circle.setPoints(controlPolygonForDebugging, offset_);
+
 	color_shader_.use();
 	color_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
-	if (renderOnlyPolygon)
-		circle.draw();
+	if (renderOnlyPolygon) circle.draw();		
 
 	if (showCoordinateAxis)
 	{
