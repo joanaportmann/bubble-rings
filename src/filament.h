@@ -34,6 +34,7 @@ public:
     float resampleLength_ = 0.1;
     bool updatedFilament = true;
     int framecouter = 0;
+    bool modifyThicknessRungeKutta = true;
 
     // Methods
     void updateSkeleton();
@@ -44,6 +45,7 @@ public:
     void setResampleLength(float length) { resampleLength_ = length; }
     void setRecenter(bool recenter_) {recenter = recenter_; }
     void setModifyThickness(bool modifyThickness_) { modifyThickness = modifyThickness_;}
+    void setModifyThicknessRungeKutta(bool modify) {modifyThicknessRungeKutta = modify;}
 
     friend class FilamentTest;
 

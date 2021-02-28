@@ -22,7 +22,7 @@ make
 ./bin/Tubesystem
 ```
 
-for tests: (in filament.ccp outcommit randomnes)
+for tests:
 
 ``` 
 ./bin/testunit

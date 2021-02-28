@@ -176,6 +176,8 @@ TEST_F(FilamentTest, biotSavartAndLocalizedInduction)
                                4});
     setControlPolygon(filamentPoints_);
 
+    filament.setModifyThicknessRungeKutta(false);
+
     vec3 temp_vel_0_filamentPoint;
     temp_vel_0_filamentPoint = biotSavartAndLocalizedInduction(3, filamentPoints_);
 
@@ -460,6 +462,7 @@ TEST_F(FilamentTest, 155_Iterations_OfRungeKutta)
                                0.12,
                                4});
     setControlPolygon(filamentPoints_);
+        filament.setModifyThicknessRungeKutta(false);
 
     for (int i = 0; i < 155; i++)
         BiotSavartAndLocalizedInduction();
@@ -532,6 +535,7 @@ TEST_F(FilamentTest, 100_Iterations_OfRungeKutta_bigControlpolygon)
                                0.12,
                                4});
     setControlPolygon(filamentPoints_);
+        filament.setModifyThicknessRungeKutta(false);
 
     for (int i = 0; i < 100; i++)
         BiotSavartAndLocalizedInduction();
@@ -562,6 +566,7 @@ TEST_F(FilamentTest, 792_Iterations_OfRungeKutta)
                                0.12,
                                4});
     setControlPolygon(filamentPoints_);
+        filament.setModifyThicknessRungeKutta(false);
 
     for (int i = 0; i < 792; i++)
         BiotSavartAndLocalizedInduction();

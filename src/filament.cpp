@@ -295,7 +295,6 @@ vec3 Filament::oneStepOfRungeKutta(int i, const std::vector<FilamentPoint> &temp
 
 // Runge Kutta evaluation
 
-//TODO: add thickness flow!!!
 void Filament::BiotSavartAndLocalizedInduction()
 {
     std::vector<FilamentPoint> temp_polygon1, temp_polygon2, temp_polygon3, tempPolygonOld;
@@ -312,11 +311,14 @@ void Filament::BiotSavartAndLocalizedInduction()
         temp_polygon1[i].position += temp_K * 0.5;
     }
 
+if(modifyThicknessRungeKutta)
+{
     for (int i = 0; i < controlPolygon_.size(); i++)
     {
         temp_polygon1[i].a *= sqrt((tempPolygonOld[i].position - tempPolygonOld[wrap(i + 1)].position).norm() 
         / (temp_polygon1[i].position - temp_polygon1[wrap(i + 1)].position).norm());
     }
+}
 
     temp_polygon2 = controlPolygon_;
     for (int i = 0; i < controlPolygon_.size(); i++)
@@ -327,11 +329,14 @@ void Filament::BiotSavartAndLocalizedInduction()
         temp_polygon2[i].position += temp_K * 0.5;
     }
 
+if(modifyThicknessRungeKutta)
+{
     for (int i = 0; i < controlPolygon_.size(); i++)
     {
         temp_polygon2[i].a *=  sqrt((tempPolygonOld[i].position - tempPolygonOld[wrap(i + 1)].position).norm() 
         / (temp_polygon2[i].position - temp_polygon2[wrap(i + 1)].position).norm());
     }
+}
 
     temp_polygon3 = controlPolygon_;
 
@@ -344,11 +349,14 @@ void Filament::BiotSavartAndLocalizedInduction()
         temp_polygon3[i].position += temp_K;
     }
 
+if(modifyThicknessRungeKutta)
+{
     for (int i = 0; i < controlPolygon_.size(); i++)
     {
         temp_polygon3[i].a *= sqrt((tempPolygonOld[i].position - tempPolygonOld[wrap(i + 1)].position).norm() 
         / (temp_polygon3[i].position - temp_polygon3[wrap(i + 1)].position).norm());
     }
+}
 
     for (int i = 0; i < controlPolygon_.size(); i++)
     {
@@ -365,11 +373,15 @@ void Filament::BiotSavartAndLocalizedInduction()
         //      << "\n";
         controlPolygon_[k].position += update;
     }
+
+    if(modifyThicknessRungeKutta)
+{
     for (int i = 0; i < controlPolygon_.size(); i++)
     {
         controlPolygon_[i].a *= sqrt((tempPolygonOld[i].position - tempPolygonOld[wrap(i + 1)].position).norm() 
         / (controlPolygon_[i].position - controlPolygon_[wrap(i + 1)].position).norm());
     }
+}
 };
 
 /* Precomputations for Burger's equation. 
