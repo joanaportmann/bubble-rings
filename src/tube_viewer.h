@@ -76,7 +76,7 @@ private:
   bool renderOnlyPolygon = false;
   bool modifyThickness = true;
   bool recenter = false;
-  bool backgroundOn = false;
+  bool backgroundOn = true;
   bool showCoordinateAxis = false;
 
   /// default color shader (renders only texture)

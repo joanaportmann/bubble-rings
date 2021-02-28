@@ -277,25 +277,38 @@ void Tube_viewer::paint()
 
 	static const ImVec4 pressColor{0.5f, 0, 0, 1.0f};
 	static const ImVec4 releaseColor{0, 0.5f, 0, 1.0f};
-	//static bool recenter = false;
 	ImGui::StyleColorsClassic();
 
 	ImGuiWindowFlags window_flags = 0;
 	window_flags |= ImGuiWindowFlags_NoBackground;
+	window_flags = ImGuiWindowFlags_AlwaysAutoResize;
 	bool open_ptr = true;
 	ImGui::Begin("Settings", &open_ptr, window_flags);
-	ImGui::Checkbox("Modify thickness", &modifyThickness);
-	ImGui::Text("Set start configuration of bubble ring.");
+
+	if (ImGui::CollapsingHeader("Bubble ring parameters"))
+	{
+
+	ImGui::Text("Set start configuration of bubble ring and klick reset to apply changes.");
 	ImGui::SliderFloat("Thickness", &thickness, 0.0f, 0.8f);
 	ImGui::SliderFloat("Circulation", &circulation, 0.0f, 50.0f);
-	ImGui::Checkbox("Recenter", &recenter);
-	ImGui::Checkbox("Render only Polygon", &renderOnlyPolygon);
-	ImGui::Checkbox("Underwater background", &backgroundOn);
-	ImGui::Checkbox("Show coordinate axis", &showCoordinateAxis);
+
+	}
+	if (ImGui::CollapsingHeader("Operations"))
+	{
+	ImGui::Checkbox("Modify thickness", &modifyThickness);
+	ImGui::Text("Set resample parameters and klick reset to apply changes.");
+	ImGui::SliderFloat("Resample length", &length, 0.0f, 1.0f);
 	ImGui::Text("Set tension and alpha for Catmull-Rom Spline calculation.");
 	ImGui::SliderFloat("Tension", &tension, 0.0f, 1.0f);
 	ImGui::SliderFloat("Alpha", &alpha, 0.0f, 1.0f);
-	ImGui::SliderFloat("Resample length", &length, 0.0f, 1.0f);
+	}
+	if (ImGui::CollapsingHeader("Visualization"))
+	{
+	ImGui::Checkbox("Recenter", &filament.recenter);
+	ImGui::Checkbox("Render only Polygon", &renderOnlyPolygon);
+	ImGui::Checkbox("Underwater background", &backgroundOn);
+	ImGui::Checkbox("Show coordinate axis", &showCoordinateAxis);
+	}
 
 	if (ImGui::Button("Reset"))
 	{
@@ -325,14 +338,14 @@ void Tube_viewer::paint()
 		filament.updateSkeleton();
 	}
 
-	ImGui::SameLine();
+	
 	std::string text = "Frame: %d";
 	text += std::to_string(filament.framecouter);
 	ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::GetColumnWidth() - ImGui::CalcTextSize(text.c_str()).x - ImGui::GetScrollX() - 2 * ImGui::GetStyle().ItemSpacing.x);
 	ImGui::Text("Frame: %d", filament.framecouter);
 	ImGui::End();
 
-	if (false)
+	if (show_demo_window)
 		ImGui::ShowDemoWindow(&show_demo_window);
 
 	// Render dear imgui into screen
@@ -424,7 +437,7 @@ void Tube_viewer::draw_scene(mat4 &_projection, mat4 &_view, vec3 &eye)
 	circle.setPoints(controlPolygonForDebugging);
 	color_shader_.use();
 	color_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
-	if (!recenter)
+	if (renderOnlyPolygon)
 		circle.draw();
 
 	if (showCoordinateAxis)

@@ -35,6 +35,7 @@ public:
     bool updatedFilament = true;
     int framecouter = 0;
     bool modifyThicknessRungeKutta = true;
+    bool recenter = false;
 
     // Methods
     void updateSkeleton();
@@ -65,7 +66,6 @@ private:
     CatmullRom curve;
     float tension = 0;
     float alpha = 0.5;
-    bool recenter = false;
     bool modifyThickness = true;
    
     // Methods
