@@ -530,11 +530,6 @@ Eigen::VectorXd Filament::doBurgerStepOnBubbleRing()
     Eigen::ConjugateGradient<Eigen::SparseMatrix<double>, Eigen::Lower | Eigen::Upper> cg;
     cg.setTolerance(1e-5);
     cg.compute(LHS);
-    cout << "estimated error: " << cg.error() << "\n";
-    cout << "tolerance: " << cg.tolerance() << "\n";
-
-    cout << "sol: " << cg.solve(RHS * scale) << "\n";
-    cout << "sol scaled___________________________: " << cg.solve(RHS * scale) / scale << "\n";
     return (cg.solve(RHS * scale)) / scale;
 }
 
