@@ -290,7 +290,7 @@ void Tube_viewer::paint()
 
 		ImGui::Text("Set start configuration of bubble ring and klick reset to apply changes.");
 		ImGui::SliderFloat("Thickness", &thickness, 0.0f, 0.8f);
-		ImGui::SliderFloat("Circulation", &circulation, 0.0f, 50.0f);
+		ImGui::SliderFloat("Circulation", &circulation, -4.0f, 50.0f);
 	}
 	if (ImGui::CollapsingHeader("Operations"))
 	{
