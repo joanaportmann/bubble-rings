@@ -24,7 +24,6 @@ uniform mat4 modelview_matrix;
 void main() {
     // Compute vertices' normalized device coordinates
     gl_Position = modelview_projection_matrix * v_position;
-    v2f_normal = normalize(normal_matrix * v_normal);
 
     // reflection
     vec3 reflected_normal = normalize(reflect(eyePositionW - vec3(v_position), v2f_normal));
@@ -40,9 +39,11 @@ void main() {
 
     // Phong 
     v2f_texcoord = v_texcoord;
-	v2f_light = normalize(vec3(light_position - (modelview_matrix * v_position)));
+	v2f_light = normalize(vec3(modelview_matrix * light_position - (modelview_matrix * v_position)));
 	v2f_view = normalize(vec3(modelview_matrix * v_position));
 	//v2f_view = normalize(vec3(modelview_matrix * v_position) - v2f_light);
-	v2f_normal = normalize(normal_matrix * v_normal);
+	// v2f_normal = normalize(v_normal);
+    v2f_normal = normalize(normal_matrix * v_normal);
+    // v2f_normal = normalize(modelview_matrix * v_normal);
 	
 }

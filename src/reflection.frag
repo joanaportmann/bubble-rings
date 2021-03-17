@@ -22,27 +22,26 @@ void main() {
 	vec3 I_in = sunlight;
 
     vec3 normal_normalized = normalize(v2f_normal);
-    vec3 color = 0.5 * texture(tex, v2f_texcoord_reflect.st).rgb;
-    color +=  0.5 * texture(tex, v2f_texcoord_refract.st).rgb;
+    vec3 color =  0.9 * texture(tex, v2f_texcoord_reflect.st).rgb;
+    color += 0 * 0.5 * texture(tex, v2f_texcoord_refract.st).rgb;
 
 	// Add ambient light
 	//color += I_a * c_material;
 
 	// Add diffuse light
-     float nl = dot(v2f_normal, v2f_light);
+    float nl = dot(v2f_normal, v2f_light);
 	if (nl > 0) {
-		color += 0.001* I_in * c_material * nl;
+		color += 0 * vec3(0, 1, 0) * c_material * nl;
 	}
 
 	// Add specular light
 	vec3 r = reflect(v2f_light, v2f_normal);
 	float rv = dot(v2f_view, r);
 	if (nl > 0 && rv > 0) {
-		color +=  0.0001 * I_in * c_material * pow(dot(r, v2f_view), shininess);
+		color +=  vec3(1, 0, 1) * c_material * pow(dot(r, v2f_view), shininess);
 	}
-
  
     // add required alpha value
-    f_color = vec4(color, 0.8);
+    f_color = vec4(color, 1);
 
 }
