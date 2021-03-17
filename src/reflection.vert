@@ -13,7 +13,7 @@ out vec2 v2f_texcoord_refract;
 out vec3 v2f_normal;
 out vec2 v2f_texcoord;
 out vec3 v2f_light;
-// out vec3 v2f_view;
+out vec3 v2f_view;
 
 uniform vec3 eyePositionW;
 uniform mat4 modelview_projection_matrix;
@@ -41,8 +41,8 @@ void main() {
     // Phong 
     v2f_texcoord = v_texcoord;
 	v2f_light = normalize(vec3(light_position - (modelview_matrix * v_position)));
-	// v2f_view = normalize(vec3(modelview_matrix * v_position));
-	// //v2f_view = normalize(vec3(modelview_matrix * v_position) - v2f_light);
-	// v2f_normal = normalize(normal_matrix * v_normal);
+	v2f_view = normalize(vec3(modelview_matrix * v_position));
+	//v2f_view = normalize(vec3(modelview_matrix * v_position) - v2f_light);
+	v2f_normal = normalize(normal_matrix * v_normal);
 	
 }

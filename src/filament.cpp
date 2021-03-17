@@ -518,6 +518,9 @@ Eigen::VectorXd Filament::doBurgerStepOnBubbleRing()
     Eigen::SparseMatrix<double> LHS = nuIdt * M - (0.5 * coef * L);
     Eigen::MatrixXd RHS = nuIdt * M * A + d.transpose() * F;
 
+// Crank-Nicholson
+     //Eigen::MatrixXd RHS = nuIdt * M * A + d.transpose() * F + 0.5 * coef * L * A;
+
     // cout << "LHS " << LHS << "\n" << "\n";
     // cout << "RHS " << RHS << "\n" << "\n";
     // SCALE DUE TO PRECISION
