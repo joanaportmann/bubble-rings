@@ -213,8 +213,8 @@ void Tube_viewer::initialize()
 	tube.tex_.init(GL_TEXTURE0, GL_TEXTURE_2D, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, GL_REPEAT);
 
 	// Load/generate textures
-	background.tex_.loadPNG(TEXTURE_PATH "/underwaterSphere.png");
-	tube.tex_.loadPNG(TEXTURE_PATH "/underwaterSphere.png");
+	background.tex_.loadPNG(TEXTURE_PATH "/debug.png");
+	tube.tex_.loadPNG(TEXTURE_PATH "/debug.png");
 
 	// setup shader
 	background_shader_.load(SHADER_PATH "/background.vert", SHADER_PATH "/background.frag");
@@ -366,6 +366,11 @@ void Tube_viewer::timer()
 
 void Tube_viewer::draw_scene(mat4 &_projection, mat4 &_view, vec3 &eye)
 {
+	// the sun is centered at the origin and -- for lighting -- considered to be a point, so that is the light position in world coordinates
+	vec4 light = vec4(0.0, 0.0, 0.0, 1.0); //in world coordinates
+	// convert light into camera coordinates
+	light = _view * light;
+
 	Eigen::Affine3f rotation_y;
 	rotation_y = Eigen::AngleAxisf(0.0f, vec3::UnitY().cast<float>());
 	mat4 rotation_y_mat = rotation_y.matrix().cast<double>();
@@ -397,6 +402,8 @@ void Tube_viewer::draw_scene(mat4 &_projection, mat4 &_view, vec3 &eye)
 	mv_matrix = _view * m_matrix;
 	mvp_matrix = _projection * mv_matrix;
 	mat3 normal_matrix;
+	normal_matrix = mat3::Identity();
+
 	mat3 mv_matrix_3d;
 	
 	for(int i = 0; i < 3; i++) 
@@ -409,6 +416,7 @@ void Tube_viewer::draw_scene(mat4 &_projection, mat4 &_view, vec3 &eye)
 
 	normal_matrix = mv_matrix_3d.inverse().transpose();
 
+
 	if (!renderOnlyPolygon)
 	{
 		// test_tube_shader_.use();
@@ -417,22 +425,15 @@ void Tube_viewer::draw_scene(mat4 &_projection, mat4 &_view, vec3 &eye)
 
 		//test_tube_shader_.set_uniform("light_position", _view * vec4(0, 0, 0, 1));
 		// test_tube_shader_.set_uniform("color", vec4(0.8, 0.8, 0.2, 0.6));
-
-		Eigen::Matrix3d rotationSun1;
-		rotationSun1 = Eigen::AngleAxisd(0.9425, vec3(0, 1, 0));
-
-		Eigen::Matrix3d rotationSun2;
-		rotationSun2 = Eigen::AngleAxisd(0.8378, vec3(0, 0, 1));
-
-		vec3 light = rotationSun2 * (rotationSun1 * vec3(0, 1, 0));
-
 		reflection_shader_.use();
 		reflection_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
 		reflection_shader_.set_uniform("normal_matrix", normal_matrix);
 		reflection_shader_.set_uniform("modelview_matrix", mv_matrix);
 		reflection_shader_.set_uniform("tex", 0);
 		reflection_shader_.set_uniform("eyePositionW", eye);
-		reflection_shader_.set_uniform("light_position", vec4(light[0], light[1], light[2], 1));
+		vec3 light =  normal_matrix * vec3(0, 1, 0);
+		reflection_shader_.set_uniform("light_position", light);
+
 		tube.draw();
 	}
 	std::vector<FilamentPoint> FilamentPoints = filament.getFilamentPoints();
@@ -445,14 +446,12 @@ void Tube_viewer::draw_scene(mat4 &_projection, mat4 &_view, vec3 &eye)
 	circle.initialize();
 
 	vec3 offset_ = vec3(0, 0, 0);
-	if (filament.recenter)
-		offset_ = originalFirstVertex - controlPolygonForDebugging[0];
+	if(filament.recenter) offset_ = originalFirstVertex - controlPolygonForDebugging[0];
 	circle.setPoints(controlPolygonForDebugging, offset_);
 
 	color_shader_.use();
 	color_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
-	if (renderOnlyPolygon)
-		circle.draw();
+	if (renderOnlyPolygon) circle.draw();		
 
 	if (showCoordinateAxis)
 	{
