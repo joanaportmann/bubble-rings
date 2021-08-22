@@ -1,10 +1,4 @@
-//=============================================================================
-//
-//   Exercise code for the lecture "Introduction to Computer Graphics"
-//     by Prof. Mario Botsch, Bielefeld University
-//
-//   Copyright (C) by Computer Graphics Group, Bielefeld University
-//
+
 //=============================================================================
 
 #include "tube_viewer.h"
@@ -213,8 +207,8 @@ void Tube_viewer::initialize()
 	tube.tex_.init(GL_TEXTURE0, GL_TEXTURE_2D, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, GL_REPEAT);
 
 	// Load/generate textures
-	background.tex_.loadPNG(TEXTURE_PATH "/debug.png");
-	tube.tex_.loadPNG(TEXTURE_PATH "/debug.png");
+	background.tex_.loadPNG(TEXTURE_PATH "/underwaterSphere.png");
+	tube.tex_.loadPNG(TEXTURE_PATH "/underwaterSphere.png");
 
 	// setup shader
 	background_shader_.load(SHADER_PATH "/background.vert", SHADER_PATH "/background.frag");
@@ -419,19 +413,21 @@ void Tube_viewer::draw_scene(mat4 &_projection, mat4 &_view, vec3 &eye)
 
 	if (!renderOnlyPolygon)
 	{
-		// test_tube_shader_.use();
-		// test_tube_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
-		// test_tube_shader_.set_uniform("normal_matrix", normal_matrix);
 
-		//test_tube_shader_.set_uniform("light_position", _view * vec4(0, 0, 0, 1));
-		// test_tube_shader_.set_uniform("color", vec4(0.8, 0.8, 0.2, 0.6));
+		Eigen::Matrix3d rotationSun1;
+		rotationSun1 = Eigen::AngleAxisd(0.9425, vec3(0, 0, 1));
+
+		Eigen::Matrix3d rotationSun2;
+		rotationSun2 = Eigen::AngleAxisd(M_PI + 0.8378, vec3(0, 1, 0));
+
+		vec3 light = normal_matrix * rotationSun2 * (rotationSun1 * vec3(0, 1, 0));
+
 		reflection_shader_.use();
 		reflection_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
 		reflection_shader_.set_uniform("normal_matrix", normal_matrix);
 		reflection_shader_.set_uniform("modelview_matrix", mv_matrix);
 		reflection_shader_.set_uniform("tex", 0);
 		reflection_shader_.set_uniform("eyePositionW", eye);
-		vec3 light =  normal_matrix * vec3(0, 1, 0);
 		reflection_shader_.set_uniform("light_position", light);
 
 		tube.draw();
