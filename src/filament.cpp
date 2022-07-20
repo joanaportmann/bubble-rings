@@ -11,8 +11,13 @@
 #include <ctime>
 #include "CatmullRom.h"
 #include <assert.h>
+#include <chrono>
 
 using namespace std;
+using std::chrono::duration;
+using std::chrono::duration_cast;
+using std::chrono::high_resolution_clock;
+using std::chrono::milliseconds;
 
 typedef Eigen::Triplet<double> T;
 
@@ -112,6 +117,7 @@ std::vector<vec3> Filament::verticesofOneCircle_(int n, vec3 center, vec3 normal
     Eigen::Matrix3d rotationToOrientRing;
     rotationToOrientRing = Eigen::AngleAxisd(signUpCrossVertex * angleToUp, normal.normalized());
 
+    auto t1 = high_resolution_clock::now();
     std::vector<vec3> vertices;
     for (int i = 0; i < n; i++)
     {
@@ -129,6 +135,16 @@ std::vector<vec3> Filament::verticesofOneCircle_(int n, vec3 center, vec3 normal
     }
 
     return vertices;
+    auto t2 = high_resolution_clock::now();
+    /* Getting number of milliseconds as an integer. */
+    auto ms_int = duration_cast<milliseconds>(t2 - t1);
+
+    /* Getting number of milliseconds as a double. */
+    duration<double, std::milli> ms_double = t2 - t1;
+
+    std::cout << ms_int.count() << "ms\n";
+    std::cout << ms_double.count() << "ms\n";
+    std::cout << "test";
 }
 
 //----------------------------------------------------------------------------------
@@ -274,7 +290,9 @@ vec3 Filament::boussinesq_on_edge(int i, const std::vector<FilamentPoint> &temp_
            denom;
 };
 
-vec3 Filament::oneStepOfRungeKutta(int i, const std::vector<FilamentPoint> &temp_controlPolygon_)
+//-----------------------------------------------------------------------------------------------
+
+vec3 Filament::velUpdateForEdgeI(int i, const std::vector<FilamentPoint> &temp_controlPolygon_)
 {
     vec3 v_temp = vec3(0, 0, 0);
 
@@ -290,6 +308,8 @@ vec3 Filament::oneStepOfRungeKutta(int i, const std::vector<FilamentPoint> &temp
     return v_temp;
 };
 
+//---------------------------------------------------------------------------------------------------
+
 // Runge Kutta evaluation
 
 void Filament::BiotSavartAndLocalizedInduction()
@@ -300,86 +320,122 @@ void Filament::BiotSavartAndLocalizedInduction()
 
     std::vector<vec3> K1, K2, K3, K4;
 
+    // K1
     for (int i = 0; i < controlPolygon_.size(); i++)
     {
         vec3 temp_K;
-        temp_K = Filament::oneStepOfRungeKutta(i, controlPolygon_);
+        temp_K = Filament::velUpdateForEdgeI(i, controlPolygon_);
         K1.push_back(temp_K);
         temp_polygon1[i].position += temp_K * 0.5;
     }
 
-if(modifyThicknessRungeKutta)
-{
-    for (int i = 0; i < controlPolygon_.size(); i++)
+    if (modifyThicknessRungeKutta)
     {
-        temp_polygon1[i].a *= sqrt((tempPolygonOld[i].position - tempPolygonOld[wrap(i + 1)].position).norm() 
-        / (temp_polygon1[i].position - temp_polygon1[wrap(i + 1)].position).norm());
+        for (int i = 0; i < controlPolygon_.size(); i++)
+        {
+            temp_polygon1[i].a *= sqrt((tempPolygonOld[i].position - tempPolygonOld[wrap(i + 1)].position).norm() / (temp_polygon1[i].position - temp_polygon1[wrap(i + 1)].position).norm());
+        }
     }
-}
 
+    // K2
     temp_polygon2 = controlPolygon_;
     for (int i = 0; i < controlPolygon_.size(); i++)
     {
         vec3 temp_K;
-        temp_K = Filament::oneStepOfRungeKutta(i, temp_polygon1);
+        temp_K = Filament::velUpdateForEdgeI(i, temp_polygon1);
         K2.push_back(temp_K);
         temp_polygon2[i].position += temp_K * 0.5;
     }
 
-if(modifyThicknessRungeKutta)
-{
-    for (int i = 0; i < controlPolygon_.size(); i++)
+    if (modifyThicknessRungeKutta)
     {
-        temp_polygon2[i].a *=  sqrt((tempPolygonOld[i].position - tempPolygonOld[wrap(i + 1)].position).norm() 
-        / (temp_polygon2[i].position - temp_polygon2[wrap(i + 1)].position).norm());
+        for (int i = 0; i < controlPolygon_.size(); i++)
+        {
+            temp_polygon2[i].a *= sqrt((tempPolygonOld[i].position - tempPolygonOld[wrap(i + 1)].position).norm() / (temp_polygon2[i].position - temp_polygon2[wrap(i + 1)].position).norm());
+        }
     }
-}
 
     temp_polygon3 = controlPolygon_;
 
+    // K3
     for (int i = 0; i < controlPolygon_.size(); i++)
     {
 
         vec3 temp_K;
-        temp_K = Filament::oneStepOfRungeKutta(i, temp_polygon2);
+        temp_K = Filament::velUpdateForEdgeI(i, temp_polygon2);
         K3.push_back(temp_K);
         temp_polygon3[i].position += temp_K;
     }
 
-if(modifyThicknessRungeKutta)
-{
-    for (int i = 0; i < controlPolygon_.size(); i++)
+    if (modifyThicknessRungeKutta)
     {
-        temp_polygon3[i].a *= sqrt((tempPolygonOld[i].position - tempPolygonOld[wrap(i + 1)].position).norm() 
-        / (temp_polygon3[i].position - temp_polygon3[wrap(i + 1)].position).norm());
+        for (int i = 0; i < controlPolygon_.size(); i++)
+        {
+            temp_polygon3[i].a *= sqrt((tempPolygonOld[i].position - tempPolygonOld[wrap(i + 1)].position).norm() / (temp_polygon3[i].position - temp_polygon3[wrap(i + 1)].position).norm());
+        }
     }
-}
 
     for (int i = 0; i < controlPolygon_.size(); i++)
     {
 
         vec3 temp_K;
-        temp_K = Filament::oneStepOfRungeKutta(i, temp_polygon3);
+        temp_K = Filament::velUpdateForEdgeI(i, temp_polygon3);
         K4.push_back(temp_K);
     }
 
     for (int k = 0; k < controlPolygon_.size(); k++)
     {
         vec3 update = (K1[k] + 2 * K2[k] + 2 * K3[k] + K4[k]) / 6;
-        // cout << "update BiotSavart " << update << "\n"
-        //      << "\n";
         controlPolygon_[k].position += update;
     }
 
-    if(modifyThicknessRungeKutta)
+    if (modifyThicknessRungeKutta)
+    {
+        for (int i = 0; i < controlPolygon_.size(); i++)
+        {
+            controlPolygon_[i].a *= sqrt((tempPolygonOld[i].position - tempPolygonOld[wrap(i + 1)].position).norm() / (controlPolygon_[i].position - controlPolygon_[wrap(i + 1)].position).norm());
+        }
+    }
+};
+
+//----------------------------------------------------------------------------------------------------
+
+//Alternative to Runge Kutta: Adams-Bashforth
+
+void Filament::BiotSavartAndLocalizedInductionEuler()
 {
+
+std::vector<FilamentPoint> tempPolygonOld;
+    tempPolygonOld = controlPolygon_;
+
+    std::vector<vec3> K1;
+
+    // K1
     for (int i = 0; i < controlPolygon_.size(); i++)
     {
-        controlPolygon_[i].a *= sqrt((tempPolygonOld[i].position - tempPolygonOld[wrap(i + 1)].position).norm() 
-        / (controlPolygon_[i].position - controlPolygon_[wrap(i + 1)].position).norm());
+        vec3 temp_K;
+        temp_K = Filament::velUpdateForEdgeI(i, controlPolygon_);
+        K1.push_back(temp_K);
     }
-}
+
+    
+
+    for (int k = 0; k < controlPolygon_.size(); k++)
+    {
+        vec3 update = K1[k];
+        controlPolygon_[k].position += update;
+    }
+
+    if (modifyThicknessRungeKutta)
+    {
+        for (int i = 0; i < controlPolygon_.size(); i++)
+        {
+            controlPolygon_[i].a *= sqrt((tempPolygonOld[i].position - tempPolygonOld[wrap(i + 1)].position).norm() / (controlPolygon_[i].position - controlPolygon_[wrap(i + 1)].position).norm());
+        }
+    }
+    
 };
+//-----------------------------------------------------------------------------------------------------
 
 /* Precomputations for Burger's equation. 
 * _e: Per edge (in Houdini)
@@ -518,8 +574,8 @@ Eigen::VectorXd Filament::doBurgerStepOnBubbleRing()
     Eigen::SparseMatrix<double> LHS = nuIdt * M - (0.5 * coef * L);
     Eigen::MatrixXd RHS = nuIdt * M * A + d.transpose() * F;
 
-// Crank-Nicholson
-     //Eigen::MatrixXd RHS = nuIdt * M * A + d.transpose() * F + 0.5 * coef * L * A;
+    // Crank-Nicholson
+    //Eigen::MatrixXd RHS = nuIdt * M * A + d.transpose() * F + 0.5 * coef * L * A;
 
     // cout << "LHS " << LHS << "\n" << "\n";
     // cout << "RHS " << RHS << "\n" << "\n";
@@ -683,7 +739,16 @@ float Filament::totalVolume()
 
 void Filament::updateSkeleton()
 {
-    BiotSavartAndLocalizedInduction();
+    if (rungeKutta4)
+    {
+        BiotSavartAndLocalizedInduction();
+    }
+
+    if (euler)
+    {
+        BiotSavartAndLocalizedInductionEuler();
+    }
+    
     resampleCatMullRomWithWeight(resampleLength_);
 
     if (modifyThickness)

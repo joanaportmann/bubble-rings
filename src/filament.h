@@ -46,6 +46,8 @@ public:
     void setResampleLength(float length) { resampleLength_ = length; }
     void setRecenter(bool recenter_) {recenter = recenter_; }
     void setModifyThickness(bool modifyThickness_) { modifyThickness = modifyThickness_;}
+    void setRungeKutta4(bool rungeKutta4_) {rungeKutta4 = rungeKutta4_;}
+    void setEuler(bool euler_) {euler = euler_;}
     void setModifyThicknessRungeKutta(bool modify) {modifyThicknessRungeKutta = modify;}
 
     friend class FilamentTest;
@@ -67,6 +69,8 @@ private:
     float tension = 0;
     float alpha = 0.5;
     bool modifyThickness = true;
+    bool rungeKutta4 = true;
+    bool euler = false;
    
     // Methods
 
@@ -84,8 +88,9 @@ private:
     vec3 biotSavartAndLocalizedInduction(int j, const std::vector<FilamentPoint> &temp_controlPolygon_);
     vec3 localizedInduction(int j, const std::vector<FilamentPoint> &temp_controlPolygon_);
     vec3 boussinesq_on_edge(int i, const std::vector<FilamentPoint> &temp_controlPolygon_);
-    vec3 oneStepOfRungeKutta(int i, const std::vector<FilamentPoint> &temp_controlPolygon_);
+    vec3 velUpdateForEdgeI(int i, const std::vector<FilamentPoint> &temp_controlPolygon_);
     void BiotSavartAndLocalizedInduction();
+    void BiotSavartAndLocalizedInductionEuler();
 
     // Thickness flow: Burger's equation
     void preComputations();

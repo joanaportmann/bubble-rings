@@ -71,6 +71,8 @@ private:
   bool modifyThickness = true;
   bool backgroundOn = true;
   bool showCoordinateAxis = false;
+  bool rungeKutta4 = true;
+  bool euler = false;
 
   /// default color shader (renders only texture)
   Shader color_shader_;

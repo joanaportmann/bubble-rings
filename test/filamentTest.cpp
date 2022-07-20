@@ -57,9 +57,9 @@ protected:
         return filament.boussinesq_on_edge(i, temp_controlPolygon_);
     }
 
-    vec3 oneStepOfRungeKutta(int i, const std::vector<FilamentPoint> &temp_controlPolygon_)
+    vec3 velUpdateForEdgeI(int i, const std::vector<FilamentPoint> &temp_controlPolygon_)
     {
-        return filament.oneStepOfRungeKutta(i, temp_controlPolygon_);
+        return filament.velUpdateForEdgeI(i, temp_controlPolygon_);
     }
 
     void BiotSavartAndLocalizedInduction()
@@ -260,7 +260,7 @@ TEST_F(FilamentTest, boussinesqOnEdge)
 }
 
 // Test (for filament with 6 vertices) third edge (i = 2)
-TEST_F(FilamentTest, oneStepOfRungeKutta)
+TEST_F(FilamentTest, velUpdateForEdgeI)
 {
     filamentPoints_.push_back({{0.611779, 0.0, 0.0},
                                0.12,
@@ -282,7 +282,7 @@ TEST_F(FilamentTest, oneStepOfRungeKutta)
                                4});
     setControlPolygon(filamentPoints_);
 
-    vec3 result = oneStepOfRungeKutta(2, filamentPoints_);
+    vec3 result = velUpdateForEdgeI(2, filamentPoints_);
 
     BiotSavartAndLocalizedInduction();
 

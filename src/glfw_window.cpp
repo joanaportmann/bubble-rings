@@ -193,7 +193,7 @@ int GLFW_window::run()
         paint();
 
         // swap buffers
-        // glfwSwapBuffers(window_);
+        glfwSwapBuffers(window_);
 
         // handle events
         // Poll and handle events (inputs, window resize, etc.)

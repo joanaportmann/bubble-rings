@@ -294,6 +294,8 @@ void Tube_viewer::paint()
 		ImGui::Text("Set tension and alpha for Catmull-Rom Spline calculation.");
 		ImGui::SliderFloat("Tension", &tension, 0.0f, 1.0f);
 		ImGui::SliderFloat("Alpha", &alpha, 0.0f, 1.0f);
+		ImGui::Checkbox("Runge Kutta 4", &rungeKutta4);
+		ImGui::Checkbox("Euler", &euler);
 	}
 	if (ImGui::CollapsingHeader("Visualization"))
 	{
