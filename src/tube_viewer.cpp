@@ -21,7 +21,7 @@
 #include <Eigen/Dense>
 
 #define numberOfVerticesPerTubeCircle 30
-#define numEdges 30
+#define numEdges 5
 
 using namespace std;
 
@@ -213,7 +213,6 @@ void Tube_viewer::initialize()
 	// setup shader
 	background_shader_.load(SHADER_PATH "/background.vert", SHADER_PATH "/background.frag");
 	reflection_shader_.load(SHADER_PATH "/reflection.vert", SHADER_PATH "/reflection.frag");
-	color_shader_.load(SHADER_PATH "/color.vert", SHADER_PATH "/color.frag");
 	solid_color_shader_.load(SHADER_PATH "/solid_color.vert", SHADER_PATH "/solid_color.frag");
 	test_tube_shader_.load(SHADER_PATH "/test_tube.vert", SHADER_PATH "/test_tube.frag");
 
@@ -447,8 +446,6 @@ void Tube_viewer::draw_scene(mat4 &_projection, mat4 &_view, vec3 &eye)
 	if(filament.recenter) offset_ = originalFirstVertex - controlPolygonForDebugging[0];
 	circle.setPoints(controlPolygonForDebugging, offset_);
 
-	color_shader_.use();
-	color_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
 	if (renderOnlyPolygon) circle.draw();		
 
 	if (showCoordinateAxis)

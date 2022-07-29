@@ -42,8 +42,7 @@ void main() {
     // Phong 
     v2f_texcoord = v_texcoord;
 	v2f_light = normalize(vec3(light_position ));
-	// v2f_light = normalize(vec3(modelview_matrix * light_position));
-	
+    	
     v2f_view = normalize(vec3(modelview_matrix * v_position));
 	// //v2f_view = normalize(vec3(modelview_matrix * v_position) - v2f_light);
 	v2f_normal_viewspace = normalize(normal_matrix * v_normal);
