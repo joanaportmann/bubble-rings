@@ -9,7 +9,6 @@
 #include <stdlib.h>
 #include <cstdlib>
 #include <ctime>
-#include "CatmullRom.h"
 #include <assert.h>
 #include <chrono>
 

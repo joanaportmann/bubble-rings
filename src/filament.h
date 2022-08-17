@@ -7,7 +7,6 @@
 #include <Eigen/Dense>
 #include "glmath.h"
 #include <vector>
-#include "CatmullRom.h"
 //=============================================================================
 
 struct FilamentPoint
@@ -65,7 +64,6 @@ private:
     std::vector<FilamentPoint> controlPolygon_;
     std::vector<FilamentPoint> originalControlPolygon_;
     std::vector<vec3> verticesofOneCircle_(int n, vec3 center, vec3 normal, vec3 up, float radius);
-    CatmullRom curve;
     float tension = 0;
     float alpha = 0.5;
     bool modifyThickness = true;
