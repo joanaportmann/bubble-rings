@@ -727,6 +727,7 @@ void Filament::resampleCatMullRomWithWeight(float resampleLength)
     controlPolygon_.assign(newPoints.begin(), newPoints.end());
 }
 
+// Just needed for debugging
 float Filament::totalVolume()
 {
     float volume = 0;

@@ -212,7 +212,7 @@ void Tube_viewer::initialize()
 
 	// setup shader
 	background_shader_.load(SHADER_PATH "/background.vert", SHADER_PATH "/background.frag");
-	reflection_shader_.load(SHADER_PATH "/reflection.vert", SHADER_PATH "/reflection.frag");
+	reflection_shader_.load(SHADER_PATH "/reflection.vert", SHADER_PATH "/reflection.frag"); // SHader for reflection and refraction
 	solid_color_shader_.load(SHADER_PATH "/solid_color.vert", SHADER_PATH "/solid_color.frag"); // Shader for coordinate axis
 
 	coordinateAxis.initialize();
