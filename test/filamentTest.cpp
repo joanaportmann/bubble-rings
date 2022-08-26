@@ -87,6 +87,11 @@ protected:
         filament.resampleCatmullRom(length);
     }
 
+    vec3 catMullRom(float tension_, float alpha__, float k, vec3 P0, vec3 P1, vec3 P2, vec3 P3)
+    {
+        return filament.generalCatmullRom(tension_, alpha__, k, P0, P1, P2, P3);
+    }
+
     // SetUp and TearDown
     void SetUp() override {}
     void TearDown() override {}
@@ -756,6 +761,15 @@ TEST_F(FilamentTest, resampleSquareThicknessConstant)
         EXPECT_NEAR(controlPolygon__[i].a, 0.12, 0.0000001);
     for (int i = 2; i < 4; i++)
         EXPECT_NEAR(controlPolygon__[i].C, 4, 0.00001);
+}
+
+TEST_F(FilamentTest, catMullRom)
+{
+    vec3 result1 = catMullRom(0.0f, 0.0f, 0.0f, {0, 0, 0}, {1, 0, 0}, {2, 0, 0}, {3, 0, 0});
+ cout << result1 << "\n";
+    vec3 result2 = catMullRom(0.0f, 0.0f, 1.0f, {0, 10, 0}, {1, 20, 0}, {2, 2, 0}, {3, 0, 0});
+
+    EXPECT_EQ(result1[0], 1);
 }
 
 // TEST_F(FilamentTest, CatmullRomResampleSquare)
