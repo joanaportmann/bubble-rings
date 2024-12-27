@@ -16,13 +16,13 @@
 //=============================================================================
 
 
-/// default class for the planet
-class Planet
+/// default class for the background
+class Background
 {
 public:
 
     /// default constructor
-    Planet(const float _angle_step_orbit,
+    Background(const float _angle_step_orbit,
            const float _angle_step_self,
            const float _radius,
            const float _distance) :

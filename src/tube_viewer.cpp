@@ -21,7 +21,7 @@
 #include <Eigen/Dense>
 
 #define numberOfVerticesPerTubeCircle 30
-#define numEdges 5
+#define numEdges 20
 
 using namespace std;
 
@@ -35,7 +35,6 @@ Tube_viewer::Tube_viewer(const char *_title, int _width, int _height)
 	  background(0.0f, 0.0f, 50.0f, 0.0f)
 {
 	// rendering parameters
-	greyscale_ = false;
 	fovy_ = 70;
 	near_ = 0.01f;
 	far_ = 20;
@@ -146,7 +145,7 @@ void Tube_viewer::resize(int _width, int _height)
 
 //-----------------------------------------------------------------------------
 
-std::vector<vec3> circleVertices(int n, vec3 center, vec3 normal, float radius)
+/* std::vector<vec3> circleVertices(int n, vec3 center, vec3 normal, float radius)
 {
 	std::vector<vec3> vertices;
 
@@ -187,7 +186,7 @@ std::vector<vec3> circleVertices(int n, vec3 center, vec3 normal, float radius)
 	}
 
 	return vertices;
-}
+} */
 //--------------------------------------------------------------------------------
 
 void Tube_viewer::initialize()
@@ -211,8 +210,8 @@ void Tube_viewer::initialize()
 	tube.tex_.loadPNG(TEXTURE_PATH "/underwaterSphere.png");
 
 	// setup shader
-	background_shader_.load(SHADER_PATH "/background.vert", SHADER_PATH "/background.frag");
-	reflection_shader_.load(SHADER_PATH "/reflection.vert", SHADER_PATH "/reflection.frag"); // SHader for reflection and refraction
+	background_shader_.load(SHADER_PATH "/background.vert", SHADER_PATH "/background.frag");	// Shader for background img
+	bubble_ring_shader_.load(SHADER_PATH "/bubble_ring.vert", SHADER_PATH "/bubble_ring.frag");	// Shader for bubble ring (reflection, refraction, phong)
 	solid_color_shader_.load(SHADER_PATH "/solid_color.vert", SHADER_PATH "/solid_color.frag"); // Shader for coordinate axis
 
 	coordinateAxis.initialize();
@@ -380,7 +379,6 @@ void Tube_viewer::draw_scene(mat4 &_projection, mat4 &_view, vec3 &eye)
 		background_shader_.use();
 		background_shader_.set_uniform("modelview_projection_matrix", mvp_matrix_background);
 		background_shader_.set_uniform("tex", 0);
-		background_shader_.set_uniform("greyscale", static_cast<int>(greyscale_));
 		background.tex_.bind();
 		unit_sphere_.draw();
 	}
@@ -399,17 +397,16 @@ void Tube_viewer::draw_scene(mat4 &_projection, mat4 &_view, vec3 &eye)
 	normal_matrix = mat3::Identity();
 
 	mat3 mv_matrix_3d;
-	
-	for(int i = 0; i < 3; i++) 
+
+	for (int i = 0; i < 3; i++)
 	{
-		for(int j = 0; j < 3 ; j++)
+		for (int j = 0; j < 3; j++)
 		{
 			mv_matrix_3d(i, j) = mv_matrix(i, j);
 		}
 	}
 
 	normal_matrix = mv_matrix_3d.inverse().transpose();
-
 
 	if (!renderOnlyPolygon)
 	{
@@ -422,13 +419,13 @@ void Tube_viewer::draw_scene(mat4 &_projection, mat4 &_view, vec3 &eye)
 
 		vec3 light = normal_matrix * rotationSun2 * (rotationSun1 * vec3(0, 1, 0));
 
-		reflection_shader_.use();
-		reflection_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
-		reflection_shader_.set_uniform("normal_matrix", normal_matrix);
-		reflection_shader_.set_uniform("modelview_matrix", mv_matrix);
-		reflection_shader_.set_uniform("tex", 0);
-		reflection_shader_.set_uniform("eyePositionW", eye);
-		reflection_shader_.set_uniform("light_position", light);
+		bubble_ring_shader_.use();
+		bubble_ring_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
+		bubble_ring_shader_.set_uniform("normal_matrix", normal_matrix);
+		bubble_ring_shader_.set_uniform("modelview_matrix", mv_matrix);
+		bubble_ring_shader_.set_uniform("tex", 0);
+		bubble_ring_shader_.set_uniform("eyePositionW", eye);
+		bubble_ring_shader_.set_uniform("light_position", light);
 
 		tube.draw();
 	}
@@ -442,10 +439,12 @@ void Tube_viewer::draw_scene(mat4 &_projection, mat4 &_view, vec3 &eye)
 	circle.initialize();
 
 	vec3 offset_ = vec3(0, 0, 0);
-	if(filament.recenter) offset_ = originalFirstVertex - controlPolygonForDebugging[0];
+	if (filament.recenter)
+		offset_ = originalFirstVertex - controlPolygonForDebugging[0];
 	circle.setPoints(controlPolygonForDebugging, offset_);
 
-	if (renderOnlyPolygon) circle.draw();		
+	if (renderOnlyPolygon)
+		circle.draw();
 
 	if (showCoordinateAxis)
 	{

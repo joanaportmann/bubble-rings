@@ -11,9 +11,7 @@ in vec3 v2f_view;
 out vec4 f_color;
 
 const float shininess = 8.0;
-// const vec3  sunlight = vec3(1.0, 0.941, 0.898);
 uniform sampler2D tex;
-
 const vec3  sunlight = vec3(1.0, 0.941, 0.898);
 
 void main() {
@@ -23,7 +21,7 @@ void main() {
 	vec3 I_a = 0.2 * sunlight;
 	vec3 I_in = sunlight;
 
-	//TODO weight refraction and reflection based on angle
+	// Weight refraction and reflection based on angle
 
     vec3 normal_normalized = normalize(v2f_normal);
     vec3 color = 0.01 * vec3(normal_normalized.x, 0.0, 0.0);   
@@ -46,8 +44,8 @@ void main() {
 		color +=  0.4 * sunlight * c_material * pow(dot(r, v2f_view), shininess);
 	}
 
- 
-    // add required alpha value
+
+    // Add required alpha value
     f_color = vec4(color, 0.8);
 
 }

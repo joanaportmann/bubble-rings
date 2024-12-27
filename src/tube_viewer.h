@@ -12,7 +12,7 @@
 #include "frame.h"
 #include "tube.h"
 #include "filament.h"
-#include "planet.h"
+#include "background.h"
 
 /// OpenGL viewer that handles all the rendering for us
 class Tube_viewer : public GLFW_window
@@ -49,7 +49,7 @@ protected:
 private:
 
   // Draw sphere and map underwater image
-  Planet background;
+  Background background;
   Sphere unit_sphere_;
   vec3 originalFirstVertex;
 
@@ -85,10 +85,7 @@ private:
 
   Shader solid_color_shader_;
 
-  Shader reflection_shader_;
-
-  /// state whether the rendering should be in color or not
-  bool greyscale_;
+  Shader bubble_ring_shader_;
 
   /// rotation in x direction
   float x_angle_;

@@ -5,6 +5,7 @@
 #include "glmath.h"
 #include <vector>
 
+// This is used for debugging view, when only rendering the control polygon
 class Path {
 public:
     Path(unsigned int resolution = 1000) : m_resolution(resolution), m_num_pts(0) { }
