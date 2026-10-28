@@ -209,16 +209,15 @@ vec3 Filament::localizedInduction(int j, const std::vector<FilamentPoint> &temp_
     vec3 e_prev = temp_controlPolygon_[j].position - temp_controlPolygon_[wrap(j - 1)].position;
     float l_prev = e_prev.norm();
     float l_next = e_next.norm();
-    float a_prev = temp_controlPolygon_[j].a;
-    float a_next = temp_controlPolygon_[wrap(j + 1)].a;
+    float a_prev = temp_controlPolygon_[wrap(j - 1)].a;
+float a_next = temp_controlPolygon_[j].a;
 
     // Curvature
     vec3 kB = 2.0 * e_prev.normalized().cross(e_next.normalized()) / (e_prev + e_next).norm();
 
     // cout << "kB: " << kB << "\n";
     // Circulation
-    float C = 0.5 * (temp_controlPolygon_[j].C + temp_controlPolygon_[wrap(j + 1)].C);
-
+    float C = 0.5 * (temp_controlPolygon_[wrap(j - 1)].C + temp_controlPolygon_[j].C);
     // Log term
     float logTerm = log(l_prev * l_next / (a_prev * a_next * delta * delta));
 
@@ -568,21 +567,42 @@ Eigen::VectorXd Filament::doBurgerStepOnBubbleRing()
 
     // Backward Euler  (Ax = b)
     Eigen::SparseMatrix<double> LHS = nuIdt * M - (0.5 * coef * L);
-    Eigen::MatrixXd RHS = nuIdt * M * A + d.transpose() * F;
+    Eigen::VectorXd RHS = nuIdt * M * A + d.transpose() * F;
 
     // Crank-Nicholson
-    //Eigen::MatrixXd RHS = nuIdt * M * A + d.transpose() * F + 0.5 * coef * L * A;
+    //Eigen::VectorXd RHS = nuIdt * M * A + d.transpose() * F + 0.5 * coef * L * A;
 
     // cout << "LHS " << LHS << "\n" << "\n";
     // cout << "RHS " << RHS << "\n" << "\n";
     // SCALE DUE TO PRECISION
-    double scale = 1.0 / RHS.norm();
+double rhsNorm = RHS.norm();
 
+if (rhsNorm == 0.0) {
+    return Eigen::VectorXd::Zero(RHS.size());
+}
+
+double scale = 1.0 / rhsNorm;
     // fill A = LHS and b = RHS
     Eigen::ConjugateGradient<Eigen::SparseMatrix<double>, Eigen::Lower | Eigen::Upper> cg;
     cg.setTolerance(1e-5);
-    cg.compute(LHS);
-    return (cg.solve(RHS * scale)) / scale;
+   cg.compute(LHS);
+
+if (cg.info() != Eigen::Success) {
+    std::cerr << "ERROR: Burgers solver initialization failed."
+              << std::endl;
+    return A;
+}
+
+Eigen::VectorXd result = cg.solve(RHS * scale);
+
+if (cg.info() != Eigen::Success) {
+    std::cerr << "WARNING: Burgers solver did not converge. "
+              << "Iterations: " << cg.iterations()
+              << ", error: " << cg.error() << std::endl;
+    return A;
+}
+
+return result / scale;
 }
 
 float Filament::totalLengthOfControlpolygon()
@@ -780,6 +800,10 @@ void Filament::updateSkeleton()
     {
         preComputations(); // for Burger's equation
         Eigen::VectorXd x = doBurgerStepOnBubbleRing();
+        if (x.minCoeff() < 0.0) {
+        std::cerr << "WARNING: Negative area detected: "
+              << x.minCoeff() << std::endl;
+        }
         for (int i = 0; i < controlPolygon_.size(); i++)
         {
             //cout << x.minCoeff() << "\n" "\n";
@@ -787,7 +811,7 @@ void Filament::updateSkeleton()
         }
     }
 
-    resampleCatMullRomWithWeight(resampleLength_);
+    //resampleCatMullRomWithWeight(resampleLength_); //Not needed!
     updatedFilament = true;
     framecouter++;
 
