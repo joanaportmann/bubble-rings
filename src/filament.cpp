@@ -531,10 +531,14 @@ Eigen::VectorXd Filament::doBurgerStepOnBubbleRing()
 
     //d.makeCompressed(); // optional
 
-    std::vector<T> trp_C_square_div_pointLength;
+   std::vector<T> trp_C_square_div_pointLength;
     for (int i = 0; i < controlPolygon_.size(); i++)
     {
-        double entry = std::pow(controlPolygon_[i].C, 2) / point_lengths_v[i];
+        double C_vertex = 0.5 * (
+    controlPolygon_[wrap(i - 1)].C +
+    controlPolygon_[i].C
+);
+        double entry = C_vertex * C_vertex / point_lengths_v[i];
         trp_C_square_div_pointLength.push_back(T(i, i, entry));
     }
 
