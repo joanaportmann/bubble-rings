@@ -76,14 +76,25 @@ private:
     float totalLengthOfControlpolygon();
     void resample(float resampleLength);
     vec3 uniformCatmullRom(float u,  vec3 &P0,  vec3 &P1,  vec3 &P2,  vec3 &P3);
-    vec3 generalCatmullRom(float tension, float alpha, float u, vec3 &P0, vec3 &P1, vec3 &P2, vec3 &P3);
-    void resampleCatMullRomWithWeight(float resampleLength);
+vec3 generalCatmullRom(
+    float tension_,
+    float alpha__,
+    float k,
+    const vec3& P0,
+    const vec3& P1,
+    const vec3& P2,
+    const vec3& P3);    void resampleCatMullRomWithWeight(float resampleLength);
     void resampleCatmullRom(float resampleL);
-    float totalVolume();
+    double totalVolume();
 
     // Biotsavart velocity
-    vec3 biotsavartedge(vec3 p, vec3 R0, vec3 R1, float Gamma, float a);
-    vec3 biotSavartAndLocalizedInduction(int j, const std::vector<FilamentPoint> &temp_controlPolygon_);
+vec3 biotsavartedge(
+    const vec3& p,
+    const vec3& R0,
+    const vec3& R1,
+    float Gamma,
+    float a) ;
+       vec3 biotSavartAndLocalizedInduction(int j, const std::vector<FilamentPoint> &temp_controlPolygon_);
     vec3 localizedInduction(int j, const std::vector<FilamentPoint> &temp_controlPolygon_);
     vec3 boussinesq_on_edge(int i, const std::vector<FilamentPoint> &temp_controlPolygon_);
     vec3 velUpdateForEdgeI(int i, const std::vector<FilamentPoint> &temp_controlPolygon_);
