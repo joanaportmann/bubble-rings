@@ -114,8 +114,7 @@ std::vector<vec3> Filament::verticesofOneCircle_(int n, vec3 center, vec3 normal
     // Rotation of first vertex of cross-section circle in space
     vec3 vertexNotOriented = rotation * vec3(radius, 0, 0);
 
-    // Project reference vector up onto the normal plane orthogonal to 
-ormal
+    // Project reference vector up onto the normal plane orthogonal to normal
     vec3 n_unit = normal.normalized();
     vec3 up_proj = up - up.dot(n_unit) * n_unit;
     Eigen::Matrix3d rotationToOrientRing = Eigen::Matrix3d::Identity();
