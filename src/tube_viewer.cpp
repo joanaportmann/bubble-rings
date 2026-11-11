@@ -144,7 +144,7 @@ void Tube_viewer::initialize()
     centerline_path_.initialize();
 
     // set initial state
-    glClearColor(0, 0, 0, 0);
+    glClearColor(0.08f, 0.12f, 0.38f, 1.00f);
     glEnable(GL_DEPTH_TEST);
 
     glEnable(GL_BLEND);
@@ -326,7 +326,9 @@ void Tube_viewer::draw_scene(mat4 &_projection, mat4 &_view, vec3 &eye)
         background_shader_.set_uniform("modelview_projection_matrix", mvp_matrix_background);
         background_shader_.set_uniform("tex", 0);
         background.tex_.bind();
+        glCullFace(GL_FRONT);
         unit_sphere_.draw();
+        glCullFace(GL_BACK);
     }
 
     mat4 m_matrix = mat4::Identity();
