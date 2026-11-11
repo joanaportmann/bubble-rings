@@ -87,6 +87,16 @@ protected:
         filament.resampleCatmullRom(length);
     }
 
+    void resampleCatMullRomWithWeight(float length)
+    {
+        filament.resampleCatMullRomWithWeight(length);
+    }
+
+    double totalVolume()
+    {
+        return filament.totalVolume();
+    }
+
     vec3 catMullRom(float tension_, float alpha__, float k, vec3 P0, vec3 P1, vec3 P2, vec3 P3)
     {
         return filament.generalCatmullRom(tension_, alpha__, k, P0, P1, P2, P3);
@@ -482,8 +492,8 @@ TEST_F(FilamentTest, 155_Iterations_OfRungeKutta)
     // -0.302304	-0.175722	2.9266
     // 0.322385	-0.178072	2.93021
 
-    for (int i = 0; i < 2; i++)
-        EXPECT_NEAR(controlPolygon__[5].position(i), result(i), 0.000001);
+    for (int i = 0; i < 3; i++)
+        EXPECT_NEAR(controlPolygon__[5].position(i), result(i), 0.00001);
 }
 
 TEST_F(FilamentTest, 100_Iterations_OfRungeKutta_bigControlpolygon)
@@ -546,8 +556,8 @@ TEST_F(FilamentTest, 100_Iterations_OfRungeKutta_bigControlpolygon)
         BiotSavartAndLocalizedInduction();
     std::vector<FilamentPoint> controlPolygon__ = filament.getFilamentPoints();
     vec3 result = vec3(-0.166883, 0.74118, 1.71075);
-    for (int i = 0; i < 2; i++)
-        EXPECT_NEAR(controlPolygon__[5].position(i), result(i), 0.000001);
+    for (int i = 0; i < 3; i++)
+        EXPECT_NEAR(controlPolygon__[5].position(i), result(i), 0.00001);
 }
 
 TEST_F(FilamentTest, 792_Iterations_OfRungeKutta)
@@ -578,14 +588,14 @@ TEST_F(FilamentTest, 792_Iterations_OfRungeKutta)
     std::vector<FilamentPoint> controlPolygon__ = filament.getFilamentPoints();
     vec3 result = vec3(0.476367, 5.3476, 11.4972);
 
-    // All Positions in 156th frame:
+    // All Positions in 793rd frame:
     // 0.960341	5.86888	10.8438
     // 0.485476	6.38932	10.1874
     // -0.481976	6.39004	10.1812
     // -0.973293	5.86918	10.8351
     // -0.498115	5.34976	11.4941
     // 0.476367	5.3476	11.4972
-    for (int i = 0; i < 2; i++)
+    for (int i = 0; i < 3; i++)
         EXPECT_NEAR(controlPolygon__[5].position(i), result(i), 0.0001);
 }
 
@@ -765,11 +775,25 @@ TEST_F(FilamentTest, resampleSquareThicknessConstant)
 
 TEST_F(FilamentTest, catMullRom)
 {
-    vec3 result1 = catMullRom(0.0f, 0.0f, 0.0f, {0, 0, 0}, {1, 0, 0}, {2, 0, 0}, {3, 0, 0});
- cout << result1 << "\n";
-    vec3 result2 = catMullRom(0.0f, 0.0f, 1.0f, {0, 10, 0}, {1, 20, 0}, {2, 2, 0}, {3, 0, 0});
+    vec3 result1 = catMullRom(0.0f, 0.5f, 0.0f, {0, 0, 0}, {1, 0, 0}, {2, 0, 0}, {3, 0, 0});
+    vec3 result2 = catMullRom(0.0f, 0.5f, 1.0f, {0, 10, 0}, {1, 20, 0}, {2, 2, 0}, {3, 0, 0});
 
-    EXPECT_EQ(result1[0], 1);
+    for (int i = 0; i < 3; ++i)
+    {
+        EXPECT_NEAR(result1(i), vec3(1, 0, 0)(i), 1e-6);
+        EXPECT_NEAR(result2(i), vec3(2, 2, 0)(i), 1e-6);
+    }
+}
+
+TEST_F(FilamentTest, resampleCatMullRomWithWeightConservesVolume)
+{
+    Filament ring(0.12f, 4.0f, 20);
+    filament = ring;
+    const double volumeBefore = totalVolume();
+    resampleCatMullRomWithWeight(0.1f);
+    const double volumeAfter = totalVolume();
+    EXPECT_EQ(filament.getFilamentPoints().size(), 38);
+    EXPECT_NEAR(volumeAfter, volumeBefore, 1e-6);
 }
 
 // TEST_F(FilamentTest, CatmullRomResampleSquare)

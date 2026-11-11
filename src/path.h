@@ -54,7 +54,7 @@ public:
         glEnable(GL_LINE_SMOOTH);
         glLineWidth(1.0f); // Unfortunately, setting line widths > 1 is unsupported in modern OpenGL;
                            // we'll need to render polygons if we want thicker lines...
-        glDrawElements(GL_LINE_STRIP, m_num_pts, GL_UNSIGNED_INT, NULL);
+        glDrawElements(GL_LINE_LOOP, m_num_pts, GL_UNSIGNED_INT, NULL);
         glBindVertexArray(0);
     }
 

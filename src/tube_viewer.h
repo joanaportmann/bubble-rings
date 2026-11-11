@@ -1,4 +1,3 @@
-
 //=============================================================================
 #ifndef TUBE_VIEWER_H
 #define TUBE_VIEWER_H
@@ -25,7 +24,7 @@ public:
   Tube_viewer(const char *_title, int _width, int _height);
 
 protected:
-  /// function that is called on the, creation of the widget for the initialisation of OpenGL
+  /// function that is called on the creation of the widget for the initialisation of OpenGL
   virtual void initialize();
 
   /// resize function - called when the window size is changed
@@ -47,7 +46,6 @@ protected:
   void drawCircle(const std::vector<vec3> pts, float radius);
 
 private:
-
   // Draw sphere and map underwater image
   Background background;
   Sphere unit_sphere_;
@@ -58,15 +56,15 @@ private:
 
   bool timer_active_ = false;
 
-  // tube object
+  // tube object and centerline path
   Tube tube;
+  Path centerline_path_;
 
-
-  float thickness = 0.12;
-  float circulation = 4;
-  float tension = 0;
-  float alpha = 0.5;
-  float length = 0.1;
+  float thickness = 0.12f;
+  float circulation = 4.0f;
+  float tension = 0.0f;
+  float alpha = 0.5f;
+  float length = 0.1f;
   bool renderOnlyPolygon = false;
   bool modifyThickness = true;
   bool backgroundOn = true;
@@ -77,7 +75,7 @@ private:
   /// default color shader (renders only texture)
   Shader color_shader_;
 
-  /// simple shader for visualizing curves (just using solid color).
+  /// simple shader for visualizing background sky-sphere
   Shader background_shader_;
 
   /// Shader
@@ -99,7 +97,6 @@ private:
 
   Frame coordinateAxis;
   vec3 center_of_coordinatesystem;
-
 
   /// the field of view for the camera
   float fovy_;

@@ -14,6 +14,7 @@
 #include <limits>
 #include <iomanip>
 #include <cmath>
+#include <algorithm>
 
 using namespace std;
 using std::chrono::duration;
@@ -94,7 +95,7 @@ std::vector<vec3> Filament::verticesofOneCircle_(int n, vec3 center, vec3 normal
         vec3 normalized_normal = normal.normalized();
         if (normalized_normal(2) == -1)
         {
-            vec3 axis = vec3(0, 0, 1);
+            vec3 axis = vec3(1, 0, 0);
             rotation = Eigen::AngleAxisd(M_PI, axis);
         }
         else
@@ -104,23 +105,32 @@ std::vector<vec3> Filament::verticesofOneCircle_(int n, vec3 center, vec3 normal
     }
     else
     {
-        angle = acos(normal(2) / normal.norm());
+        double cosTheta = std::max(-1.0, std::min(1.0, normal(2) / normal.norm()));
+        angle = acos(cosTheta);
         vec3 axis = vec3(-normal(1), normal(0), 0);
         rotation = Eigen::AngleAxisd(angle, axis.normalized());
     }
 
-    // Rotation of first vertex of ring in space
+    // Rotation of first vertex of cross-section circle in space
     vec3 vertexNotOriented = rotation * vec3(radius, 0, 0);
 
-    // Determine direction of rotation (since acos is always positive)
-    int signUpCrossVertex = up.cross(vertexNotOriented).dot(normal) < 0 ? 1 : -1;
+    // Project reference vector up onto the normal plane orthogonal to 
+ormal
+    vec3 n_unit = normal.normalized();
+    vec3 up_proj = up - up.dot(n_unit) * n_unit;
+    Eigen::Matrix3d rotationToOrientRing = Eigen::Matrix3d::Identity();
+    if (up_proj.norm() > 1e-8 && vertexNotOriented.norm() > 1e-8)
+    {
+        up_proj.normalize();
+        vec3 v_unit = vertexNotOriented.normalized();
+        double cosAngle = std::max(-1.0, std::min(1.0, v_unit.dot(up_proj)));
+        double angleToUp = acos(cosAngle);
+        double signAngle = v_unit.cross(up_proj).dot(n_unit) >= 0.0 ? 1.0 : -1.0;
+        rotationToOrientRing = Eigen::AngleAxisd(signAngle * angleToUp, n_unit);
+    }
 
-    double angleToUp = acos(vertexNotOriented.dot(up) / (vertexNotOriented.norm() * up.norm()));
-    Eigen::Matrix3d rotationToOrientRing;
-    rotationToOrientRing = Eigen::AngleAxisd(signUpCrossVertex * angleToUp, normal.normalized());
-
-    auto t1 = high_resolution_clock::now();
     std::vector<vec3> vertices;
+    vertices.reserve(n);
     for (int i = 0; i < n; i++)
     {
         float x = cos(2 * M_PI / n * i) * radius;
@@ -137,16 +147,6 @@ std::vector<vec3> Filament::verticesofOneCircle_(int n, vec3 center, vec3 normal
     }
 
     return vertices;
-    auto t2 = high_resolution_clock::now();
-    /* Getting number of milliseconds as an integer. */
-    auto ms_int = duration_cast<milliseconds>(t2 - t1);
-
-    /* Getting number of milliseconds as a double. */
-    duration<double, std::milli> ms_double = t2 - t1;
-
-    std::cout << ms_int.count() << "ms\n";
-    std::cout << ms_double.count() << "ms\n";
-    std::cout << "test";
 }
 
 //----------------------------------------------------------------------------------
@@ -848,8 +848,7 @@ void Filament::updateSkeleton()
     {
         BiotSavartAndLocalizedInduction();
     }
-
-    if (euler)
+    else if (euler)
     {
         BiotSavartAndLocalizedInductionEuler();
     }
